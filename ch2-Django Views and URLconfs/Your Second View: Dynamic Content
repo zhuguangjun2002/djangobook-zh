@@ -1,0 +1,98 @@
+In this example, we will set a maximum 99 hours by only allowing either one- or two-digit numbers – and in regular expression syntax, that translates into `\d{1,2}`:
+在这个例子中，我们将设置最多99个小时，只允许使用一位或两位数字 - 并且使用正则表达式语法，将其翻译为`\d{1,2}`：
+--------------------------------
+url(r'^time/plus/\d{1,2}/$', hours_ahead),
+--------------------------------
+Now that we’ve designated a wildcard for the URL, we need a way of passing that wildcard data to the view function, so that we can use a single view function for any arbitrary hour offset. 
+We do this by placing parentheses around the data in the `URLpattern` that we want to save. 
+In the case of our example, we want to save whatever number was entered in the URL, so let’s put parentheses around the `\d{1,2}`,
+like this:
+现在,我们已经为URL指定了`通配符`，我们需要一种将`通配符`数据,`传递`给`视图函数`的`方法`，以便我们可以使用`单个视图函数`来处理`任意`小时`偏移量`。
+我们通过在我们想要保存的`URLpattern`的数据周围放置`圆括号`来实现这一点。
+在我们的例子中，我们想要保存在`URL`中输入的任何数字，所以让我们围绕`\d{1,2}`放置括号，
+--------------------------------
+url(r'^time/plus/(\d{1,2})/$', hours_ahead),
+--------------------------------
+
+If you’re familiar with regular expressions, you’ll be right at home here; 
+we’re using `parentheses` to capture data from the matched text. 
+The final URLconf, including our previous two views, looks like this:
+--------------------------------
+from django.conf.urls import include, url
+from django.contrib import admin
+from mysite.views import hello, current_datetime, hours_ahead
+
+urlpatterns = [
+    url(r'^admin/', admin.site.urls),
+    url(r'^hello/$', hello),
+    url(r'^time/$', current_datetime),
+    url(r'^time/plus/(\d{1,2})/$', hours_ahead),
+]
+--------------------------------
+
+With that taken care of, let’s write the hours_ahead `view. hours_ahead` is very similar to the `current_datetime` view we wrote earlier, with a key difference: 
+it takes an extra argument, the number of hours of offset. 
+Here’s the view code:
+有了这个，让我们写`view.hours_ahead`视图。 `hours_ahead`与我们之前写的`current_datetime`视图非常相似，主要区别在于：
+它需要`额外`的参数，即`偏移小时数`。
+视图的代码如下：
+--------------------------------
+from django.http import Http404, HttpResponse
+import datetime
+
+def hours_ahead(request, offset):
+    try:
+        offset = int(offset)
+    except ValueError:
+        raise Http404()
+    dt = datetime.datetime.now() + datetime.timedelta(hours=offset)
+    html = "<html><body>In %s hour(s), it will be  %s.</body></html>" % (offset, dt)
+    return HttpResponse(html)
+--------------------------------
+
+
+The view function, hours_ahead, takes two parameters: `request` and `offset`:
+视图函数`hours_ahead`有两个参数：`request`和`offset`：
+----------------------------------------------
+++ `request` is an `HttpRequest` object, just as in `hello` and `current_datetime. 
+I’ll say it again: each view always takes an `HttpRequest` object as its first parameter.
+++`request`是一个`HttpRequest`对象，就像`hello`和`current_datetime一样。
+我会再说一遍：每个视图总是以一个`HttpRequest`对象，作为其第一个参数。
+
+++ offset is the string captured by the parentheses in the URLpattern. 
+For example, if the requested URL were `/time/plus/3/`, then offset would be the string ‘3’. 
+If the requested URL were `/time/plus/21/`, then offset would be the string ’21’. 
+Note that captured values will always be `Unicode` objects, not integers, even if the string is composed of only digits, such as ’21’.
+
+++ offset是由URLpattern中`括号`捕获的`字符串`。
+例如，如果请求的`URL`是`/time/plus/3/`，那么`offset`就是字符串'3'。
+如果请求的`URL`是`/time/plus/21 /`，那么`offset`就是字符串'21'。
+ 请注意，即使字符串仅由数字组成，如“21”，捕获的值将始终为“Unicode”对象，而不是`整数`。
+----------------------------------------------
+
+I decided to call the variable `offset`, but you can call it whatever you’d like, as long as it’s a valid Python identifier. 
+The variable name doesn’t matter; all that matters is that it’s the second argument to the function, after request. 
+(It’s also possible to use `keyword`, rather than positional, arguments in an URLconf. I cover that in Chapter 7.)
+我决定叫这个变量为`offset'，但只要它是一个有效的Python`标识符`，就叫什么无所谓。
+`变量``名称`无关紧要;所有`重要`的是，它是在`请求`之后`函数`的`第二个``参数`。
+（在URLconf中也可以使用`keyword`，而不是位置参数，我在第7章中将其说明）
+
+The first thing we do within the function is call `int()` on `offset`. This converts the `Unicode` string value to an integer.
+我们在函数中做的第一件事，是在`offset`上调用`int()`。这将`Unicode`字符串值，转换为`整数`。
+
+Note that Python will raise a `ValueError` exception if you call `int()` on a value that cannot be converted to an integer, such as the string “foo”. 
+In this example, if we encounter the `ValueError`, we raise the exception `django.http.Http404`, which, as you can imagine, results in a 404 “Page not found” error.
+请注意，如果您对不能转换为`整数`的值（例如字符串“foo”）调用`int()`，则Python将引发`ValueError`异常。
+在这个例子中，如果我们遇到`ValueError`，我们引发异常`django.http.Http404`，你可以想象得到404“Page not found”错误。
+
+
+Astute readers will wonder: how could we ever reach the `ValueError` case, anyway, given that the regular expression in our URLpattern – `(\d{1,2})` – captures only digits, and therefore `offset` will only ever be a string composed of digits? 
+The answer is, we won’t, because the URLpattern provides a modest but useful level of input validation, but we still check for the `ValueError` in case this view function ever gets called in some other way. 
+It’s good practice to implement view functions such that they don’t make any assumptions about their parameters.
+ Loose coupling, remember?
+精明的读者会怀疑：无论如何，假如我们的`URLpattern`中的正则表达式 - `（\ d {1,2}）` - 只捕获`数字`，那么我们怎么能到达`ValueError`的情况，因此'offset'将只会曾经是由`数字`组成的`字符串`？
+答案是，确实不会有这种情况发生，因为`URLpattern`提供了一个`适度`但有用的`输入验证级别`，但是我们仍然`检查`“ValueError”，以防止以`其他`方式`调用`此视图函数。
+实现`视图函数`是一种很好的做法，这样他们就不会对其参数做任何`假设`。
+`松散`的`耦合`，记得吗？
+
+

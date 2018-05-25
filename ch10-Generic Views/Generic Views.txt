@@ -1,0 +1,492 @@
+=======================
+Generic Views
+-------------
+https://djangobook.com/generic-views/
+-------------
+=======================
+
+Here again is a recurring theme of this book: at its worst, Web development is boring and monotonous. 
+So far, we’ve covered how Django tries to take away some of that monotony at the model and template layers, 
+but Web developers also experience this boredom at the view level.
+这里又一次是本书的一个反复出现的主题：最糟糕的是，Web开发是无聊而单调的。
+到目前为止，我们已经介绍了Django如何试图在`模型`和`模板层`去掉一些单调，
+但Web开发人员在`视图`层面也会感受到这种无聊感。
+
+Django’s `generic views` were developed to ease that pain.
+Django`通用视图`是为缓解疼痛而开发的。
+
+They take certain common idioms and patterns found in view development and abstract them so that you can quickly write common views of data without having to write too much code. 
+We can recognize certain common tasks, like displaying a list of objects, and write code that displays a list of any object.
+
+他们采用在视图开发中发现的某些常见`习惯用法`和`模式`，并将它们`抽象化`，以便您可以快速编写数据的`常见视图`，而无需编写太多代码。
+我们可以识别某些`常见任务`，例如`显示对象列表`，并编写显示任何对象列表的`代码`。
+
+Then the model in question can be passed as an extra argument to the URLconf. 
+Django ships with generic display views to do the following:
+然后，所讨论的`模型`可以作为`URLconf`的一个额外的`参数`被传递。
+Django附带`通用显示视图`来执行以下操作：
+------------------
+++ Display list and detail pages for a single object. 
+If we were creating an application to manage `conferences`, then a `TalkListView` and a `RegisteredUserListView` would be examples of list views. 
+A single `talk` page is an example of what we call a “detail” view.
+++显示单个`对象`的`列表`和`详细信息`页面。
+如果我们正在创建一个应用程序来管理`会议'，那么'TalkListView`和`RegisteredUserListView`就是`列表视图`的例子。
+一个“谈话”页面,就是我们称之为“detail”视图的一个`例子`。
+
+++ Present date-based objects in `year/month/day` archive pages, associated `detail`, and “latest” pages.
+++在“年/月/日”存档页面中，当前的基于日期的对象，与“detail”和“latest”页面相关。
+
+++ Allow users to create, update, and delete objects – with or without authorization.
+Taken together, these views provide easy interfaces to perform the most common tasks developers encounter when displaying database data in views. 
+Finally, display views are only one part of Django’s comprehensive class-based view system. 
+For a full introduction and detailed description of the other class-based views Django provides, see `Appendix C`.
+
+++允许用户创建，更新和删除对象 - 无论是否授权。
+综合起来，这些视图提供了简单的界面来执行开发人员在`视图`中显示数据库数据时遇到的最常见任务。
+最后，`显示视图`只是Django全面的`基于类`的`视图系统`的一部分。
+有关Django提供的其他`基于类`的`视图`的完整介绍和详细描述，请参阅“附录C”。
+
+=============================
+Generic Views of Objects
+
+Django’s generic views really shine when it comes to presenting views of your database content. 
+Because it’s such a common task, Django comes with a handful of built-in generic views that make generating list and detail views of objects incredibly easy.
+Django的`通用视图`,在呈现数据库内容的`视图`方面,真的非常出色。
+因为这是一个常见的任务，所以Django带有一些内置的`通用视图`，这些视图使对象的`列表`和`详细视图`生成非常容易。
+
+Let’s start by looking at some examples of showing a list of objects or an individual object. We’ll be using these models:
+我们先看一些显示对象列表或单个对象的例子。我们将使用这些模型：
+
+------------------
+# models.py
+from django.db import models
+
+class Publisher(models.Model):
+    name = models.CharField(max_length=30)
+    address = models.CharField(max_length=50)
+    city = models.CharField(max_length=60)
+    state_province = models.CharField(max_length=30)
+    country = models.CharField(max_length=50)
+    website = models.URLField()
+
+    class Meta:
+        ordering = ["-name"]
+
+    def __str__(self):
+        return self.name
+
+class Author(models.Model):
+    salutation = models.CharField(max_length=10)
+    name = models.CharField(max_length=200)
+    email = models.EmailField()
+    headshot = models.ImageField(upload_to='author_headshots')
+
+    def __str__(self):
+        return self.name
+
+class Book(models.Model):
+    title = models.CharField(max_length=100)
+    authors = models.ManyToManyField('Author')
+    publisher = models.ForeignKey(Publisher)
+    publication_date = models.DateField()
+-----------------
+Now we need to define a view:
+添加一个视图：
+
+---------------------
+# views.py
+from django.views.generic import ListView
+from books.models import Publisher
+
+class PublisherList(ListView):
+    model = Publisher 
+--------------------
+
+Finally hook that view into your urls:
+最后，让我们把这个`视图`与你的`urls`关联起来：
+
+-----------------
+# urls.py
+from django.conf.urls import url
+from books.views import PublisherList
+
+urlpatterns = [
+    url(r'^publishers/$', PublisherList.as_view()),
+]
+----------------------------
+
+That’s all the Python code we need to write. 
+We still need to write a template, however. 
+We could explicitly tell the view which template to use by adding a `template_name` attribute to the view, but in the absence of an explicit template Django will infer one from the object’s name. 
+In this case, the inferred template will be `books/publisher_list.html` – the “books” part comes from the name of the `app` that defines the `model`, 
+while the “publisher” bit is just the lowercased version of the `model`’s name.
+
+这就是我们需要编写的所有Python代码。
+不过，我们仍然需要编写一个`模板`。
+通过向`视图`添加`template_name`属性，我们可以明确地告诉`视图`使用哪个模板，但是在没有`显式模板`的情况下，Django会从`对象`的名称中推断出一个模板。
+在这种情况下，推断`模板`将为`books/publisher_list.html` - “books”部分,来自`定义``模型`的`app`名称，而“publisher”位,仅仅是`model`名称的`小写`版本。
+
+Thus, when (for example) the `APP_DIRS` option of a DjangoTemplates backend is set to `True` in `TEMPLATES`, 
+a template location could be: /`path/to/project/books/templates/books/publisher_list.html`
+因此，当（例如）在模板中将`Django Templates 后端`的`APP_DIRS`选项设置为`True`时，
+`模板位置`可以是：`/path/to/project/books/templates/books/publisher_list.html`
+
+This template will be rendered against a context containing a variable called object_list that contains all the publisher objects.
+A very simple template might look like the following:
+
+该`模板`将针对包含名为`object_list`的变量的`上下文`进行`呈现`，该`变量`包含所有`publisher`对象(`出版商`对象)。
+一个非常简单的`模板`可能如下所示：
+-----------------
+% extends "base.html" %}
+
+{% block content %}
+    <h2>Publishers</h2>
+    <ul>
+        {% for publisher in object_list %}
+            <li>{{ publisher.name }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+-----------------
+
+That’s really all there is to it. 
+All the cool features of generic views come from changing the attributes set on the generic view. 
+'Appendix C' documents all the generic views and their options in detail;
+the rest of this document will consider some of the common ways you might customize and extend generic views.
+`通用视图`的所有`很酷`的`功能`都来自`更改``通用视图`上的`属性设置`。
+'附录C'详细记录了所有`通用视图`及其`选项`;
+本文档的其余部分将考虑您可能`定制`和`扩展`通用视图的一些常用方法。
+=====================================
+### Making “Friendly” Template Contexts
+制作“友善”的模板上下文
+You might have noticed that our sample publisher list template stores all the publishers in a variable named object_list. 
+While this works just fine, it isn’t all that “friendly” to template authors: they have to “just know” that they’re dealing with publishers here.
+您可能已经注意到，我们的示例`publisher``列表模板`将所有`publishres`存储在名为`object_list`的变量中。
+虽然这很好，但对`模板作者`来说并不是那么“友好”：他们必须“知道”他们在这里与`publishers`打交道。
+
+In Django, if you’re dealing with a model object, this is already done for you.
+When you are dealing with an object or `queryset`, Django populates the context using the lower cased version of the `model class`’ name.
+This is provided in addition to the default `object_list` entry, but contains exactly the same data, i.e. `publisher_list`.
+在Django中，如果你正在处理`模型对象`，这已经为你完成了。
+当你处理一个`object`(`对象`)或者`queryset`时，Django使用`小写`版本的`model class`的名字，来填充`context`(`上下文`）。
+这是除了默认的`object_list`条目之外提供的，但包含完全相同的数据，即`publisher_list`。
+
+If this still isn’t a good match, you can manually set the name of the `context` variable. 
+The `context_object_name` attribute on a generic view specifies the context variable to use:
+---------------
+这仍然不是一个很好的匹配，你可以手动设置`context`变量的`名字`。
+`通用视图`上的`context_object_name`属性，指定要使用的`context`(`上下文`)变量：
+---------------
+# views.py
+from django.views.generic import ListView
+from books.models import Publisher
+
+class PublisherList(ListView):
+    model = Publisher
+    context_object_name = 'my_favorite_publishers'
+---------------
+Providing a useful 'context_object_name' is always a good idea. 
+Your co-workers who design templates will thank you.
+提供一个有用的'context_object_name'总是一个`好主意`。
+`设计`模板的同事会感谢你。
+================================
+### Adding Extra Context
+
+Often you simply need to present some extra information beyond that provided by the generic view.
+For example, think of showing a list of all the books on each publisher detail page. 
+The `DetailView` generic view provides the `publisher` to the `context`, but how do we get additional information in that template?
+
+通常，您需要展现一些额外信息，这些信息超出了`通用视图`所能提供的信息。
+例如，考虑在每个`publisher`的`详细信息`页面上，显示所有`图书的列表`。
+`DetailView`通用视图，为'context`提供了`publisher`，但是，我们如何在该模板中获得更多信息？
+
+The answer is to subclass 'DetailView' and provide your own implementation of the 'get_context_data' method. 
+The default implementation simply adds the 'object' being displayed to the template, but you can override it to send more:
+
+答案是`子类`“DetailView”，并提供您自己的'get_context_data'方法的`实现`。
+默认实现,只是将显示的`object`(“对象”)添加到`模板`中，但您可以`覆盖`它,以发送更多：
+-----------------
+from django.views.generic import DetailView
+from books.models import Publisher, Book
+
+class PublisherDetail(DetailView):
+
+    model = Publisher
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(PublisherDetail, self).get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        context['book_list'] = Book.objects.all()
+        return context 
+-----------------
+
+Generally, 'get_context_data' will merge the context data of all parent classes with those of the current class. 
+To preserve this behavior in your own classes where you want to alter the context, you should be sure to call 'get_context_data' on the 'super class'. 
+When no two classes try to define the same key, this will give the expected results.
+However, if any class attempts to override a key after parent classes have set it (after the call to 'super'), any children of that class will also need to explicitly set it after 'super' if they want to be sure to override all parents. 
+If you’re having trouble, review the method resolution order of your view.
+通常，'get_context_data'将合并所有`父类`的`上下文数据`与`当前类`的`上下文数据`。
+为了在你想改变`上下文`的`类`中保留这种行为，你应该确保在'超类'上调用'get_context_data'。
+当没有两个类试图定义`相同的``关键字`时，这会给出`预期的`结果。
+然而，如果任何类试图在`父类`设置它之后尝试`覆盖`一个`键`（在调用'super'之后），那么如果这个类的子类想要确保`覆盖`它，那么该类的任何`子类`也需要在'super'之后明确地设置它所有的`父母`。
+如果遇到问题，请查看`视图`的方法解析顺序。
+
+=======================================
+### Viewing Subsets of Objects
+查看对象的子集
+
+Now let’s take a closer look at the `model` argument we’ve been using all along.
+The model argument, which specifies the database `model` that the view will operate upon, is available on all the generic views that operate on a single object or a collection of objects. 
+However, the `model` argument is not the only way to specify the objects that the view will operate upon – you can also specify the list of objects using the 'queryset' argument:
+现在让我们仔细研究一下我们一直在使用的“模型”参数-`model`argument。
+指定`视图`将操作的数据库“model”的`model参数`,可用于所有对单个对象或对象集合进行操作的`通用视图`。
+然而，`model`参数并不是指定`视图`操作对象的唯一方法 - 您还可以使用'queryset'参数指定`对象列表`：
+------------------
+from django.views.generic import DetailView
+from books.models import Publisher
+
+class PublisherDetail(DetailView):
+
+    context_object_name = 'publisher'
+    queryset = Publisher.objects.all()
+--------------------
+Specifying 'model = Publisher' is really just shorthand for saying 'queryset = Publisher.objects.all()'. 
+However, by using 'queryset' to define a filtered list of objects you can be more specific about the objects that will be visible in the view. 
+To pick a simple example, we might want to order a list of books by publication date, with the most recent first:
+指定'model = Publisher'实际上只是说'queryset = Publisher.objects.all（）'的`简写`。
+但是，通过使用'queryset'来定义一个`过滤`的`对象列表`，您可以更具体地了解在`视图`中`可见`的`对象`。
+为了选择一个简单的例子，我们可能想要根据`出版日期`来`排序`一个`books`列表，让`最新的`放在最前面：
+-------------------------
+from django.views.generic import ListView
+from books.models import Book
+
+class BookList(ListView):
+    queryset = Book.objects.order_by('-publication_date')
+    context_object_name = 'book_list'
+-------------------------
+译者注：
+我们实现了该功能，并`books/urls.py`做了URLconf定义，添加了模板`book_list.html`。
+通过访问链接：`http://127.0.0.1:8000/books/`,即可查看`books`列表。且按照`出版日期`的`倒序`排列。
+
+=============
+译者注：
+这里，实现一个让`出版商`（`Publisher`）,按照其所在`city`(`城市`)来`排序`，
+代码如下：
+----------------------
+class PublisherList(ListView):
+    #model = Publisher
+    queryset = Publisher.objects.order_by('city')
+    context_object_name = 'my_favorite_publishers'
+
+----------------------
+访问网站：`http://127.0.0.1:8000/publishers/`，得到如下内容：
+---------------
+My helpful timestamp site
+
+Publishers
+上海科学技术出版社
+上海译文出版社
+Penguin UK
+人民邮电出版社
+商务印书馆
+航空工业出版社
+中国科学技术大学音像出版社
+合肥工业大学出版社
+安徽科学技术出版社
+
+Thanks for visiting my site.
+---------------
+=============
+
+That’s a pretty simple example, but it illustrates the idea nicely. 
+Of course, you’ll usually want to do more than just reorder objects. 
+If you want to present a list of 'books' by a particular 'publisher', you can use the same technique:
+这是一个非常简单的例子，但它很好地说明了这个想法。
+当然，你通常不仅仅需要重新`排序`对象。
+如果您想通过一个特定的“出版商”（`publisher`）列出一个“书籍”列表（`a list of books`），则可以使用相同的技术：
+------------------
+from django.views.generic import ListView
+from books.models import Book
+
+class AcmeBookList(ListView):
+
+    context_object_name = 'book_list'
+    queryset = Book.objects.filter(publisher__name='Acme Publishing')
+    template_name = 'books/acme_list.html'
+------------------
+Notice that along with a filtered 'queryset', we’re also using a custom template name. 
+If we didn’t, the generic view would use the same template as the “vanilla” object list, which might not be what we want.
+请注意，除了一个`过滤`的“queryset”外，我们还使用`自定义`的`template`(`模板`)名称。
+如果我们不这样做，`通用视图`将使用与“vanilla”`object list`相同的`模板`，这可能不是我们想要的。
+---------------
+译者注：
+vanilla - Unexciting, normal, conventional, boring. (source)
+
+In your case it means "default" queryset value for generic view which will be
+---------
+queryset = Book.objects.all()
+---------
+If you don't specify it explicitly.
+---------------
+
+Also notice that this isn’t a very elegant way of doing 'publisher-specific' books. 
+If we want to add another publisher page, we’d need another handful of lines in the 'URLconf', and more than a few publishers would get unreasonable. 
+We’ll deal with this problem in the next section.
+
+另外请注意，这不是一个非常优雅的做'特定于出版商'(`publishers-specific`)的`书籍`(`books`)的方式。
+如果我们想要添加另一个`出版商`页面，那么我们需要在'URLconf'中添加另外几行代码，并且不止一些`publishers`会变得`不合理`。
+我们将在下一节讨论这个问题。
+===============================
+Dynamic Filtering
+
+Another common need is to filter down the objects given in a list page by some key in the URL. 
+Earlier we hard-coded the `publisher`’s name in the `URLconf`, but what if we wanted to write a view that displayed all the books by some arbitrary `publisher`?
+另一个常见需求是,通过URL中的某个`键`过滤`列表页`中给定的`对象`。
+早些时候，我们在`URLconf`中`硬编码`了`publisher`的`名字`，但是如果我们想编写一个`视图`来显示由一些任意的`publisher`（`出版商`）出版的所有`书籍`，该怎么办？
+
+Handily, the `ListView` has a `get_queryset()` method we can override. 
+Previously, it has just been returning the value of the `queryset` attribute, but now we can add more logic. 
+The key part to making this work is that when `class-based views` are called, various useful things are stored on self; 
+as well as the `request` (`self.request`), this includes the positional (`self.args`) and `name-based` (`self.kwargs`) arguments captured according to the `URLconf`.
+有用的是，`ListView`有一个我们可以`覆盖`的`get_queryset（）`方法。
+以前，它刚刚返回一个`queryset`属性的`值`，但现在我们可以添加更多`逻辑`。
+使其可以如此运转的`关键`部分是，当调用`基于类的视图`时，各种有用的东西都存储在`self`（`自己`）身上;
+以及`request`（`self.request`），这包括根据`URLconf`获取的`位置`（`self.args`）和`name-based'（`self.kwargs`）的`参数`。
+
+Here, we have a URLconf with a single captured group:
+在这里，我们有一个带有单个捕获组的URLconf：
+----------------
+# urls.py
+from django.conf.urls import url
+from books.views import PublisherBookList
+
+urlpatterns = [
+    url(r'^books/([\w-]+)/$', PublisherBookList.as_view()),
+]
+------------------------
+Next, we’ll write the PublisherBookList view itself:
+接下来，我们将编写`PublisherBookList`视图本身：
+-------------
+# views.py
+from django.shortcuts import get_object_or_404
+from django.views.generic import ListView
+from books.models import Book, Publisher
+
+class PublisherBookList(ListView):
+
+    template_name = 'books/books_by_publisher.html'
+
+    def get_queryset(self):
+        self.publisher = get_object_or_404(Publisher,  name=self.args[0])
+        return Book.objects.filter(publisher=self.publisher)
+-------------
+As you can see, it’s quite easy to add more logic to the `queryset` selection; 
+if we wanted, we could use `self.request.user` to filter using the current `user`, or other more complex logic. 
+We can also add the `publisher` into the `context` at the same time, so we can use it in the `template`:
+
+正如你所看到的，向`queryset`选择添加更多逻辑是很容易的;
+如果我们想要，我们可以使用`self.request.user`来使用当前的`user`或其他更复杂的逻辑进行过滤。
+我们还可以同时将`publisher`添加到`context`中，所以我们可以在`template`中使用它：
+----------------
+# ...
+
+def get_context_data(self, **kwargs):
+    # Call the base implementation first to get a context
+    context = super(PublisherBookList, self).get_context_data(**kwargs)
+
+    # Add in the publisher
+    context['publisher'] = self.publisher
+    return context ## Performing Extra Work
+------------------
+===========================
+译者注：
+
+`books/templates/books/books_by_publisher.html`文件，内容如下：
+------------------------------ 
+{% extends "base.html" %}
+
+{% block content %}
+    <h2> {{ publisher  }} 图书列表</h2>
+    <ul>
+        {% for book in book_list %}
+            <li>{{ book.title }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+------------------------------ 
+我参考了这个例子：
+执行如下命令：
+------------
+http://127.0.0.1:8000/books/人民邮电出版社/
+------------
+显示结果如下：
+-----------
+My helpful timestamp site
+人民邮电出版社 图书列表
+Android编程权威指南
+Thanks for visiting my site.
+-----------
+果然，效果很好。
+===========================
+
+The last common pattern we’ll look at involves doing some extra work before or after calling the generic view. 
+Imagine we had a `last_accessed` field on our `Author` model that we were using to keep track of the last time anybody looked at that `author`:
+我们要看的最后一个`常见模式`,涉及在调用`通用视图`之前或之后做一些`额外的`工作。
+想象一下，我们在'Author'模型上有一个'last_accessed'字段，用于跟踪上次看到'author'的时间：
+---------------------
+# models.py
+from django.db import models
+
+class Author(models.Model):
+    salutation = models.CharField(max_length=10)
+    name = models.CharField(max_length=200)
+    email = models.EmailField()
+    headshot = models.ImageField(upload_to='author_headshots')
+    last_accessed = models.DateTimeField()
+---------------------
+The generic `DetailView class`, of course, wouldn’t know anything about this field, but once again we could easily write a custom view to keep that field updated. 
+First, we’d need to add an `author` detail bit in the `URLconf` to point to a custom view:
+通用的`DetailView类`当然不会知道这个`字段`的任何内容，但我们可以再次轻松地编写一个`自定义视图`来保持该`字段`的`更新`。
+首先，我们需要在`URLconf`中添加一个`author`位,来指向一个自定义`视图`：
+------------------
+from django.conf.urls import url
+from books.views import AuthorDetailView
+
+urlpatterns = [
+    #...
+    url(r'^authors/(?P<pk>[0-9]+)/$', AuthorDetailView.as_view(), name='author-detail\'),
+]
+------------------
+Then we’d write our new view – `get_object` is the method that retrieves the `object` – so we simply override it and wrap the call:
+然后，我们将编写我们的`新视图` - “get_object”是检索`object`(“对象”)的方法 - 所以,我们简单地`覆盖`它并`包装`这个`调用`：
+------------------
+from django.views.generic import DetailView
+from django.utils import timezone
+from books.models import Author
+
+class AuthorDetailView(DetailView):
+
+    queryset = Author.objects.all()
+
+    def get_object(self):
+        # Call the superclass
+        object = super(AuthorDetailView, self).get_object()
+
+        # Record the last accessed date
+        object.last_accessed = timezone.now()
+        object.save()
+        # Return the object
+        return object 
+------------------
+The `URLconf` here uses the named group pk – this name is the default name that `DetailView` uses to find the value of the `primary key` used to `filter` the `queryset`.
+'URLconf'在这里使用`named group`--`pk`  - 这个`名字`是'DetailView`用来查找用于'过滤''queryset`的`primary key`(`主键`)的`值`的`默认名称`。
+
+If you want to call the `group` something else, you can set `pk_url_kwarg` on the view. 
+More details can be found in the reference for `DetailView`.
+如果你想调用`group`的其它东西，你可以在`视图`上设置`pk_url_kwarg`。
+更多细节可以在`DetailView`中找到。
+
+=========================================
+
+

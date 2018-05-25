@@ -1,0 +1,142 @@
+======================================
+Django Sessions
+Django会话
+------------------
+https://djangobook.com/django-sessions/
+------------------
+
+Imagine you had to log back in to a website every time you navigated to another page, or your favorite websites forgot all of your settings and you had to enter them again each time you visited?
+想象一下，每次浏览到另一个页面时，您都必须`重新登录`到`网站`，或者您最喜欢的网站忘记了所有`设置`，并且每次访问时都必须`重新输入`它们。
+
+Modern websites could not provide the usability and convenience we are used to without some way of remembering who you are and your previous activities on the website. HTTP is, by design, stateless – there is no persistence between one request and the next, and there is no way the server can tell whether successive requests come from the same person.
+现代网站无法提供我们习惯的`可用性`和`便利性`，而无法以某种方式`记住``您是谁`以及`您之前在网站上的活动`。
+在设计上，`HTTP`是`无状态`的 - 在一个`请求`和下一个`请求`之间`不存在``持久性`，并且`服务器`无法判断`连续请求`是否来自`同一个人`。
+
+This lack of state is managed using sessions, which are a semi-permanent, two-way communication between your browser and the web server. When you visit a modern website, in the majority of cases, the web server will use an anonymous session to keep track of data relevant to your visit. The session is called anonymous because the web server can only record what you did, not who you are.
+这种缺少`状态`是使用`会话`进行`管理`的，`会话`是`浏览器`和`Web服务器`之间的`半永久性``双向``通信`。
+当你访问一个现代化的网站时，在大多数情况下，`Web服务器`将使用`匿名会话`来跟踪与访问相关的数据。
+`会话`被称为`匿名`，因为`Web服务器`只能`记录`你所做的`事情`，而不是`你是谁`。
+
+We have all experienced this when we have returned to an eCommerce site at a later date and found the items we put in the cart are still there, despite not having provided any personal details.
+Sessions are most often persisted using the often maligned, but rarely understood cookie. Like all other web frameworks, Django also uses cookies, but does so in a more clever and secure manner, as you will see.
+当我们稍后返回`电子商务网站`时，我们都遇到过这种情况，并发现我们放入`购物车`的`物品`仍然存在，尽管`没有`提供任何`个人详细信息`。
+`会话`通常会`持续存在`,使用经常被`恶意`但很少理解的`Cookie`。
+像所有其他`Web框架`一样，Django也使用`Cookie`，但是以`更聪明`和`安全`的方式进行操作，就像您将看到的一样。
+
+Django provides full support for anonymous sessions. The session framework lets you store and retrieve arbitrary data on a per-site-visitor basis. It stores data on the server side and abstracts the sending and receiving of cookies. Cookies contain a session ID – not the data itself (unless you’re using the cookie based backend); a more secure way of implementing cookies than some other frameworks.
+Django全面支持`匿名会话`。`会话框架`允许您以每个站点`访问者`为`基础`,`存储`和`检索`任意数据。
+它将`数据`存储在`服务器端`并`提取``发送`和`接收`的`cookies`。 
+`Cookie`包含一个`会话ID`  - 不是`数据本身`（除非您使用基于`cookie`的后端）;一个比其他一些`框架`更安全的方法`实现cookie`。
+======================================
+Enabling Sessions
+启用会话
+Sessions are implemented via a piece of middleware. The default settings.py created by django-admin startproject has SessionMiddleware activated. To enable session functionality, edit the MIDDLEWARE_CLASSES setting and make sure it contains 'django.contrib.sessions.middleware.SessionMiddleware'.
+
+`会话`通过一个`中间件`来实现。
+由`django-admin startproject`创建的默认`settings.py`已经激活了`SessionMiddleware`。
+要启用`会话功能`，请编辑`MIDDLEWARE_CLASSES`设置并确保它包含'django.contrib.sessions.middleware.SessionMiddleware'。
+
+If you don’t want to use sessions, you might as well remove the SessionMiddleware line from MIDDLEWARE_CLASSES and 'django.contrib.sessions' from your INSTALLED_APPS. It’ll save you a small bit of overhead.
+如果您`不想`使用`会话`，则最好从`MIDDLEWARE_CLASSES`删除行`SessionMiddleware`，以及在`INSTALLED_APPS`中删除`django.contrib.sessions`。
+它会为你节省一点点的开销。
+======================================
+Configuring The Session Engine
+配置会话引擎
+
+By default, Django stores sessions in your database (using the model django.contrib.sessions.models.Session). Though this is convenient, in some setups it’s faster to store session data elsewhere, so Django can be configured to store session data on your file system or in your cache.
+默认情况下，Django将`会话`存储在你的`数据库`中（使用`模型``django.contrib.sessions.models.Session`）。
+尽管这很方便，但在某些`设置`中，将`会话数据``存储`在`别处`会`更快`，因此`Django`可以被配置为，存储`会话数据`在`文件系统`或`缓存`中。
+======================================
+Using Database-Backed Sessions
+使用`数据库支持`的`会话`
+
+If you want to use a database-backed session, you need to add 'django.contrib.sessions' to your INSTALLED_APPS setting. Once you have configured your installation, run manage.py migrate to install the single database table that stores session data.
+如果您想使用一个`数据库支持`的`会话`，则需要将'django.contrib.sessions'添加到你的`INSTALLED_APPS`设置中。
+一旦你配置好安装，运行`manage.py migrate`以`安装``单个数据库表`用于`存储``会话数据`。
+======================================
+Using Cached Sessions
+使用`缓存会话`
+
+For better performance, you may want to use a cache-based session backend. To store session data using Django’s cache system, you’ll first need to make sure you’ve configured your cache; see the cache documentation for details.
+为了获得更好的`性能`，您可能需要使用`基于缓存`的`会话后端`。
+要使用`Django`的`缓存系统`来`存储``会话数据`，您首先需要确保您配置了`缓存`;
+详细信息请参阅`缓存文档`。
+---------------------
+You should only use cache-based sessions if you’re using the Memcached cache backend. The local-memory cache backend doesn’t retain data long enough to be a good choice, and it’ll be faster to use file or database sessions directly instead of sending everything through the file or database cache backends. Additionally, the local-memory cache backend is NOT multi-process safe, therefore probably not a good choice for production environments.
+如果您使用`Memcached cache backend`,你应该使用`基于缓存`的`会话`。
+`本地内存高速缓存后端`保留`数据`并不会很长，从而成为一个`好的``选择`，比`使用文件`或`数据库会话`会更快，而不是通过`文件`或`数据库高速缓存后端``发送`所有`内容`。
+此外，`本地内存缓存后端``不是``多进程安全`的，因此可能`不是``生产环境`的`理想选择`。
+---------------------
+If you have multiple caches defined in CACHES, Django will use the default cache. To use another cache, set SESSION_CACHE_ALIAS to the name of that cache. Once your cache is configured, you’ve got two choices for how to store data in the cache:
+
+如果您在`CACHES`中定义了多个`缓存`，则`Django`将使用`默认缓存`。
+要使用另一个`缓存`，请将`SESSION_CACHE_ALIAS`设置为该`缓存`的`名称`。
+一旦你的`缓存`配置好了，你就有`两种选择`如何将数据存储在`缓存`中：
+--------------------
+1.Set SESSION_ENGINE to "django.contrib.sessions.backends.cache" for a simple caching session store. Session data will be stored directly in your cache. However, session data may not be persistent: cached data can be evicted if the cache fills up or if the cache server is restarted.
+1.为一个简单的`缓存会话存储`，设置`SESSION_ENGINE`为“django.contrib.sessions.backends.cache”。
+`会话数据`将直接存储在`缓存`中。
+但是，`会话数据`可能不是`持久性`的：如果`缓存`填满或`缓存`服务器重新启动，`缓存数据`可能会被`逐出`。
+
+2. For persistent, cached data, set SESSION_ENGINE to "django.contrib.sessions.backends.cached_db". This uses a write-through cache – every write to the cache will also be written to the database. Session reads only use the database if the data is not already in the cache.
+2.对于`持久``缓存数据`，将`SESSION_ENGINE`设置为“django.contrib.sessions.backends.cached_db”。
+这使用一个`直写式``缓存` - `每`写入高速缓存也将写入`数据库`。
+如果`数据`尚未存在于`缓存`中，则`会话`读取仅使用`数据库`。
+
+Both session stores are quite fast, but the simple cache is faster because it disregards persistence. In most cases, the cached_db backend will be fast enough, but if you need that last bit of performance, and are willing to let session data be expunged from time to time, the cache backend is for you. If you use the cached_db session backend, you also need to follow the configuration instructions for the using database-backed sessions.
+`两种会话`存储都非常快，但`简单缓存`更快，因为它忽略了`持久性`。
+在大多数情况下，`cached_db后端`将足够快，但是如果您需要性能的最后一点，并且愿意让`会话数据`不时被`删除`，那么`缓存后端`就是为您`服务`的。
+如果您使用`cached_db会话后端`，则还需要遵循使用`数据库支持会话`的`配置说明`。
+--------------------
+======================================
+Using File-Based Sessions
+使用基于文件的会话
+
+To use file-based sessions, set the SESSION_ENGINE setting to "django.contrib.sessions.backends.file". You might also want to set the SESSION_FILE_PATH setting (which defaults to output from tempfile.gettempdir(), most likely /tmp) to control where Django stores session files. Be sure to check that your Web server has permissions to read and write to this location.
+要使用`基于文件的会话`，请将`SESSION_ENGINE`设置为“django.contrib.sessions.backends.file”。
+您可能还想设置`SESSION_FILE_PATH`设置（默认从`tempfile.gettempdir（）`输出，很可能是`/tmp`）来控制`Django``存储会话文件`的`位置`。
+务必检查您的`Web服务器`是否有权`读取`和`写入`此位置。
+======================================
+Using Cookie-Based Sessions
+使用基于Cookie的会话
+
+To use cookies-based sessions, set the SESSION_ENGINE setting to "django.contrib.sessions.backends.signed_cookies". The session data will be stored using Django’s tools for cryptographic signing and the SECRET_KEY setting.
+使用`基于cookie的会话`，请将`SESSION_ENGINE`设置为“django.contrib.sessions.backends.signed_cookies”。
+`会话数据`将使用`Django`的`加密签名工具`和`SECRET_KEY`设置进行`存储`。
+
+It’s recommended to leave the SESSION_COOKIE_HTTPONLY setting on True to prevent access to the stored data from JavaScript.
+建议将`SESSION_COOKIE_HTTPONLY`设置设置为`True`，以防止从`JavaScript`访问存储的`数据`。
+---------------------------
+If the SECRET_KEY is not kept secret and you are using the PickleSerializer, this can lead to arbitrary remote code execution.
+An attacker in possession of the SECRET_KEY can not only generate falsified session data, which your site will trust, but also remotely execute arbitrary code, as the data is serialized using pickle. If you use cookie-based sessions, pay extra care that your secret key is always kept completely secret, for any system which might be remotely accessible.
+
+如果`SECRET_KEY`不保密,并且您正在使用`PickleSerializer`，则可能导致`任意远程代码执行`。
+拥有`SECRET_KEY`的`攻击者`不仅可以生成`伪造`的`会话数据`，您的`站点`将`信任`该数据，还可以`远程执行任意代码`，因为`数据`是使用`pickle序列化`的。
+如果您使用`基于cookie`的会话，请特别注意您的`密钥`始终保持完全`保密`，因为任何`系统`可能被`远程访问`。
+--------------------------
+
+--------------------------
+The session data is signed but not encrypted
+When using the cookies backend, the session data can be read by the client. A MAC (Message Authentication Code) is used to protect the data against changes by the client, so that the session data will be invalidated when being tampered with. The same invalidation happens if the client storing the cookie (e.g. your user’s browser) can’t store all of the session cookie and drops data. Even though Django compresses the data, it’s still entirely possible to exceed the common limit of 4096 bytes per cookie.
+会话数据已签名但未加密
+当使用`cookies后端`时，`会话数据`可以被`客户端``读取`。
+一个MAC（消息认证码）用于保护数据免受`客户端`的`改变`，以便`会话数据`在被`篡改`时将`失效`。
+如果`存储cookie`的`客户端`（例如您的`用户`的`浏览器`）无法`存储`所有`会话cookie`并`丢弃数据`，则会发生同样的`失效`。
+尽管Django`压缩数据`，但仍然完全有可能超过每个`cookie`4096个字节的`常见限制`。
+--------------------------
+
+--------------------------
+No freshness guarantee
+Note also that while the MAC can guarantee the authenticity of the data (that it was generated by your site, and not someone else), and the integrity of the data (that it is all there and correct), it cannot guarantee freshness i.e. that you are being sent back the last thing you sent to the client. This means that for some uses of session data, the cookie backend might open you up to replay attacks. Unlike other session backends which keep a server-side record of each session and invalidate it when a user logs out, cookie-based sessions are not invalidated when a user logs out. Thus if an attacker steals a user’s cookie, they can use that cookie to login as that user even if the user logs out. Cookies will only be detected as ‘stale’ if they are older than your SESSION_COOKIE_AGE.
+
+没有`新鲜度``保证`
+还要注意的是，虽然`MAC`可以保证`数据`的`真实性`（`数据`是由您的`网站`而不是`其他人`生成的），`数据`的`完整性`（`数据`的`完整性`和`正确性`），但它不能保证数据的`真实性`，即你正在被送回你发给客户的最后一件东西。
+这意味着对于`会话数据`的某些用途，`cookie后端`可能会让您重新开始`重放攻击`。
+与`其他会话后端`不同，`后者`保留每个`会话`的`服务器端记录`，并在`用户``注销`时使其`失效`，当用户`注销`时，`基于cookie`的`会话`不会失效。
+因此，如果攻击者窃取用户的`cookie`，即使用户`注销`，他们也可以使用该`cookie`以该`用户`的`身份``登录`。
+如果`Cookie`比您的`SESSION_COOKIE_AGE`年龄大，则只会将其`检测`为“陈旧”。
+--------------------------
+Finally, assuming the above warnings have not discouraged you from using cookie based sessions: the size of a cookie can also have an impact on the speed of your site.
+
+最后，假设上述警告并未阻止您使用`基于Cookie的会话`：`Cookie`的`大小`也会影响您`网站`的`速度`。
+======================================

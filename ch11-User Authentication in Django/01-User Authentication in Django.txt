@@ -1,0 +1,285 @@
+=======================
+Authentication in Django
+在Django中,用户认证
+-------------------
+https://djangobook.com/user-authentication-django/
+-------------------
+=======================
+A significant percentage of modern, interactive websites allow some form of user interaction – from allowing simple comments on a blog, to full editorial control of articles on a news site. 
+If a site offers any sort of ecommerce, authentication and authorization of paying customers is essential.
+
+Just managing users – lost usernames, forgotten passwords and keeping information up to date – can be a real pain. 
+As a programmer, writing an authentication system can be even worse.
+
+Lucky for us, Django provides a default implementation for managing user accounts, groups,  permissions and cookie-based user sessions out of the box.
+
+Like most things in Django, the default implementation is fully extensible and customizable to suit your project’s needs.
+So let’s jump right in.
+
+很多现代互动网站，允许某种形式的`用户互动` - 从允许在`博客`上发表`简单评论`到对`新闻网站`上的`文章`进行全面`编辑`控制。
+如果一个网站提供任何类型的`电子商务`，`支付`客户的`认证`和`授权`是至关重要的。
+仅仅管理`用户` - `丢失用户名`，`忘记密码`和`保持信息更新` - 可能是一个真正的痛苦。
+作为`程序员`，编写`认证系统`可能会`更糟`。
+幸运的是，Django提供了一个`默认实现`，用于管理`用户帐户`，`组`，`权限`和`开箱即用`的`基于cookie`的`用户会话`。
+所以让我们直接进入。
+
+===========================
+Overview
+概观
+
+The Django authentication system handles both authentication and authorization.
+Briefly, `authentication` verifies a `user` is who they claim to be, and `authorization` determines what an `authenticated` `user` is allowed to do. 
+Here the term `authentication` is used to refer to both tasks.
+
+Django`认证系统`处理`认证`和`授权`。
+简而言之，`认证'验证'用户'是他们`自称`是`谁`，'授权'决定了'认证'用户可以`做什么`。
+这里使用术语`认证'来指代这`两个任务`。
+
+The authentication system consists of:
+`认证系统`由以下部分组成：
+----------------------
++ Users
++ Permissions: Binary (yes/no) flags designating whether a user may perform a certain task
++ Groups: A generic way of applying labels and permissions to more than one user
++ A configurable password hashing system
++ Forms for managing user authentication and authorization
++ View tools for logging in users, or restricting content
++ A pluggable backend system
+----------------------
+
+----------------------
++用户
++权限：指定`一个``用户`是否可以`执行特定任务`的二进制`标志`（是/否）
++组：将`标签`和`权限`应用于`多个``用户`的通用方法
++可配置的`密码散列系统`
++用于管理用户`身份验证`和`授权`的`表单`
++查看`登录用户`或`限制内容`的`工具`
++一个`可插入`的`后端系统`
+----------------------
+
+The authentication system in Django aims to be very generic and doesn’t provide some features commonly found in web authentication systems.
+Solutions for some of these common problems have been implemented in third-party packages:
+Django中的`认证系统`的`目标`是非常`通用`，并且`不`提供`Web认证系统`中常见的一些功能。
+`第三方软件包`已经实施了一些常见问题的解决方案：
+
+----------------------
++ Password strength checking
++ Throttling of login attempts
++ Authentication against third-parties (OAuth, for example)
+----------------------
+
+----------------------
++密码强度检查
++限制登录尝试
++针对第三方的身份验证（例如，OAuth）
+----------------------
+========================
+Using The Django Authentication System
+
+Django’s authentication system in its default configuration has evolved to serve the most common project needs, handling a reasonably wide range of tasks, and has a careful implementation of passwords and permissions.
+For projects where authentication needs differ from the default, Django also supports extensive extension and customization of authentication.
+
+Django的`认证系统`的`默认配置`已经发展到满足最常见的项目需求，处理合理范围广泛的任务，并且仔细实现了`密码`和`权限`。
+对于`认证需求`与`默认`不同的项目，Django还支持广泛的`扩展`和`定制认证`。
+
+=========================
+User Objects
+
+User objects are the core of the authentication system. 
+They typically represent the people interacting with your site and are used to enable things like restricting access, registering user profiles, associating content with creators etc. 
+Only one class of user exists in Django’s authentication framework, i.e., `superusers` or `admin staff` users are just user objects with special attributes set, not different classes of user objects. 
+The primary attributes of the default user are:
+`用户对象`是认证系统的核心。
+它们通常代表与您网站互动的`人`，并用于`启用`限制访问权限，注册用户配置文件，将`内容`与`创作者`关联等内容。
+Django的`身份验证框架`中只存在`一类用户`，即“超级用户”或“管理员”用户，也只是具有`特殊属性`的`用户对象`，而不是`不同类`的`用户对象`。
+默认`用户`的主要`属性`是：
+----------------
++ username
++ password
++ email
++ first_name
++ last_name
+----------------
+===========================
+Creating Superusers
+Create superusers using the createsuperuser command:
+创建超级用户
+使用`createsuperuser`命令,创建`超级用户`：
+---------------
+python manage.py createsuperuser --username=joe --email=joe@example.com 
+---------------
+You will be prompted for a password. 
+After you enter one, the user will be created immediately.
+If you leave off the --username or the --email options, it will prompt you for those values.
+系统会提示您输入密码。
+输入一个后，用户将立即创建。
+如果您不使用--username或--email选项，它会提示您输入这些值。
+==============================
+Creating Users
+创建用户
+The simplest, and least error prone way to create and manage users is through the Django admin.
+Django also provides built in views and forms to allow users to log in and out and change their own password.
+We will be looking at user management via the `admin` and generic `user forms` a bit later in this chapter, but first, let’s look at how we would handle user authentication directly.
+
+创建和管理用户的最简单，最容易出错的方式是通过Django管理员。
+Django还提供内置的`视图`和`表单`,以允许`用户登录`和`更改`自己的`密码`。
+本章后面我们将通过`admin`和通用`user forms'(`用户表单`)来探讨`用户管理`，但首先让我们看看我们将如何`直接`处理`用户认证`。
+
+The most direct way to create users is to use the included `create_user()` helper function:
+`创建用户`,最直接的方法是,使用包含的`create_user（）`辅助函数：
+
+----------------------
+>>> from django.contrib.auth.models import User
+>>> user = User.objects.create_user('john', 'lennon@thebeatles.com',  'johnpassword')
+
+# At this point, user is a User object that has already been saved
+# to the database. You can continue to change its attributes
+# if you want to change other fields.
+>>> user.last_name = 'Lennon'
+>>> user.save()
+-------------------------
+==============================
+Changing Passwords
+
+Django does not store raw (clear text) passwords on the `user` model, but only a `hash`. 
+Because of this, do not attempt to manipulate the `password` attribute of the user directly. 
+This is why a helper function is used when creating a user. 
+To change a user’s password, you have two options:
+Django不会在`user`模型中存储`原始（纯文本）密码`，而只会存储一个`hash`。
+因此，不要试图直接操作`用户`的`password`属性。
+这就是`创建用户`时使用帮助函数的原因。
+要`更改`用户的`密码`，您有两种选择：
+-------------------
+1. manage.py changepassword username 
+offers a method of changing a User’s password from the command line. 
+It prompts you to change the password of a given user which you must enter twice. 
+If they both match, the new password will be changed immediately. 
+If you do not supply a user, the command will attempt to change the password of the user whose username matches the current system user.
+提供了一种从`命令行`更改`用户密码`的方法。
+它会提示您更改您必须输入`两次`的给定`用户`的`密码`。
+如果两者都匹配，则`新密码`将立即`更改`。
+如果您不提供`用户`，则该命令将尝试更改`用户名`与当前`系统用户`匹配的`用户`的`密码`。
+
+2.You can also change a password programmatically, using `set_password()`:
+您也可以使用`set_password（）`以编程方式更改密码：
+------------------
+  >>> from django.contrib.auth.models import User
+  >>> u = User.objects.get(username='john')
+  >>> u.set_password('new password')
+  >>> u.save()
+------------------
+Changing a user’s password will log out all their sessions if the `SessionAuthenticationMiddleware` is enabled.
+如果启用了`SessionAuthenticationMiddleware`，则更改用户的密码将注销其所有会话。
+==============================
+Permissions and Authorization
+权限和授权
+
+Django comes with a simple permissions system. It provides a way to assign permissions to specific users and groups of users. It’s used by the Django admin site, but you’re welcome to use it in your own code. The Django admin site uses permissions as follows:
+
+Django带有一个简单的`权限系统`。它提供了一种为`特定用户`和`用户组`分配权限的方法。
+它由Django`后台管理系统`使用，但欢迎您在自己的`代码`中使用它。 
+Django`后台管理系统`使用`权限`如下：
+
+--------------------
++ Access to view the “add” form and add an object is limited to users with the “add” permission for that type of object.
++ Access to view the change list, view the “change” form and change an object is limited to users with the “change” permission for that type of object.
++ Access to delete an object is limited to users with the “delete” permission for that type of object.
+--------------------
+
+--------------------
++ 有访问权限去查看“添加”表单,并`添加一个对象`仅限于具有该`类型`对象的“添加”权限的`用户`。
++ 有访问权限去查看`更改列表`，查看“更改”表单,并更改一个对象仅限于具有该类型对象的“更改”权限的`用户`。
++ 只有具有该类型对象的“删除”权限的用户，才能有权限去`删除`一个`对象`。
+--------------------
+Permissions can be set not only per type of object, but also per specific object instance. 
+By using the has_add_permission(), has_change_permission() and has_delete_permission() methods provided by the ModelAdmin class, it’s possible to customize permissions for different object instances of the same type. 
+User objects have two `many-to-many` fields: `groups` and `user_permissions`. 
+User objects can access their related objects in the same way as any other Django model.
+
+`权限`不仅可以被设置为`每种类型`的`对象`，还可以根据特定的`对象实例`设置。
+通过使用`ModelAdmin类`提供的`has_add_permission（）`，`has_change_permission（）`和`has_delete_permission（）`方法，可以为`同一类型`的`不同对象实例`定制`权限`。
+用户对象有两个`多对多`字段：`groups`和`user_permissions`。
+用户对象可以像其他任何Django模型一样访问其相关对象。
+
+================================
+Default Permissions
+
+When `django.contrib.auth` is listed in your `INSTALLED_APPS` setting, it will ensure that three default permissions – `add`, `change` and `delete` – are created for each Django model defined in one of your installed applications. 
+These permissions will be created for all new models each time you run `manage.py migrate`.
+当'django.contrib.auth`在你的`INSTALLED_APPS`设置中被`列出`时，它将`确保为你`installed applications`中`定义`的每个`Django模型`创建三个`默认权限`：`add`，`change`和`delete`。 
+每次运行`manage.py migrate`时，将为所有`新模型`创建这些`权限`。
+================================
+Groups 组
+
+`django.contrib.auth.models.Group` models are a generic way of categorizing users so you can apply permissions, or some other label, to those users. 
+A user can belong to any number of groups. 
+A user in a group automatically has the permissions granted to that group. 
+For example, if the group Site editors has the permission `can_edit_home_page`, any user in that group will have that permission.
+
+`django.contrib.auth.models.Group`模型,是对`用户`进行分类的一种通用方式，因此您可以将`权限`或其他`标签`应用于这些`用户`。
+用户可以属于任何数量的`组`。
+在一个`组`中的一个`用户`,自动拥有该`组`所授予的`权限`。
+例如，如果`网站编辑组`（`group site editors`）拥有权限`can_edit_home_page`，那么该`组`中的`任何用户`都将拥有该`权限`。
+
+Beyond permissions, groups are a convenient way to categorize users to give them some label, or extended functionality.
+For example, you could create a group “Special users,” and you could write code that could, say, give them access to a members-only portion of your site, or send them members-only email messages.
+
+除了`权限`之外，`组`是一种方便的方式来对用户进行`分类`，以给他们一些`标签`或`扩展功能`。
+例如，您可以创建一个`组`-“特殊用户”组，并且您可以编写代码，可以让他们访问您网站的仅限`会员`的部分，或向其发送仅限`会员`的`电子邮件`。
+=================================
+Programmatically Creating Permissions
+以编程方式,创建`权限`
+
+While custom permissions can be defined within a model’s `Meta` class, you can also create permissions directly. 
+For example, you can create the `can_publish permission` for a `BookReview` model in `books`:
+
+虽然自定义权限可以在模型的`Meta类`中定义，但您也可以直接`创建权限`。
+例如，您可以为`books`中的`BookReview`模型,创建`can_publish`权限：
+-------------------
+from books.models import BookReview
+from django.contrib.auth.models import Group, Permission
+from django.contrib.contenttypes.models import ContentType
+
+content_type = ContentType.objects.get_for_model(BookReview)
+permission = Permission.objects.create(codename='can_publish',
+                                       name='Can Publish Reviews',
+                                       content_type=content_type)
+-------------------
+The permission can then be assigned to a `User` via its `user_permissions` attribute or to a `Group` via its `permissions` attribute.
+`权限`可以被分配给一个`User`，通过它的`user_permissions`属性，或者`权限`被分配给一个`Group`,通过其`permissions`属性。
+
+===============================
+Permission Caching
+权限缓存
+
+The ModelBackend caches permissions on the User object after the first time they need to be fetched for a permissions check.
+This is typically fine for the request-response cycle since permissions are not typically checked immediately after they are added (in the admin, for example).
+
+在首次获取一个`用户对象`的`一个权限检查`之后，`ModelBackend`会`缓存`该用户对象的`权限`。
+对于`请求-响应`周期来说，这通常很好，因为`权限`被`添加`之后，通常不会被`立即`检查（例如，在`后台管理系统`中）。
+
+If you are adding permissions and checking them immediately afterward, in a test or view for example, the easiest solution is to re-fetch the User from the database. For example:
+如果您正在添加`权限`,并在之后`立即检查`它们，例如,在一个测试或视图中，最简单的解决方案是，从`数据库`中`重新`(`re-fetch`)获取这个`用户`。例如：
+-------------------------
+from django.contrib.auth.models import Permission, User
+from django.shortcuts import get_object_or_404
+
+def user_gains_perms(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    # any permission check will cache the current set of permissions
+    user.has_perm('books.change_bar')
+
+    permission = Permission.objects.get(codename='change_bar')
+    user.user_permissions.add(permission)
+
+    # Checking the cached permission set
+    user.has_perm('books.change_bar')  # False
+
+    # Request new instance of User
+    user = get_object_or_404(User, pk=user_id)
+
+    # Permission cache is repopulated from the database
+    user.has_perm('books.change_bar')  # True
+
+    # ...
+-----------------------------

@@ -1,0 +1,606 @@
+=========================
+Advanced Views and URLconfs
+-----------
+https://djangobook.com/advanced-views-urlconfs/
+-----------
+=========================
+
+=========================
+### URLconf Tips and Tricks
+
+=========================
+## Streamlining Function Imports
+简化`导入`功能
+
+我们在第二章，导入了`views`模块的各个函数，如下所示：
+-----------------------
+from django.conf.urls import include, url
+from django.contrib import admin
+from mysite.views import hello, current_datetime, hours_ahead
+
+urlpatterns = [
+      url(r'^admin/', include(admin.site.urls)),
+      url(r'^hello/$', hello),
+      url(r'^time/$', current_datetime),
+      url(r'^time/plus/(\d{1,2})/$', hours_ahead),
+      ]
+
+-----------------------
+But as a Django application grows in complexity, its `URLconf` grows, too, and keeping those `imports` can be tedious to manage. 
+(For each new `view` function, you have to remember to import it, and the import statement tends to get overly long if you use this approach.)
+
+但是随着Django应用程序的复杂性增加，它的`URLconf`也会增长，并且保留这些`imports`可能会很繁琐。
+（对于每个新的`view`函数，你都必须记住导入它，如果你使用这种方法，导入语句会过长。）
+
+It’s possible to avoid that tedium by importing the `views` module itself. This example `URLconf` is equivalent to the previous one:
+通过导入`视图`模块本身，可以避免这种乏味。这个`URLconf`示例,等同于前一个示例：
+
+-----------------------
+from django.conf.urls import include, url
+from . import views
+
+urlpatterns = [
+    url(r'^hello/$', views.hello),
+    url(r'^time/$', views.current_datetime),
+          url(r'^time/plus/(d{1,2})/$', views.hours_ahead),
+]
+-----------------------
+=========================
+
+Special-Casing URLs in Debug Mode
+在`调试模式`下,Special-Casing URL 
+
+
+Speaking of constructing urlpatterns dynamically, you might want to take advantage of this technique to alter your URLconf’s behavior while in Django’s debug mode. To do this, just check the value of the DEBUG setting at runtime, like so:
+说到`动态`构建`urlpattern`，你可能想利用这种技术来改变你的`URLconf`在`Django调试模式`下的行为。为此，只需在运行时检查`DEBUG`设置的`值`，如下所示：
+------------------------
+from django.conf import settings
+from django.conf.urls import url
+from . import views
+
+urlpatterns = [
+    url(r'^$', views.homepage),
+    url(r'^(\d{4})/([a-z]{3})/$', views.archive_month),
+]
+
+if settings.DEBUG:
+    urlpatterns += [url(r'^debuginfo/$', views.debug),]
+------------------------
+In this example, the URL `/debuginfo/` will only be available if your `DEBUG` setting is set to `True`.
+
+==============================
+==============================
+### Named Groups
+命名组
+
+The above example used simple, `non-named` regular-expression groups (via `parenthesis`) to capture bits of the URL and pass them as `positional` arguments to a view.
+上面的例子使用简单的“非命名”正则表达式组（通过`括号'）来捕获`URL`的位,并将它们作为`位置`参数传递给一个`视图`。
+
+In Python regular expressions, the syntax for named regular-expression groups is `(?P<name>pattern)`, where `name` is the name of the `group` and `pattern` is some pattern to match.
+在Python正则表达式中，命名正则表达式`组`的语法是`（?P<name>pattern`，其中`name`是`group`的名称，`pattern`是一些匹配的模式。
+
+For example, say we have a list of book `reviews` on our books site, and we want to retrieve `reviews` for certain dates, or date ranges.
+例如，假设我们的`图书网站`上有`书评`的列表，并且我们想要`检索`特定日期或日期范围的`评论`。
+
+Here’s a sample URLconf:
+-----------------------
+from django.conf.urls import url
+
+from . import views
+
+urlpatterns = [
+    url(r'^reviews/2003/$', views.special_case_2003),
+    url(r'^reviews/([0-9]{4})/$', views.year_archive),
+    url(r'^reviews/([0-9]{4})/([0-9]{2})/$', views.month_archive),
+    url(r'^reviews/([0-9]{4})/([0-9]{2})/([0-9]+)/$', views.review_detail),
+]
+-----------------------
+
+Notes:
+---------------
+++ To capture a value from the URL, just put `parenthesis` around it.
+++ There’s no need to add a `leading slash`, because every URL has that. 
+For example, it’s `^reviews`, not `^/reviews`.
+++ The `'r'` in front of each regular expression string is optional but recommended. 
+It tells Python that a string is `“raw”` – that nothing in the string should be escaped.
+
+++ 要从`URL`中捕获一个`值`，只需在其周围放置`括号`即可。
+++ 没有必要添加一个`前导斜杠`，因为每个`URL`都有。例如，它是`^reviews`，而不是`^/reviews`。
+++ 每个`正则表达式``字符串`前面的'r'是可选的，但建议使用。
+它告诉Python,一个字符串是`“原始的”`(`raw`) - 字符串中的任何内容都不应该被`转义`。
+---------------
+
+Example requests:
+-----------------
+++ A request to `/reviews/2005/03/` would match the third entry in the list. 
+Django would call the function `views.month_archive(request, '2005', '03')`.
+++ `/reviews/2005/3/` would not match any URL patterns, because the third entry in the list requires two digits for the month.
+++ `/reviews/2003/` would match the first pattern in the list, not the second one, because the patterns are tested in order, and the first one is the first test to pass. 
+Feel free to exploit the ordering to insert special cases like this.
+++ `/reviews/2003` would not match any of these patterns, because each pattern requires that the URL end with a slash.
+++ `/reviews/2003/03/03/` would match the final pattern. 
+Django would call the function `views.review_detail(request, '2003', '03','03')`.
+-----------------
+Here’s the above example URLconf, rewritten to use named groups:
+使用`命名组`(``named group)重写的上述示例URLconf：
+------------------
+from django.conf.urls import url
+from . import views
+
+urlpatterns = [
+    url(r'^reviews/2003/$', views.special_case_2003),
+    url(r'^reviews/(?P<year>[0-9]{4})/$', views.year_archive),
+    url(r'^reviews/(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/$',
+views.month_archive),
+    url(r'^reviews/(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/(?P<day>[0-9]{2})/$',views.review_detail),
+------------------
+This accomplishes exactly the same thing as the previous example, with one subtle difference: 
+The captured values are passed to view functions as `keyword` arguments rather than `positional` arguments.
+For example:
+这与前面的例子完全一样，只有一个细微的差别：
+捕获的值被传递给`视图函数`，作为`关键字`参数，而不是作为`位置参数'来传递的。
+例如：
+--------------------
+++ A  request to `/reviews/2005/03/` would call the function `views.month_archive(request, year='2005', month='03')`, instead of `views.month_archive(request, '2005', '03')`.
+++ A request to `/reviews/2003/03/03/` would call the function `views.review_detail(request, year='2003', month='03', day='03')`.
+--------------------
+In practice, this means your `URLconfs` are slightly more explicit and less prone to argument-order bugs – and you can reorder the arguments in your `views`’ function definitions. 
+Of course, these benefits come at the cost of `brevity`; 
+some developers find the named-group syntax ugly and too verbose.
+
+实际上，这意味着你的`URLconfs`稍微更加`明确`，不太容易出现`参数顺序`错误 - 你可以在`views``函数定义中对`参数`进行`重新排序`。
+当然，这些好处是以“简洁”为代价的;
+一些开发人员发现`命名组语法`,`丑陋`而且太`冗长`。
+
+===============================
+The matching/grouping algorithm
+匹配/组合 算法
+
+Here’s the algorithm the `URLconf` parser follows, with respect to `named groups` vs. `non-named groups` in a regular expression:
+------------------
+1.If there are any `named` arguments, it will use those, ignoring `non-named` arguments.
+2.Otherwise, it will pass all `non-named` arguments as `positional` arguments.
+------------------
+In both cases, any extra keyword arguments that have been given will also be passed to the view.
+
+下面是`URLconf`解析器遵循的算法，与正则表达式中的'命名组'和'非命名组'有关：
+1.如果有`named`参数，它将使用那些，忽略`非命名`参数。
+2.否则，它将传递所有'非命名'参数作为'位置'参数。
+------------------
+在这两种情况下，已经给出的任何`额外的``关键字`参数也将被传递给`视图`。
+
+===============================
+### What the URLconf Searches Against
+URLconf搜索的对象
+
+The URLconf searches against the requested URL, as a normal Python string. 
+This does not include `GET` or `POST` parameters, or the domain name. 
+For example, in a request to `http://www.example.com/myapp/`, the URLconf will look for `myapp/`. 
+In a request to `http://www.example.com/myapp/?page=3`, the URLconf will look for `myapp/`. 
+The URLconf doesn’t look at the request method. In other words, all request methods – `POST`, `GET`, `HEAD`, etc. – will be routed to the same function for the same URL.
+
+`URLconf`搜索请求的URL，作为一个普通的Python字符串。
+这不包括`GET`或`POST`参数或`域名`。
+例如，在对“http://www.example.com/myapp/`的请求中，URLconf将查找”myapp/“。
+在“http：//www.example.com/myapp/？page = 3”的请求中，URLconf将查找“myapp/”。
+URLconf不查看请求的`方法`（`method`）。换句话说，所有请求方法（`POST`，`GET`，`HEAD`等）都将被`路由`到相同的`URL`的同一个`函数`。
+=================================
+### Captured Arguments Are Always Strings
+捕获的参数，总是字符串类型（Strings）
+
+Each captured argument is sent to the view as a plain Python string, regardless of what sort of match the regular expression makes. 
+每个捕获的的参数，被送到`视图`，都是作为一个`普通的Python字符串`（`a Plain Python string`），不管它正则表达式匹配了什么。
+
+For example, in this `URLconf` line:
+--------------------
+url(r'^reviews/(?P<year>[0-9]{4})/$', views.year_archive),
+--------------------
+… the `year` argument to `views.year_archive()` will be a `string`, not an `integer`, even though the [0-9]{4} will only match integer strings.
+参数`year`, 之于`views.year_archive()`函数，也是一个`string`（`字符串类型`）,不是一个`integer`(`整数类型`)，即使`[0-9]{4}`只能匹配`整数`字符串。
+===================================
+#Specifying Defaults for View Arguments
+为`View`视图的`参数`，指定`默认值`
+
+A convenient trick is to specify default parameters for your views’ arguments. Here’s an example URLconf:View Arguments
+一个方便的技巧是为`视图`的`参数`指定`默认参数`。以下是URLconf的一个示例：View参数
+-----------------
+# URLconf
+from django.conf.urls import url
+
+from . import views
+
+urlpatterns = [
+    url(r'^reviews/$', views.page),
+    url(r'^reviews/page(?P<num>[0-9]+)/$', views.page),
+]
+
+# View (in reviews/views.py)
+def page(request, num="1"):
+    # Output the appropriate page of review entries, according to num.
+-----------------
+In the above example, both URL patterns point to the same view – `views.page` – but the first pattern doesn’t capture anything from the URL. 
+If the first pattern matches, the `page()` function will use its `default argument for `num`, "1". 
+If the second pattern matches, `page()` will use whatever num value was captured by the regex.
+
+在上面的例子中，两种URL模式都指向相同的`视图`-`views.page` - 但第一种模式不会捕获URL中的任何内容。
+如果第一个模式匹配，`page（）`函数将使用`num`的默认参数“1”。
+如果第二个模式匹配，`page（）`将使用正则表达式捕获的任何num值。
+===================================
+Performance
+性能
+
+Each regular expression in a `urlpatterns` is compiled the first time it’s accessed. 
+This makes the system blazingly fast.
+在一个`urlpatterns`中，每个正则表达式第一次被访问的时候，都会会被编译。
+这使得系统非常快速。
+
+================
+Keyword Arguments vs. Positional Arguments
+
+
+A Python function can be called using `keyword` arguments or `positional` arguments – and, in some cases, both at the same time. 
+In a keyword argument call, you specify the names of the arguments along with the values you’re passing. 
+In a positional argument call, you simply pass the arguments without explicitly specifying which argument matches which value; 
+the association is implicit in the arguments’ order.
+
+======================================
+### Error Handling
+错误处理
+
+When Django can’t find a regex matching the requested URL, or when an exception is raised, Django will invoke an error-handling view. 
+The views to use for these cases are specified by four variables. 
+The variables are:
+当Django找不到与请求的`URL`匹配的`正则表达式`时，或者引发一个异常时，Django将调用一个`错误处理视图`。
+用于这些情况的`视图`,由四个`变量`指定。
+`变量`是：
+-------------
+handler404
+handler500
+handler403
+handler400
+-------------
+Their default values should suffice for most projects, but further customization is possible by assigning values to them. 
+Such values can be set in your `root URLconf`. 
+Setting these variables in any other URLconf will have no effect. 
+Values must be callables, or strings representing the full Python import path to the view that should be called to handle the error condition at hand.
+它们的`默认值`,对大多数项目来说应该`足够`了，但是通过给它们分配值可以进一步`定制`。
+这些值可以在你的`root URLconf`中设置。
+在其他URLconf中设置这些`变量`将`不起作用`。
+`值`必须是可调用的，或者是`字符串`，表示完整的Python`import路径到视图`，这个视图可以被调用，以便处理当前的`错误情况`。
+======================================
+### Including other URLconfs
+包括其他`URLconfs`
+
+At any point, your urlpatterns can “include” other URLconf modules. 
+This essentially “roots” a set of URLs below other ones. 
+For example, here’s an excerpt of the URLconf for the Django Web site itself. 
+It includes a number of other URLconfs:
+在任何时候，你的`urlpatterns`都可以“包含”其他URLconf模块。
+这实质上是将把一组`网址`“植根于”其他网址之下。
+例如，下面是`Django网站本身`的`URLconf`的一个摘录。
+它包含许多其他URLconf：
+----------------------
+from django.conf.urls import include, url
+
+urlpatterns = [
+    # ...
+    url(r'^community/', include('django_website.aggregator.urls')),
+    url(r'^contact/', include('django_website.contact.urls')),
+    # ...
+]
+----------------------
+Note that the regular expressions in this example don’t have a `$` (end-of-string match character) but do include a trailing slash. 
+Whenever Django encounters `include()`, it chops off whatever part of the URL matched up to that point and sends the remaining string to the included `URLconf` for further processing. 
+Another possibility is to include additional URL patterns by using a list of `url()` instances. For example, consider this URLconf:
+请注意，此示例中的正则表达式没有`$`（字符串尾匹配字符），但包含一个`尾部斜线`。
+每当Django遇到`include（）`时，它会截断与该点匹配的URL的任何部分，并将剩余的字符串发送到包含的`URLconf`中以供进一步处理。
+另一种可能是通过使用一个`url（）`实例列表,来包含额外的URL模式。例如，考虑这个URLconf：
+----------------
+from django.conf.urls import include, url
+from apps.main import views as main_views
+from credit import views as credit_views
+
+extra_patterns = [
+    url(r'^reports/(?P<id>[0-9]+)/$', credit_views.report),
+    url(r'^charge/$', credit_views.charge),
+]
+
+urlpatterns = [
+    url(r'^$', main_views.homepage),
+    url(r'^help/', include('apps.help.urls')),
+    url(r'^credit/', include(extra_patterns)),
+]
+----------------
+In this example, the `/credit/reports/` URL will be handled by the `credit.views.report()` Django view. 
+This can be used to remove redundancy from URLconfs where a single pattern prefix is used repeatedly. 
+For example, consider this URLconf:
+在这个例子中，`/credit/reports/`URL，将由`credit.views.report（）`Django视图处理。
+这可以用来消除重复使用单个模式前缀的URLconf中的冗余。
+例如，考虑这个URLconf
+--------------
+from django.conf.urls import url
+from . import views
+
+urlpatterns = [
+    url(r'^(?P<page_slug>\w+)-(?P<page_id>\w+)/history/$',  
+        views.history),
+    url(r'^(?P<page_slug>\w+)-(?P<page_id>\w+)/edit/$',
+views.edit),
+    url(r'^(?P<page_slug>\w+)-(?P<page_id>\w+)/discuss/$',  
+        views.discuss),
+    url(r'^(?P<page_slug>\w+)-(?P<page_id>\w+)/permissions/$', 
+        views.permissions),
+]
+--------------
+We can improve this by stating the common path prefix only once and grouping the suffixes that differ:
+我们可以通过只声明一次公共路径前缀并对不同的后缀进行分组来改善这一点：
+--------------
+from django.conf.urls import include, url
+from . import views
+
+urlpatterns = [
+    url(r'^(?P<page_slug>\w+)-(?P<page_id>\w+)/', 
+        include([
+        url(r'^history/$', views.history),
+        url(r'^edit/$', views.edit),
+        url(r'^discuss/$', views.discuss),
+        url(r'^permissions/$', views.permissions),
+        ])),
+]
+--------------
+================
+===================================
+### Captured Parameters
+捕捉参数
+-------------------------
+An included URLconf receives any captured parameters from parent URLconfs, so the fol\
+lowing example is valid:
+
+# In settings/urls/main.py
+from django.conf.urls import include, url
+
+urlpatterns = [
+    url(r'^(?P<username>\w+)/reviews/', include('foo.urls.reviews')),
+]
+
+# In foo/urls/reviews.py
+from django.conf.urls import url
+from . import views
+
+urlpatterns = [
+    url(r'^$', views.reviews.index),
+    url(r'^archive/$', views.reviews.archive),
+]
+-------------------------
+In the above example, the captured "username" variable is passed to the included URLconf, as expected.
+在上面的例子中，如预期的那样，捕获的“username”变量被传递给包含的URLconf。
+=====================================
+### Reverse Resolution of URLs
+反向解析URL
+
+A common need when working on a Django project is the possibility to obtain URLs in their final forms either for embedding in generated content (views and assets URLs, URLs shown to the user, etc.) or for handling of the navigation flow on the server side (redirections, etc.)
+
+处理Django项目时的一个常见需求是,可以获取`URL`的`最终形式，以嵌入生成的内容（`视图`和`资产URL`，显示给`用户`的URL等），或者用于处理服务器上的`导航流`（`重定向`等）
+
+It is strongly desirable to avoid hard-coding these URLs (a laborious, non-scalable and error-prone strategy) or having to devise ad-hoc mechanisms for generating URLs that are parallel to the design described by the URLconf and as such in danger of producing stale URLs at some point. In other words, what’s needed is a DRY mechanism.
+强烈希望避免对这些URL进行硬编码（一种费力，不可扩展且容易出错的策略），或者必须设计一种临时机制，为生成URL,他们是由`URLconf`所描述的设计，并且因此处于危险之中，在某些时候生成陈旧的`URLs`。
+换句话说，需要的是一个DRY机制。
+
+Among other advantages it would allow evolution of the URL design without having to go all over the project source code to search and replace outdated URLs. 
+The piece of information we have available as a starting point to get a URL is an identification (e.g. the `name`) of the view in charge of handling it, other pieces of information that necessarily must participate in the lookup of the right URL are the types (positional, keyword) and values of the view arguments.
+除了其他优势之外，它还可以允许进行URL设计的`演变`，而无需`遍历`项目源代码来搜索和替换`过时的`URL。
+我们可以获得的信息，可以作为获取URL的起点，是负责处理它的`视图`的一个标识（例如`name`），其他必须`参与`查找正确的`URL`的信息片段是，视图参数的`类型`（位置，关键字）和`值`。
+
+Django provides a solution such that the URL mapper is the only repository of the URL design. You feed it with your URLconf and then it can be used in both directions:
+Django提供了一个解决方案，使得`URL映射器`是`URL设计`的唯一的`存储库`。你用`你的URLconf`来`提供`它，然后它可以在两个方向上使用：
+---------------------
+++ Starting with a URL requested by the user/browser, it calls the right Django view providing any arguments it might need with their values as extracted from the URL.
+++ Starting with the `identification` of the corresponding Django view plus the values of arguments that would be passed to it, obtain the associated URL.
+
+++从`用户/浏览器`请求的URL开始，它调用正确的Django视图，提供它可能需要的任何参数以及从URL中提取的值。
+++从相应的Django视图的“标识”,加上传递给它的参数值开始，获取关联的URL。
+---------------------
+
+The first one is the usage we’ve been discussing in the previous sections. 
+The second one is what is known as `reverse resolution of URLs`, `reverse URL matching`, `reverse URL lookup`, or simply `URL reversing`.
+第一个是我们在前几节讨论过的用法。
+第二种是所谓的“反向解析URL”，“反向URL匹配”，“反向URL查找”或简单的“URL反转”。
+
+Django provides tools for performing URL reversing that match the different layers where URLs are needed:
+Django提供了用于执行`URL反转`的工具，以匹配需要URL的`不同`的`层`：
+---------------
+In templates: Using the url template tag.
+In Python code: Using the `django.core.urlresolvers.reverse()` function.
+In higher level code related to handling of URLs of Django model instances: The `get_absolute_url()` method.
+
+在模板中：使用`网址模板标签`。
+在Python代码中：使用`django.core.urlresolvers.reverse（）`函数。
+在与处理Django模型实例的URL有关的更高级代码中：`get_absolute_url（）`方法。
+---------------
+===============
+## Examples 例子
+Consider again this URLconf entry:
+考虑如下例子：
+---------------
+from django.conf.urls import url
+from . import views
+
+urlpatterns = [
+    #...
+    url(r'^reviews/([0-9]{4})/$', views.year_archive, 
+        name='reviews-year-archive'),
+    #...
+]
+---------------
+According to this design, the URL for the archive corresponding to `year nnnn` is `/reviews/nnnn/`.
+You can obtain these in template code by using:
+根据这种设计，对应于`year nnnn`的`档案`的URL是:`/reviews/nnnn/`。
+您可以使用以下方式在`模板代码`中获得这些内容:
+------------------
+<a href="{% url 'reviews-year-archive' 2012 %}">2012 Archive</a>
+{# Or with the year in a template context variable: #}
+
+<ul>
+{% for yearvar in year_list %}
+<li><a href="{% url 'reviews-year-archive' yearvar %}">{{ yearvar }} Archive</a></li>
+{% endfor %}
+</ul>
+----------------------
+Or in Python code:
+或者在Python代码中：
+----------------------
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+
+def redirect_to_year(request):
+    # ...
+    year = 2012
+    # ...
+    return HttpResponseRedirect(reverse('reviews-year-archive', args=(year,)))
+----------------------
+If, for some reason, it was decided that the URLs where content for yearly review archives are published at should be changed then you would only need to change the entry in the URLconf. 
+In some scenarios where views are of a generic nature, a many-to-one relationship might exist between URLs and views. 
+For these cases the view name isn’t a good enough identifier for it when comes the time of reversing URLs. 
+Read the next section to know about the solution Django provides for this.
+出于某种原因，如果决定更改发布年度审阅档案的内容的`URL`，那么您只需要更改`URLconf`中的条目。
+在某些情况下，`视图`具有通用性，因此`URL`和`视图`之间可能存在`多对一`的关系。
+对于这些情况，`视图`名称在`倒转URL`时,不是一个足够好的`标识符`。
+阅读下一节以了解Django为此提供的解决方案。
+====================================
+### Naming URL Patterns
+命名URL模式
+
+In order to perform URL reversing, you’ll need to use named URL patterns as done in the examples above.
+The string used for the URL name can contain any characters you like. 
+You are not restricted to valid Python names. 
+When you name your URL patterns, make sure you use names that are unlikely to clash with any other application’s choice of names. 
+If you call your URL pattern `comment`, and another application does the same thing, there’s no guarantee which URL will be inserted into your template when you use this name. 
+Putting a prefix on your URL names, perhaps derived from the application name, will decrease the chances of collision. 
+We recommend something like `myapp-comment` instead of `comment`.
+
+为了执行URL反转，您需要使用上述示例中所做的命名的URL模式。
+用于URL名称的字符串可以包含您喜欢的任何字符。
+您不限于有效的Python名称。
+当您为`URL模式``命名`时，请确保使用不会与其他`应用程序`的`名称`选择冲突的`名称`。
+如果您调用URL模式`comment`，而另一个应用程序执行相同的操作，则无法保证在使用此名称时哪个URL将插入到`模板`中。
+在您的URL名称上加上一个`前缀`，可能是从`应用程序名称`派生的，这样可以减少碰撞的可能性。
+我们推荐使用`myapp-comment`而不是`comment`。
+
+====================================
+### URL Namespaces
+
+URL namespaces allow you to uniquely reverse named URL patterns even if different applications use the same URL names. 
+It’s a good practice for third-party apps to always use namespaced URLs. 
+Similarly, it also allows you to reverse URLs if multiple instances of an application are deployed. 
+In other words, since multiple instances of a single application will share named URLs, namespaces provide a way to tell these named URLs apart.
+即使不同的应用程序使用相同的URL名称，URL`名称空间`也允许您`唯一地`反转命名的URL模式。
+对于`第三方应用程序`总是使用`名称空间`URL是一种很好的做法。
+同样，它也允许您在部署应用程序的`多个实例`时`反转URL`。
+换句话说，由于单个应用程序的`多个实例`将`共享``命名的URL`，因此`命名空间`提供了一种方法来区分这些`命名的URL`。
+
+Django applications that make proper use of URL namespacing can be deployed more than once for a particular site. For example,
+`django.contrib.admin` has an `AdminSite class` which allows you to easily deploy more than once instance of the `admin`. 
+A URL namespace comes in two parts, both of which are strings:
+正确使用URL命名空间的Django应用程序,可以为一个特定的`站点``多次部署`。例如，
+`django.contrib.admin`有一个`AdminSite类`，它允许你轻松地部署`多个``admin`实例。
+一个URL命名空间有两部分，它们都是字符串：
+------------------------
+1. Application namespace. 
+应用程序命名空间
+This describes the name of the application that is being deployed. 
+Every instance of a single application will have the same application namespace. 
+For example, Django’s `admin` application has the somewhat predictable application namespace of `admin`.
+这描述了正在部署的`应用程序`的名称。
+每个应用程序的每个实例都具有相同的`应用程序名称空间`。
+例如，Django的`admin`应用程序,具有可预测的`应用程序名称空间`-“admin”。
+2. Instance namespace. 
+实例命名空间
+This identifies a specific instance of an application. 
+Instance namespaces should be unique across your entire project. 
+However, an instance namespace can be the same as the application namespace. 
+This is used to specify a default instance of an application. 
+For example, the default Django `admin` instance has an instance namespace of `admin`.
+这`标识`了一个应用程序的一个特定的`实例`。
+`实例名称空间`在整个项目中应该是`唯一的`。
+但是，`实例名称空间`可以与`应用程序名称空间`相同。
+这用于一个`应用程序`的一个`默认的``实例`。
+例如，默认的Django`admin`实例，有一个名为`admin`的`实例名称空间`。
+------------------------
+Namespaced URLs are specified using the “ : “ operator. 
+For example, the main index page of the `admin` application is referenced using “admin:index”. 
+This indicates a namespace of “admin”, and a named URL of “index”.
+命名空间URL使用“:”运算符指定。
+例如，`admin`应用程序的`主索引页面`使用“admin：index”引用。
+这表示一个“admin”的名称空间和一个名为“index”的`命名URL`。
+
+
+Namespaces can also be nested. 
+The named URL `members:reviews:index` would look for a pattern named “index” in the namespace “reviews” that is itself defined within the top-level namespace “members”.
+名称空间也可以嵌套。
+命名URL`members:reviews:index`会在`命名空间`“reviews”中查找名为一个匹配名为“index”的URL，它本身在顶级的`命名空间`“members”中定义。
+
+=====================================
+### Reversing Namespaced URLs
+逆向命名空间URLs
+
+When given a namespaced URL (e.g. “reviews:index”) to resolve, Django splits the fully qualified name into parts and then tries the following lookup:
+当给定一个命名空间URL（例如“reviews：index”）来解析时，Django将完全限定的名称拆分为多个部分，然后尝试以下查找：
+---------------------------
+1.First, Django looks for a matching application namespace (in this example, “reviews”). This will yield a list of instances of that application.
+
+2.If there is a current application defined, Django finds and returns the URL resolver for that instance. 
+The current application can be specified as an attribute on the request. 
+Applications that expect to have multiple deployments should set the current_app attribute on the request being processed.
+
+3.The current application can also be specified manually as an argument to the reverse() function.
+4.If there is no current application. 
+Django looks for a default application instance. 
+The default application instance is the instance that has an instance namespace matching the application namespace (in this example, an instance of reviews called “reviews”).
+5.If there is no default application instance, Django will pick the last deployed instance of the application, whatever its instance name may be.
+6.If the provided namespace doesn’t match an application namespace in step 1, Django will attempt a direct lookup of the namespace as an instance namespace.
+
+1.首先，Django查找一个匹配的`应用程序名称空间`（在本例中为“评论”-`reviews`）。这将`产生`该应用程序的一个`实例列表`。
+2.如果定义了一个当前的`应用程序`，Django将查找并返回该实例的`URL解析器`。
+当前`应用程序`可以被指定为`请求`中的一个`属性`。
+期望具有多个部署的`应用程序`应该在正在处理的请求上设置`current_app`属性。
+3.当前`应用程序`，也可以`手动`指定为`reverse（）`函数的`参数`。
+4.如果没有当前的`应用程序`。 
+Django寻找一个默认的`应用程序实例`。
+默认的应用程序实例，是一个实例，该实例有一个`实例命名空间`，匹配`应用程序名称空间`（在本例中，是一个名为“reviews”的`reviews`实例）。
+5.如果没有默认的`应用程序实例`，Django会选择`应用程序`的最后部署的`实例`，无论它的`实例名称`是什么。
+6.如果提供的`名称空间`在`步骤1`中与一个`应用程序名称空间`不匹配，Django将尝试一个直接查找名称空间作为一个实例名称空间。
+---------------------------
+If there are nested namespaces, these steps are repeated for each part of the namespace until only the view name is unresolved. 
+The view name will then be resolved into a URL in the namespace that has been found.
+如果有`嵌套命名空间`，则对命名空间的每个部分重复这些步骤，直到只有`视图名称`未解析。
+`视图名称`将被解析为已找到的`名称空间`中的`URL`。
+=====================================
+URL Namespaces and Included URLconfs
+
+URL namespaces of included URLconfs can be specified in two ways. 
+Firstly, you can provide the application and instance namespaces as arguments to `include()` when you construct your URL patterns. For example:
+-----------------
+url(r'^reviews/', include('reviews.urls', namespace='author-reviews', app_name='reviews')),
+-----------------
+This will include the URLs defined in `reviews.urls` into the application namespace 'reviews', with the instance namespace 'author-reviews'. 
+Secondly, you can include an object that contains embedded namespace data. 
+If you `include()` a list of `url()` instances, the URLs contained in that object will be added to the global namespace. 
+However, you can also `include()` a 3-tuple containing:
+------------------------
+(<list of url() instances>, <application namespace>, <instance namespace>)
+------------------------
+For example:
+------------------------
+from django.conf.urls import include, url
+from . import views
+
+reviews_patterns = [
+    url(r'^$', views.IndexView.as_view(), name='index'),
+    url(r'^(?P<pk>\d+)/$', views.DetailView.as_view(), name='detail'), 
+]
+
+url(r'^reviews/', include((reviews_patterns, 'reviews', 'author-reviews'))),
+------------------------
+================================================
+
+

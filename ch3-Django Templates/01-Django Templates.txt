@@ -1,0 +1,361 @@
+===========================
+Django Templates
+-------------------------
+https://djangobook.com/django-templates/
+-------------------------
+===========================
+
+
+HTML was hard-coded directly in our Python code, like this:
+HTML是直接在我们的Python代码中`硬编码`的，如下所示：
+-------------------------
+def current_datetime(request):
+    now = datetime.datetime.now()
+    html = "<html><body>It is now %s.</body></html>" % now
+    return HttpResponse(html)
+-------------------------
+
+Although this technique was convenient for the purpose of explaining how views work, it’s not a good idea to hard-code HTML directly into your views. Here’s why:
+尽管这种技术对于解释视图的工作方式很方便，但将HTML直接硬编码到视图中并不是一个好主意。原因如下：
+------------------------
+++ Any change to the design of the page requires a change to the Python code. 
+The design of a site tends to change far more frequently than the underlying Python code, so it would be convenient if the design could change without needing to modify the Python code.
+++对页面设计的任何`改变`，都需要修改`Python代码`。
+一个网站的设计的`变化`，往往`比`底层的`Python代码`更加`频繁`，所以如果`设计`可以在不需要修改`Python代码`的情况下进行`更改`，那将很`方便`。
+
+++ This is only a very simple example. 
+A common webpage template has hundreds of lines of HTML and scripts. 
+Untangling and troubleshooting program code from this mess is a nightmare (cough-PHP-cough).
+++这只是一个非常简单的例子。
+一个常见的`网页模板`,有数百行HTML代码和`脚本`。
+从这个混乱中`解开`和`解决`程序代码是一场噩梦（咳嗽 -  PHP-咳嗽）。
+
+++ Writing Python code and designing HTML are two different disciplines, and most professional web development environments split these responsibilities between separate people (or even separate departments). 
+Designers and HTML/CSS coders shouldn’t be required to edit Python code to get their job done.
+
+++ `编写Python代码`和`设计HTML`是两个不同的`学科`，大多数专业的Web`开发环境`，将这些责任分散在不同的人（甚至不同的部门）之间。
+`设计人员`和HTML / CSS`编码人员`不应该被要求`编辑`Python代码才能完成工作。
+
+++ It’s most efficient if programmers can work on Python code and designers can work on templates at the same time, rather than one person waiting for the other to finish editing a single file that contains both Python and HTML.
+++如果程序员可以处理Python代码，`设计人员`可以`同时处理模板，而不是一个人`等待`另一个人完成编辑包含Python和HTML的单个文件，那么效率最高。
+------------------------
+
+For these reasons, it’s much cleaner and more maintainable to separate the design of the page from the Python code itself. 
+We can do this with Django’s `template system`, which we discuss in this chapter.
+由于这些原因，将页面的设计与Python代码本身分开的方式更简洁，更易于维护。
+我们可以使用Django的`模板系统'来完成这个工作，我们将在本章中讨论这个模板系统。
+===========================
+Template System Basics
+模板系统基础
+
+A Django template is a string of text that is intended to separate the presentation of a document from its data. 
+A template defines placeholders and various bits of basic logic (template tags) that regulate how the document should be displayed. 
+Usually, templates are used for producing HTML, but Django templates are equally capable of generating any text-based format.
+一个Django模板，是一串文本，旨在将一个`文档`的`呈现`与其`数据`分开。
+一个 模板定义了`占位符`和各种基本`逻辑`（`模板标签`），用于规定文档应如何`显示`。
+通常，模板用于生成`HTML`，但Django模板同样能够生成任何基于`文本`的`格式`。
+
+-------------------------------------------
+Philosophy behind Django’s templates
+Django模板背后的哲学
+
+If you have a background in programming, or if you’re used to languages which mix programming code directly into HTML, 
+you’ll want to bear in mind that the Django template system is not simply Python embedded into HTML. 
+This is by design: the template system is meant to express presentation, not program logic.
+如果您有编程背景，或者您习惯于将编程代码直接混合到HTML中的语言，
+ 你要记住，Django模板系统不仅仅是嵌入到HTML中的`Python`。
+这是根据设计要求的：`模板系统`是为了表达`表示`，而不是`程序逻辑`。
+-------------------------------------------
+Let’s start with a simple example template. 
+This Django template describes an HTML page that thanks a person for placing an order with a company. 
+Think of it as a form letter:
+我们从一个简单的示例模板开始。
+ 这个Django模板描述了一个HTML页面，感谢一个人向公司下订单。
+把它想成一个表格信件：
+================================
+Using the Template System
+使用模板系统
+
+A Django project can be configured with one or several template engines (or even zero if you don’t use templates). 
+Django ships with a built-in backend for its own template system – the Django Template Language (DTL). 
+Django 1.11 also includes support for the popular alternative `Jinja2`.
+一个Django项目，可以被配置拥有`一个`或`多个``模板引擎`（如果不使用模板，甚至可以设置为`零`）。
+Django为其自己的模板系统提供了一个内置的后端-（Django模板语言（DTL））。
+Django 1.11还支持流行的替代`Jinja2`。
+
+ If you don’t have a pressing reason to choose another backend, you should use the DTL – especially if you’re writing a pluggable application and you intend to distribute templates. 
+Django’s contrib apps that include templates, like django.contrib.admin, use the DTL. 
+All of the examples in this chapter will use the DTL. 
+For more advanced template topics, including configuring third-party template engines, see Chapter 8.
+如果您没有迫切的理由选择另一个后端，那么应该使用`DTL`--尤其是如果您正在编写`可插入``应用程序`并且您打算`分发`模板。
+包含模板的Django的`contrib应用程序`（如django.contrib.admin）使用DTL。
+本章中的所有`示例`都将使用`DTL`。
+有关更高级的模板主题（包括配置第三方模板引擎），请参阅第8章。
+
+Before we go about implementing Django templates in your view, lets first dig inside the DTL a little so you can see how it works. 
+Here is the most basic way you can use Django’s template system in Python code:
+在我们开始在视图中实现Django模板之前，先让我们先深入研究一下`DTL`，以便了解它是如何工作的。
+以下是您可以在Python代码中使用Django模板系统的最基本方法：
+
+1. Create a Template object by providing the raw template code as a string.
+1.通过提供把原始的`模板代码`作为一个`字符串`来提供，来创建一个`Template对象`。
+
+2. Call the `render()` method of the Template object with a given set of variables (the `context`). 
+This returns a fully rendered template as a string, with all of the `variables` and `template tags` evaluated according to the `context`. 
+Using the Django custom Python shell (`python manage.py shell`), here’s what that looks like:
+2.用一组给定的变量（`context`），去调用这个`Template对象`的`render（）`方法。
+ 这将返回一个完全渲染好的的模板，以字符串的形式返回，其所有的`variables`和`template tags`都根据`context`进行了`evaluated`（被评估了）。
+使用Django自定义的`Python shell`（`python manage.py shell`），看起来如下所示：
+------------------------------------------------
+>>> from django import template
+>>> t = template.Template('My name is {{ name }}.')
+>>> c = template.Context({'name': 'Nige'})
+>>> print (t.render(c))
+My name is Nige.
+>>> c = template.Context({'name': 'Barry'})
+>>> print (t.render(c))
+My name is Barry.
+------------------------------------------------
+=================================
+Rendering a Template
+渲染一个模板
+
+Once you have a Template object, you can pass it data by giving it a `context`. 
+A `context` is simply a set of template variable names and their associated values. 
+A template uses this to populate its variables and evaluate its tags. 
+A context is represented in Django by the `Context class`, which lives in the `django.template` module. 
+Its constructor takes one optional argument: a `dictionary` mapping variable names to variable values. 
+Call the Template object’s `render()` method with the `context` to “fill” the template:
+
+一旦你有了一个Template`对象`，你可以通过给它一个`context`来给它传递`数据`。
+一个“context”，只是一组`模板`的`变量名称`及其`相关值`。
+`模板`使用它来`填充`其`变量`并`评估`其`标签`。
+一个`context`在`Django`中,由`Context class`表示，它位于`django.template`模块中。
+它的构造函数有一个`可选`的`参数`：一个`dictionary`将`变量名`映射到`变量值`。
+调用这个`Template对象`的`render（）`方法，使用`context`来“填充”模板。
+------------------------------------------------
+>>> from django.template import Context, Template
+>>> t = Template('My name is {{ name }}.')
+>>> c = Context({'name': 'Stephane'})
+>>> t.render(c)
+'My name is Stephane.'
+------------------------------------------------
+=================================
+Context Variable Lookup
+`上下文`变量查找
+
+In the examples so far, we’ve passed simple values in the `contexts` – mostly `strings`, plus a `datetime.date` example. 
+However, the template system elegantly handles more complex data structures, such as `lists`, `dictionaries`, and `custom objects`. 
+The key to traversing complex data structures in Django templates is the `dot character` (“.”).
+在目前为止的例子中，我们在`contexts`中传递了简单的`值` - 主要是`strings`，另外还有一个`datetime.date`示例。
+但是，`模板系统`优雅地处理更复杂的`数据结构`，例如`list`，`dictionaries`和`custom objects`。
+`遍历`Django模板中复杂数据结构的`关键`是`dot character`（`.`）。---点字符(`.`)
+
+Use a dot to access dictionary keys, attributes, methods, or indices of an object. 
+This is best illustrated with a few examples. 
+For instance, suppose you’re passing a Python dictionary to a template. 
+To access the values of that dictionary by dictionary key, use a dot:
+使用`点`来访问对象的`字典键`，`属性`，`方法`或`索引`。
+以下几个例子可以很好地说明这一点。
+例如，假设你将一个Python字典传递给一个模板。
+---------------------------------------
+>>> from django.template import Template, Context
+>>> person = {'name': 'Sally', 'age': '43'}
+>>> t = Template('{{ person.name }} is {{ person.age }} years old.')
+>>> c = Context({'person': person})
+>>> t.render(c)
+'Sally is 43 years old.'
+---------------------------------------
+
+Similarly, dots also allow access to object attributes. 
+For example, a Python `datetime.date` object has `year`, `month`, and `day` attributes, and you can use a dot to access those attributes in a Django template:
+类似地，`点`也允许访问`对象`的`属性`。
+例如，Python`datetime.date`对象，具有`year`，`month`和`day`属性，并且您可以使用`点`来访问`Django模板`中的这些`属性`：
+---------------------------------------
+>>> from django.template import Template, Context
+>>> import datetime
+>>> d = datetime.date(2017, 5, 2)
+>>> d.year
+2017
+>>> d.month
+5
+>>> d.day
+2
+>>> t = Template('The month is {{ date.month }} and the year is {{ date.year }}.')
+>>> c = Context({'date': d})
+>>> t.render(c)
+'The month is 5 and the year is 2017.'
+---------------------------------------
+
+This example uses a custom class, demonstrating that variable dots also allow attribute access on arbitrary objects:
+这个例子使用了一个`自定义类`，演示了`点`也允许在任意`对象`上访问`属性`：
+---------------------------------------
+>>> from django.template import Template, Context
+>>> class Person(object):
+...     def __init__(self, first_name, last_name):
+...         self.first_name, self.last_name = first_name, last_name
+>>> t = Template('Hello, {{ person.first_name }} {{ person.last_name }}.')
+>>> c = Context({'person': Person('John', 'Smith')})
+>>> t.render(c)
+'Hello, John Smith.'
+-------------------------------------
+
+Dots can also refer to `methods` of objects. 
+For example, each Python string has the methods `upper()` and `isdigit()`, and you can call those in Django templates using the same dot syntax:
+`点`也可以指向`对象`的“方法”。
+例如，每个Python`字符串`，都有'upper（）`和`isdigit（）`方法，您可以使用相同的`点`语法，在Django模板中`调用`这些方法：
+-------------------------------------
+>>> from django.template import Template, Context
+>>> t = Template('{{ var }} -- {{ var.upper }} -- {{ var.isdigit }}')
+>>> t.render(Context({'var': 'hello'}))
+'hello -- HELLO -- False'
+>>> t.render(Context({'var': '123'}))
+'123 -- 123 -- True'
+-------------------------------------
+Note that you do not include `parentheses` in the `method calls`. 
+Also, it’s not possible to pass arguments to the methods; 
+you can only call methods that have no required arguments. 
+(I explain this philosophy later in this chapter.) 
+Finally, dots are also used to access list indices, for example:
+请注意，您在“方法调用”(`method calls`)中，不要包括“括号”( `parentheses`)。
+而且，不可以将`参数`传递给`方法`;
+你只能调用那些`没有参数`的`方法`。
+ （我在本章后面解释这一`理念`。）
+最后，`点`也用于访问`列表``索引`，例如：
+--------------------------------
+>>> from django.template import Template, Context
+>>> t = Template('Item 2 is {{ items.2 }}.')
+>>> c = Context({'items': ['apples', 'bananas', 'carrots']})
+>>> t.render(c)
+'Item 2 is carrots.'
+--------------------------------
+
+`Dot` lookups can be summarized like this: 
+when the template system encounters a `dot` in a variable name, it tries the following lookups, in this order:
+`Dot`查找可以总结如下：
+当`模板系统`在`变量名`中遇到`dot`时，它会按以下`顺序`尝试以下`查找`：
+-----------------------------------
+++ Dictionary lookup (e.g., foo["bar"])
+++ Attribute lookup (e.g., foo.bar)
+++ Method call (e.g., foo.bar())
+++ List-index lookup (e.g., foo[2])
+-----------------------------------
+翻译如下：
+-----------------------------------
+++字典查找（例如，foo [“bar”]）
+++属性查找（例如，foo.bar）
+++方法调用（例如，foo.bar（））
+++列表索引查找（例如，foo [2]）
+-----------------------------------
+
+The system uses the first lookup type that works. 
+It’s short-circuit logic. 
+`Dot` lookups can be nested multiple levels deep. 
+For instance, the following example uses `{{ person.name.upper }}`, which translates into a `dictionary lookup` `(person['name'])` and then a `method call` `(upper())`:
+系统使用`可用的`第一个`查找类型`。
+这是短路逻辑。
+`Dot`查找，可以嵌套多层。
+例如，下面的例子使用'{{person.name.upper}}'，它转换成'字典查找'（person ['name']）'，然后'方法调用'（upper（）） `：
+---------------------------------------
+>>> from django.template import Template, Context
+>>> person = {'name': 'Sally', 'age': '43'}
+>>> t = Template('{{ person.name.upper }} is {{ person.age }} years old.')
+>>> c = Context({'person': person})
+>>> t.render(c)
+'SALLY is 43 years old.'
+---------------------------------------
+======================================
+Method Call Behavior
+方法调用行为
+
+Method calls are slightly more complex than the other lookup types. Here are some things to keep in mind:
+`方法调用`比其他`查找类型`稍微复杂一些。这里有一些事情要记住：
+
+++ If, during the method lookup, a method raises an exception, the exception will be propagated, unless the exception has an attribute `silent_variable_failure` whose value is `True`. 
+If the exception does have a `silent_variable_failure` attribute, the variable will render as the value of the engine’s `string_if_invalid configuration` option (an empty string, by default). 
+For example:
+++如果在`方法查找`期间，一个`方法`引发了一个`异常`，则这个`异常`将被`传播`，除非`异常`的属性“silent_variable_failure”的`值`为“True”。
+如果这个`异常`具有`silent_variable_failure`属性，则该`变量`将呈现为`引擎`的`string_if_invalid配置`选项的`值`（缺省情况下，为`空`字符串）
+---------------------------------------
+>>> t = Template("My name is {{ person.first_name }}.")
+>>> class PersonClass3:
+...     def first_name(self):
+...         raise AssertionError("foo")
+>>> p = PersonClass3()
+>>> t.render(Context({"person": p}))
+Traceback (most recent call last):
+...
+AssertionError: foo
+
+>>> class SilentAssertionError(Exception):
+...     silent_variable_failure = True
+>>> class PersonClass4:
+...     def first_name(self):
+...         raise SilentAssertionError
+>>> p = PersonClass4()
+>>> t.render(Context({"person": p}))
+'My name is .'
+---------------------------------------
+
+++ A method call will only work if the method has no required arguments. Otherwise, the system will move to the next lookup type (list-index lookup).
+++ 只有当一个`方法`没有`必需的`参数`时，该方法`调用`才会起作用。否则，系统将移动到下一个查找类型（`列表索引`查找）。
+
+++ By design, Django intentionally limits the amount of logic processing available in the template, so it’s not possible to pass arguments to method calls accessed from within templates. 
+Data should be calculated in views and then passed to templates for display.
+++根据设计，Django`有意`限制模板中可用的`逻辑处理量`，因此`无法`将`参数传递`给从模板内访问的`方法`调用。
+`数据`应该在`视图`中`计算`，然后传递给`模板`进行`显示`。
+
+++ Obviously, some methods have side effects, and it would be foolish at best, and possibly even a security hole, to allow the template system to access them.
+++很显然，有些方法有`副作用`，最好是`愚蠢的`，甚至可能是`安全漏洞`，以允许`模板系统`访问它们。【从而产生安全的隐患】
+
+++ Say, for instance, you have a `BankAccount` object that has a `delete()` method. 
+If a template includes something like `{{ account.delete }}`, where account is a `BankAccount` object, the object would be deleted when the template is rendered! 
+To prevent this, set the function attribute `alters_data` on the method:
+++ 例如，你有一个`BankAccount`对象，它有一个`delete（）`方法。
+如果一个`模板`包含诸如`{{account.delete}}`之类的东西，其中`account`是一个`BankAccount`对象，那么当`模板`被`渲染`时，该`对象`将被`删除`！
+为了防止出现这种情况，请在`方法`中设置`函数属性`--`alters_data`：
+--------------------------
+def delete(self):
+     # Delete the account
+     delete.alters_data = True
+--------------------------
+The template system won’t execute any method marked in this way. 
+Continuing the above example, if a template includes `{{ account.delete }}` and the `delete()` method has the `alters_data=True`, 
+then the `delete()` method will not be executed when the template is rendered, the engine will instead replace the variable with `string_if_invalid`.
+`模板系统`不会执行以这种方式`标记`的任何`方法`。
+继续上面的例子，如果一个模板包含`{{account.delete}}`，而`delete（）`方法包含`alters_data = True`，
+那么当模板被渲染时，`delete（）`方法将`不会`被执行，`引擎`将会用'string_if_invalid`替代该变量。
+
+----------------------------
+NOTE:  
+注意：
+
+The dynamically-generated `delete()` and `save()` methods on Django model objects get `alters_data=true` set automatically.
+在Django模型`对象`上，动态生成的`delete（）`和`save（）`方法，`alters_data = true`被自动设置。
+----------------------------
+=====================================
+How Invalid Variables Are Handled
+如何处理无效变量
+
+Generally, if a variable doesn’t exist, the template system inserts the value of the engine’s `string_if_invalid` configuration option, which is an empty string by default. For example:
+一般来说，如果一个变量不存在，`模板系统`会插入引擎'string_if_invalid`配置选项的`值`，`默认情况`下，这是一个`空`字符串。例如：
+----------------------------
+>>> from django.template import Template, Context
+>>> t = Template('Your name is {{ name }}.')
+>>> t.render(Context())
+'Your name is .'
+>>> t.render(Context({'var': 'hello'}))
+'Your name is .'
+>>> t.render(Context({'NAME': 'hello'}))
+'Your name is .'
+>>> t.render(Context({'Name': 'hello'}))
+'Your name is .'
+----------------------------
+
+This behaviour is better than raising an exception because it’s intended to be resilient to human error. 
+In this case, all of the lookups failed because variable names have the wrong case or name. 
+In the real world, it’s unacceptable for a web site to become inaccessible due to a small template syntax error.
+这种行为比`引发异常`更好，因为它旨在对`人为错误`具有`弹性`。
+在这种情况下，所有查找都失败了，因为`变量名称`具有错误的`大小写`或`名称`。
+在现实世界中，由于`小的`模板`语法错误`导致`网站`变得`不可访问`是`不可接受`的。
+=================================

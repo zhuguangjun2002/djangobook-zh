@@ -1,0 +1,414 @@
+Deploying Django
+部署Django
+
+This chapter covers the last essential step of building a Django application: deploying it to a production server.
+本章介绍构建Django应用程序的最后一个重要步骤：将其部署到一个｀生产服务器｀。
+
+If you’ve been following along with our ongoing examples, you’ve likely been using the runserver, which makes things very easy – with runserver, you don’t have to worry about Web server setup. But runserver is intended only for development on your local machine, not for exposure on the public Web.
+如果您一直关注我们正在进行的`示例`，那么您可能使用了`runserver`，这使得事情变得非常简单 - 使用`runserver`，您不必担心`Web服务器`的`安装`问题。
+但是`runserver`仅用于在`本地`机器上进行`开发`，而不是暴露在`公共Web`上。
+
+To deploy your Django application, you’ll need to hook it into an industrial-strength Web server such as Apache. In this chapter, we’ll show you how to do that – but, first, we’ll give you a checklist of things to do in your codebase before you go live.
+要部署您的Django应用程序，您需要将其绑定到像`Apache`这样的`工业级Web服务器`。
+在本章中，我们将向您展示如何做到这一点 - 但首先，我们会在您开始生活之前,为您提供一份在你的`代码库`要做的一份`事务清单`。
+==================================================
+Preparing Your Codebase for Production
+准备您的代码库以便用于`生产`
+
+Deployment checklist
+部署清单
+
+The Internet is a hostile environment. Before deploying your Django project, you should take some time to review your settings, with security, performance, and operations in mind.
+互联网是一个敌对的环境。
+在部署Django项目之前，您应该花一些时间来检查`设置`，并考虑`安全性`，`性能`和`操作`。
+
+
+Django includes many security features. Some are built-in and always enabled. Others are optional because they aren’t always appropriate, or because they’re inconvenient for development. For example, forcing HTTPS may not be suitable for all websites, and it’s impractical for local development.
+Django包含许多安全功能。
+有些`内置`并始终`启用`。
+其他是`可选`的，因为它们并不总是合适的，或者因为它们不便于开发。
+例如，强制`HTTPS`可能不适合`所有网站`，对于本地开发来说是`不切实际`的。
+
+Performance optimizations are another category of trade-offs with convenience. For instance, caching is useful in production, less so for local development. Error reporting needs are also widely different. The following checklist includes settings that:
+`性能优化`是`便利性`的另一类权衡。
+例如，`缓存`在`生产`中很有用，对于`本地``开发`来说更是如此。
+`错误报告`需求也大不相同。以下清单包括以下设置：
+------------------------------
+must be set properly for Django to provide the expected level of security,
+are expected to be different in each environment,
+enable optional security features,
+enable performance optimizations; and
+provide error reporting.
+必须为Django正确设置以提供预期的`安全级别`，
+预计在`每个环境`中都会`有所不同`，
+`启用``可选的``安全功能`，
+`启用``性能优化`;和
+提供`错误报告`。
+------------------------------
+Many of these settings are sensitive and should be treated as confidential. If you’re releasing the source code for your project, a common practice is to publish suitable settings for development, and to use a private settings module for production. Some of the checks described below can be automated using the
+--deploy option of the check command. Be sure to run it against your production settings file as described in the option’s documentation.
+其中许多`设置`都很`敏感`，应该视为`保密`。如果您要`发布`你的｀项目｀的｀源代码｀，一个`通常的`｀做法｀是｀发布｀合适的｀开发设置｀，并使用一个｀私有设置｀模块进行｀生产｀。下面介绍的一些检查可以使用
+--deploy 选项。确保按照`选项`文档中的说明，将其与`生产设置文件`一起运行。
+==================================================
+Critical settings
+============================
+SECRET_KEY
+
+The secret key must be a large random value and it must be kept secret.
+
+Make sure that the key used in production isn’t used anywhere else and avoid committing it to source control. 
+This reduces the number of vectors from which an attacker may acquire the key. Instead of hard-coding the secret key in your settings module, consider loading it from an environment variable:
+确保在`生产`中,使用的密钥不在其他地方使用，并避免将其提交到`源代码管理`。
+这减少了`攻击者`从中获取`密钥`的`向量数量`。
+不要在在你的`设置`模块中，对`密钥`(`Secret ｋｅy`)进行`硬编码`，而应考虑从一个｀环境变量｀中`加载`该`密钥`：
+----------------
+import os
+SECRET_KEY = os.environ['SECRET_KEY']
+or from a file:
+
+with open('/etc/secret_key.txt') as f:
+    SECRET_KEY = f.read().strip()
+----------------
+
+============================
+DEBUG
+调试
+
+You must never enable debug in production.
+您绝不能在生产中启用`调试`。
+
+When we created a project in Chapter 1, the command django-admin startproject created a settings.py file with DEBUG set to True. Many internal parts of Django check this setting and change their behavior if DEBUG mode is on.
+当我们在`第1章`中创建一个`项目`时，命令`django-admin startproject`创建了一个`DEBUG`设置为`True`的`settings.py`文件。 
+Django的许多内部部分检查此`设置`并在`DEBUG`模式打开时更改它们的行为。
+
+For example, if DEBUG is set to True, then:
+例如，如果`DEBUG`设置为`True`，那么：
+-------------------
+++ All database queries will be saved in memory as the object django.db.connection.queries. As you can imagine, this eats up memory!
+++ 所有`数据库查询`将作为对象`django.db.connection.queries`保存在`内存`中。
+正如你可以想象的，这消耗了`内存`！
+
+++ Any 404 error will be rendered by Django’s special 404 error page (covered in Chapter 3) rather than returning a proper 404 response. This page contains potentially sensitive information and should not
+be exposed to the public Internet.
+++ 任何`404错误`都将由`Django`的`特殊404错误页面`（第3章介绍）呈现，而不是返回一个`404响应`。此页面包含潜在的`敏感`信息，不应该暴露于公共互联网。
+
+++ Any uncaught exception in your Django application – from basic Python syntax errors to database errors to template syntax errors – will be rendered by the Django pretty error page that you’ve likely come to know and love. This page contains even more sensitive information than the 404 page and should never be exposed to the public.
+++ 在Django应用程序中的任何`未捕获`的`异常`（从基本的`Python语法错误`到`数据库错误`，再到`模板语法错误`）都将通过Django漂亮的`错误页面`呈现，您可能会了解并喜爱它。
+此页面包含比`404页面`更为敏感的信息，绝不应暴露给公众。
+-------------------
+In short, setting DEBUG to True tells Django to assume only trusted developers are using your site. The Internet is full of untrustworthy hooligans, and the first thing you should do when you’re preparing your application for deployment is set DEBUG to False.
+简而言之，将`DEBUG`设置为`True`，可以让`Django`假定只有值得信赖的`开发人员`正在使用您的网站。
+互联网充满了不可信的`流氓行为`，当您准备`部署`应用程序时，您应该做的第一件事情是将`DEBUG`设置为`False`。
+============================
+Environment-specific Settings
+特定于环境的设置
+===============
+ALLOWED_HOSTS
+
+When DEBUG = False, Django doesn’t work at all without a suitable value for ALLOWED_HOSTS. This setting is required to protect your site against some CSRF attacks. If you use a wildcard, you must perform your own validation of the Host HTTP header, or otherwise ensure that you aren’t vulnerable to this category of attack.
+当`DEBUG = False`时，如果没有合适的`ALLOWED_HOSTS`值，Django根本无法工作。
+需要此设置来保护您的站点免受一些`CSRF攻击`。
+如果您使用`通配符`，则必须对`Host HTTP``标头`执行自己的`验证`，否则确保您不容易受到此类攻击。
+===============
+CACHES
+
+If you’re using a cache, connection parameters may be different in development and in production. Cache servers often have weak authentication. Make sure they only accept connections from your application servers. If you’re using Memcached, consider using cached sessions to improve performance.
+
+如果您使用一个`缓存`，则`连接参数`在`开发`和`生产`中,可能会有所不同。
+`缓存服务器`通常具有`弱认证`。
+确保他们只接受来自你的`应用程序服务器｀的｀连接｀。
+如果您使用`Memcached`，请考虑使用`缓存会话`来提高`性能`。
+===============
+DATABASES
+
+Database connection parameters are probably different in development and in production. Database passwords are very sensitive. You should protect them exactly like SECRET_KEY. For maximum security, make sure database servers only accept connections from your application servers. If you haven’t set up backups for your database, do it right now!
+`数据库连接参数`在`开发`和`生产`中可能不同。
+`数据库密码`非常`敏感`。
+你应该像`SECRET_KEY`一样保护它们。
+为了获得`最大的``安全性`，确保`数据库服务器`只接受来自`应用程序服务器`的`连接`.如果您`尚未`为`数据库设置``备份`，请`立即`执行此操作！
+===============
+EMAIL_BACKEND and Related Settings
+
+If your site sends emails, these values need to be set correctly.
+如果您的网站发送电子邮件，则需要正确设置这些值。
+===============
+STATIC_ROOT and STATIC_URL
+
+Static files are automatically served by the development server. In production, you must define a STATIC_ROOT directory where collectstatic will copy them.
+`静态文件`由`开发服务器`自动提供。
+在`生产`中，您必须定义一个`STATIC_ROOT`目录，其中`collectstatic`将`复制`它们。
+===============
+MEDIA_ROOT and MEDIA_URL
+
+Media files are uploaded by your users. They’re untrusted! Make sure your web server never attempts to interpret them. For instance, if a user uploads a .php file, the web server shouldn’t execute it. Now is a good time to check your backup strategy for these files.
+`媒体文件`由您的用户上传。
+他们是不受信任的！
+确保您的`Web服务器`从不试图`解释`它们。
+例如，如果用户上传一个`.php`文件，则`Web服务器`不应执行它。
+现在,是`检查`这些文件的`备份策略`的`好时机`。
+============================
+==================================================
+
+==================================================
+HTTPS
+
+Any website which allows users to log in should enforce site-wide HTTPS to avoid transmitting access tokens in clear. In Django, access tokens include the login/password, the session cookie, and password reset tokens. (You can’t do much to protect password reset tokens if you’re sending them by email.)
+任何`允许``用户登录`的`网站`,都应实施`站点`范围内的`HTTPS`，以`避免`明文`传输``访问令牌`。
+在Django中，`访问令牌`包括`登录名/密码`，`会话cookie`和`密码重设令牌`。 
+（如果您通过`电子邮件`发送`邮件`，则无法`保护``密码重置令牌`。）
+
+Protecting sensitive areas such as the user account or the admin isn’t sufficient, because the same session cookie is used for HTTP and HTTPS. Your web server must redirect all HTTP traffic to HTTPS,
+and only transmit HTTPS requests to Django. Once you’ve set up HTTPS, enable the following settings.
+保护`用户帐户`或`管理员`等`敏感区域`是不够的，因为相同的`会话cookie`被用于`HTTP`和`HTTPS`。
+您的`Web服务器`必须将所有`HTTP通信`重定向到`HTTPS`，
+并仅向Django发送`HTTPS请求`。设置完`HTTPS`后，`启用`以下`设置`。
+============================
+CSRF_COOKIE_SECURE
+Set this to True to avoid transmitting the CSRF cookie over HTTP accidentally.
+将其`设置`为`True`,可避免通过`HTTP`意外传输`CSRF cookie`。
+============================
+SESSION_COOKIE_SECURE
+
+Set this to True to avoid transmitting the session cookie over HTTP accidentally.
+将其`设置`为`True`,可避免通过`HTTP`意外传输`会话cookie`。
+============================
+==================================================
+Performancf optimizations
+性能优化
+
+Setting DEBUG = False disables several features that are only useful in development. In addition, you can tune the following settings.
+设置`DEBUG = False`会`禁用`一些仅在`开发`中有用的功能。另外，您可以调整以下设置。
+
+============================
+CONN_MAX_AGE
+
+Enabling persistent database connections can result in a nice speed-up when connecting to the database accounts for a significant part of the request processing time. This helps a lot on virtualized hosts with limited network performance.
+连接到数据库帐户时，`启用``持久数据库连接`可以使`请求处理时间`的很大一部分时间获得很好的`加速`。
+这对`网络性能有限`的`虚拟化主机`有很大的帮助。
+============================
+TEMPLATES
+
+Enabling the cached template loader often improves performance drastically, as it avoids compiling each template every time it needs to be rendered. See the template loaders docs for more information
+`启用``缓存`的`模板加载器`通常会大大`提高性能`，因为它避免每次需要`渲染`时,`编译`每个`模板`。有关更多信息，请参阅模板加载器文档.
+==================================================
+Error Reporting
+
+By the time you push your code to production, it’s hopefully robust, but you can’t rule out unexpected errors. Thankfully, Django can capture errors and notify you accordingly.
+当你将你的代码推到生产环境时，它有希望很强大，但是你不能排除意外的错误。谢天谢地，Django可以捕获错误并相应地通知您。
+============================
+LOGGING
+Review your logging configuration before putting your website in production, and check that it works as expected as soon as you have received some traffic.
+在将您的`网站`投入`生产`之前，请`检查`您的`日志记录``配置`，并在收到一些流量后立即`检查`其是否`按预期工作`。
+============================
+ADMINS and MANAGERS
+
+ADMINS will be notified of 500 errors by email. MANAGERS will be notified of 404 errors. IGNORABLE_404_URLS can help filter out spurious reports.
+ADMINS 将通过`电子邮件`通知`500个错误`。`经理`将被通知`404错误`。 `IGNORABLE_404_URLS`可以帮助`过滤`掉`虚假报告`。
+
+Error reporting by email doesn’t scale very well. Consider using an error monitoring system such as Sentry before your inbox is flooded by reports. Sentry can also aggregate logs.
+通过`电子邮件`报告错误不能很好地`扩展`。
+在`收件箱`被`报告`充斥之前，请考虑使用`Sentry`等`错误监控系统`。 `Sentry`还可以聚合`日志`。
+==================================================
+Customize The Default Error Views
+自定义默认错误视图
+
+Django includes default views and templates for several HTTP error codes. You may want to override the default templates by creating the following templates in your root template directory: 404.html, 500.html, 403.html, and 400.html. The default views should suffice for 99% of Web applications, but if you desire to customize them, see these instructions which also contain details about the default templates:
+
+Django包含几个`HTTP错误代码`的`默认视图`和`模板`。
+您可能希望通过在`根模板``目录`中创建以下`模板`来`覆盖``默认模板`：404.html，500.html，403.html和400.html。
+对于99％的Web应用程序，`默认视图`应该足够了，但如果您想对其进行`自定义`，请参阅这些说明，其中还包含有关`默认模板`的`详细信息`：
+---------------------
+http_not_found_view
+http_internal_server_error_view
+http_forbidden_view
+http_bad_request_view
+---------------------
+==================================================
+Using a Virtualenv
+
+If you install your project’s Python dependencies inside a virtualenv, you’ll need to add the path to this virtualenv’s site-packages directory to your Python path as well. To do this, add an additional path to your WSGIPythonPath directive, with multiple paths separated by a colon (:) if using a UNIX-like system, or a semicolon (;) if using Windows. If any part of a directory path contains a space character, the complete argument string to WSGIPythonPath must be quoted:
+如果您将项目的Python依赖关系安装在`virtualenv`中，则还需要将此`virtualenv`的`site-packages目录`的`路径`添加到您的`Python路径`中。
+为此，请为`WSGIPythonPath`指令添加一个`附加路径`，如果使用类似UNIX的系统，则用冒号（:)分隔多个路径，如果使用Windows，则使用分号（;）来分隔多个路径。
+如果`目录路径`的任何部分包含`空格`字符，则必须引用`WSGIPythonPath`的`完整``参数字符串`：
+-------------------
+WSGIPythonPath /path/to/mysite.com:/path/to/your/venv/lib/python3.X/site-packages 
+-------------------
+Make sure you give the correct path to your virtualenv, and replace python3.X with the correct Python version (e.g. python3.4).
+确保你给你的`virtualenv`提供了正确的`路径`，并用正确的`Python版本`（例如python3.4）替换`python3.X`。
+==================================================
+Using Different Settings for Production
+使用不同的生产设置
+
+So far in this book, we’ve dealt with only a single settings file: the settings.py generated by django-admin startproject. But as you get ready to deploy, you’ll likely find yourself needing multiple settings files to keep your development environment isolated from your production environment. (For example, you probably won’t want to change DEBUG from False to True whenever you want to test code changes on your local machine.) Django makes this very easy by allowing you to use multiple settings files. If you’d like to organize your settings files into production and development settings,
+you can accomplish this in one of three ways:
+到目前为止，在本书中，我们只处理了一个`设置`文件：由`django-admin startproject`生成的`settings.py`。
+但是随着您准备`部署`，您可能会发现自己需要`多个``设置`文件才能将`开发环境`与`生产环境`隔离。 
+（例如，您可能不希望在您的`本地`机器上测试代码更改时将`DEBUG`从`False`更改为`True`。）
+Django通过允许您使用`多个``设置文件`使这非常简单。
+如果您想将您的设置文件组织到`生产`和`开发`设置中，
+您可以通过以下三种方法之一完成此操作：
+
+-------------------
+++ Set up two full-blown, independent settings files.
+++ Set up a base settings file (say, for development) and a second (say, production) settings file that merely imports from the first one and defines whatever overrides it needs to define.
+++ Use only a single settings file that has Python logic to change the settings based on context.
+-------------------
+We’ll take these one at a time. First, the most basic approach is to define two separate settings files. If you’re following along, you’ve already got settings.py. Now, just make a copy of it called settings_production.py. (We made this name up; you can call it whatever you want.) In this new file, change DEBUG, etc. The second approach is similar but cuts down on redundancy. Instead of having two settings files whose contents are mostly similar, you can treat one as the base file and create another file that imports from it. For example:
+我们一次拿一个。
+首先，最基本的方法是定义两个`独立`的`设置文件`。
+如果你一直在跟着，你已经有了`settings.py`。
+现在，制作一份名为`settings_production.py`的`副本`。 
+（我们创建了这个名称;可以随意调用它。）
+在这个新文件中，更改`DEBUG`等。
+
+第二种方法类似，但减少冗余。
+您可以将一个`文件`作为`基本文件`并创建`另一个`从其中导入的文件，而不是将两个`设置文件`的内容大致`相似`。例如：
+---------------------
+# settings.py
+
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
+DATABASE_ENGINE = 'postgresql_psycopg2'
+DATABASE_NAME = 'devdb'
+DATABASE_USER = ''
+DATABASE_PASSWORD = ''
+DATABASE_PORT = ''
+
+# ...
+
+# settings_production.py
+
+from settings import *
+
+DEBUG = TEMPLATE_DEBUG = False
+DATABASE_NAME = 'production'
+DATABASE_USER = 'app'
+DATABASE_PASSWORD = 'letmein'
+---------------------
+Here, settings_production.py imports everything from settings.py and just redefines the settings that are particular to production. In this case, DEBUG is set to False, but we’ve also set different database access parameters for the production setting. (The latter goes to show that you can redefine any
+setting, not just the basic ones like DEBUG.)
+在这里，`settings_production.p`y从`settings.py`中`导入`所有内容，并重新定义特定于`生产`的`设置`。
+在这种情况下，`DEBUG`设置为`False`，但我们还为`生产设置``设置`了不同的`数据库访问参数`。 
+（后者表明你可以`重新`定义任何`设置`，而不仅仅是像`DEBUG`这样的基本设置。）
+
+Finally, the most concise way of accomplishing two settings environments is to use a single settings file that branches based on the environment. One way to do this is to check the current hostname. For example:
+最后，完成两个`设置环境`的`最简洁`的方法是,使用基于`环境分支`的`单个``设置文件`。
+一种方法是检查当前的`主机名`。例如：
+-------------------------
+# settings.py
+
+import socket
+
+if socket.gethostname() == 'my-laptop':
+    DEBUG = TEMPLATE_DEBUG = True
+else:
+    DEBUG = TEMPLATE_DEBUG = False
+
+# ...
+-------------------------
+Here, we import the socket module from Python’s standard library and use it to check the current system’s hostname. We can check the hostname to determine whether the code is being run on the production server. A core lesson here is that settings files are just Python code. They can import from other files, they can execute arbitrary logic, etc. Just make sure that, if you go down this road,
+the Python code in your settings files is bulletproof. If it raises any exceptions, Django will likely crash badly.
+在这里，我们从`Python`的`标准库`中`导入``套接字模块`，并使用它来检查当前系统的`主机名`。
+我们可以检查`主机名`以确定代码是否在`生产服务器`上运行。
+这里的`核心教训`是,`设置文件`只是`Python代码`。他们可以从`其他文件``导入`，他们可以`执行`任意的逻辑等。只要`确保`，如果你沿着这条路走下去，
+`设置文件`中的`Python代码`是`防弹`的。如果它引发任何`异常`，Django可能会`崩溃`。
+
+Feel free to rename yeur settings.py to settings_dev.py or settings/dev.py or foobar.py – Django doesn’t care, as long as you tell it what settings file you’re using.
+随意将`settings.py`重命名为`settings_dev.py`或`settings/dev.py`或`foobar.py`  - 只要您告诉它您正在使用的`设置文件`，Django就`不在意`。
+
+But if you do rename the settings.py file that is generated by django-admin startproject, you’ll find that manage.py will give you an error message saying that it can’t find the settings. That’s because it tries to import a module called settings. You can fix this either by editing manage.py to change settings to the name of your module, or by using django-admin instead of manage.py. In the latter case, you’ll need to set the DJANGO_SETTINGS_MODULE environment variable to the Python path to your settings file (e.g., 'mysite.settings').
+但是，如果您重命名由`django-admin startproject`生成的`settings.py`文件，则会发现`manage.py`会给您一条`错误消息`，指出找不到`设置`。
+这是因为它会尝试导入一个名为`settings`的`模块`。
+您可以通过编辑`manage.py`来将设置更改为`模块名称`，或者使用`django-admin`而不是`manage.py`来修复此问题。
+在后一种情况下，您需要将`DJANGO_SETTINGS_MODULE`环境变量,设置为您的`设置文件`的`Python路径`（例如'mysite.settings'）。
+==================================================
+
+==================================================
+Deploying Django to a production server
+将Django部署到生产服务器
+
+Headache free deployment
+头痛自由部署
+
+If you are serious about deploying a live website, there is really only one sensible option – find a host that explicitly supports Django.Not only will you get a separate media server out of the box (usually Nginx), but they will also take care of the little things like setting up Apache correctly and setting a cron job that restarts the Python process periodically (to prevent your site hanging up). With the better hosts, you are also likely to get some form of “one-click” deployment.
+如果你真的想要部署一个真实的`网站`，那么真的只有一个`明智`的`选择` - 找到一个明确支持Django的`主机`。
+你不仅会得到一个`独立`的`媒体服务器`（通常是`Nginx`），但他们也会`照顾`正确设置`Apache`,并设置一个`定期`重启`Python进程`的`cron作业`（以防止`站点``挂起`）。
+借助更好的`主机`，您还可能获得某种形式的“一键式”部署。
+
+Honestly, save yourself the headache and pay the few bucks a month for a host who knows Django.
+老实说，每个月给一个知道Djang的一个主机支付几块钱,为了避免让自己头疼。
+==================================================
+Deploying Django with Apache and mod_wsgi
+使用Apache和mod_wsgi部署Django
+
+Deploying Django with Apache and mod_wsgi is a tried and tested way to get Django into production. mod_wsgi is an Apache module which can host any Python WSGI application, including Django. Django will work with any version of Apache which supports mod_wsgi. The official mod_wsgi documentation is fantastic; it’s your source for all the details about how to use mod_wsgi. You’ll probably want to start with the installation and configuration documentation.
+使用`Apache`和`mod_wsgi`部署`Django`,是一种`久经考验`的将Django投入生产的方法。
+`mod_wsgi`是一个`Apache`模块，可以托管任何`Python WSGI应用程序`，包括`Django`。 
+`Django`将使用任何支持`mod_wsgi`的`Apache版本`。
+官方的`mod_wsgi`文档非常棒，这是你所有关于如何使用`mod_wsgi`的细节的来源。您可能需要从安装和配置文档开始。
+=============================
+Basic Configuration
+基本配置
+
+Once you’ve got mod_wsgi installed and activated, edit your Apache server’s httpd.conf file and add the following. Note, if you are using a version of Apache older than 2.4, replace Require all granted with Allow from all and also add the line Order deny,allow above it.
+一旦你安装并激活了`mod_wsgi`，`编辑`你的`Apache服务器`的`httpd.conf文件`并添加以下内容。
+请注意，如果您使用的是早于`2.4版本`的`Apache版本`，请将所有的`Require all granted`全部替换为`Allow`，并添加`Order deny,all`行。
+--------------------
+WSGIScriptAlias / /path/to/mysite.com/mysite/wsgi.py
+WSGIPythonPath /path/to/mysite.com
+
+<Directory /path/to/mysite.com/mysite>
+<Files wsgi.py>
+Require all granted
+</Files>
+</Directory>
+--------------------
+The first bit in the WSGIScriptAlias line is the base URL path you want to serve your application at (/ indicates the root url), and the second is the location of a WSGI file – see below – on your system, usually inside of your project package (mysite in this example). This tells Apache to serve any request below the given URL using the WSGI application defined in that file.
+
+在`WSGIScriptAlias`行中的`第一位`是您希望为您的应用程序提供服务的`基本URL路径`（/表示`根URL`），第二位是系统中`WSGI文件`的`位置` 
+-请参见下文- 通常位于项目内部包（在这个例子中是`mysite`）。
+这告诉`Apache`使用该文件中定义的`WSGI应用程序`在给定`URL`下面提供任何`请求`。
+
+The WSGIPythonPath line ensures that your project package is available for import on the Python path; in other words, that import mysite works. The <Directory> piece just ensures that Apache can access your wsgi.py file.
+`WSGIPythonPath`行,确保您的`项目包`可用于在`Python路径`中`导入`;换句话说，`import mysite`能够工作。
+ <Directory>部分，只是确保｀Apache｀可以访问您的｀wsgi.py｀文件。
+
+Next we’ll need to ensure this wsgi.py with a WSGI application object exists. As of Django version 1.4, startproject will have created one for you; otherwise, you’ll need to create it.
+接下来，我们需要确保这个一个`WSGI应用程序对象｀的`wsgi.py`存在。从Django版本1.4开始，`startproject`将为您创建一个;否则，您需要创建它。
+
+See the WSGI overview for the default contents you should put in this file, and what else you can add to it.
+请参阅WSGI概述以了解您应该放入此文件的默认内容，以及您可以添加到其中的其他内容。
+==================
+If multiple Django sites are run in a single mod_wsgi process, all of them will use the settings of whichever one happens to run first. This can be solved by changing:
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "{{ project_name }}.settings")
+
+如果多个Django站点在单个`mod_wsgi``进程`中`运行`，它们都将使用`首先`运行的`设置`。这可以通过`更改`来`解决`：
+-------------------
+os.environ.setdefault（“DJANGO_SETTINGS_MODULE”，“{{project_name}}.settings”）
+-------------------
+in `wsgi.py`, to:
+-------------------
+os.environ["DJANGO_SETTINGS_MODULE"] = "{{ project_name }}.settings"
+-------------------
+or by using mod_wsgi daemon mode and ensuring that each site runs in its own daemon process.
+或者通过使用`mod_wsgi``守护进程模式`并确保每个`站点`在其自己的`守护进程`中`运行`。
+==================
+==================================================
+Using mod_wsgi Daemon Mode
+使用mod_wsgi守护进程模式
+
+Daemon mode is the recommended mode for running mod_wsgi (on non-Windows platforms). To create the required daemon process group and delegate the Django instance to run in it, you will need to add appropriate WSGIDaemonProcess and WSGIProcessGroup directives.
+`守护进程模式`是运行`mod_wsgi`（在非Windows平台上）的`推荐模式`。
+要创建所需的`守护进程组`并委托要在其中运行的`Django实例`，您需要添加适当的`WSGIDaemonProcess`和`WSGIProcessGroup`指令。
+
+A further change required to the above configuration if you use daemon mode is that you can’t use WSGIPythonPath; instead you should use the python-path option to WSGIDaemonProcess, for example:
+如果使用`守护进程模式`，上述`配置`所需的进一步`更改`是,您无法使用`WSGIPythonPath`;
+而应该使用`WSGIDaemonProcess`的`python-path`选项，例如：
+------------------------
+WSGIDaemonProcess example.com python-path=/path/to/mysite.com:/path/to/venv/lib/python2.7/site-packages
+WSGIProcessGroup example.com 
+------------------------
+See the official mod_wsgi documentation for details on setting up daemon mode.
+有关设置`守护进程模式`的`详细信息`，请参阅官方的`mod_wsgi`文档。
+==================================================

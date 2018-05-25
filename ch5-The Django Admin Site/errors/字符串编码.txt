@@ -1,0 +1,52 @@
+编码解析错误
+===========================
+当我们在管理后台，添加一本书`Book`,
+输入书名 ： `人民邮电出版社`
+最后，添加提交的时候，会产生如下错误：
+
+--------------------------------
+Unicode error hint
+The string that could not be encoded/decoded was: 人民邮电出版社
+
+UnicodeEncodeError at /admin/books/publisher/add/
+'ascii' codec can't encode characters in position 0-6: ordinal not in range(128)
+--------------------------------
+===========================
+
+===========================
+解决方法1：
+
+ascii' codec can't encode character
+---------------------------
+def __str__(self): 
+  return self.name 
+---------------------------
+这里用这个好吧？不然linux 下输入`中文`会报错
+---------------------------
+ def __unicode__(self): 
+  return self.name
+---------------------------
+`python2`和`python3`的区别
+
+python2用的是 `def __unicode__(self):`
+python3用的是 `def __str__(self):`
+这个是根据你的`python版本`写的。
+
+因我们用的python2.7版本，所以，要改成：` def __unicode__(self):` 
+===========================
+
+
+===========================
+解决方法2：
+
+这个是在弄自己的个人博客站点时遇到的问题，在`admin后台`添加中文数据时，
+会报错：UnicodeEncodeError: 'ascii' codec can't encode characters in position 0-3
+
+解决办法，在相应的`app`下面的`admin.py`(项目/blog/admin.py)中添加：
+---------------------------
+import sys;
+
+reload(sys);
+sys.setdefaultencoding("utf8")
+---------------------------
+===========================

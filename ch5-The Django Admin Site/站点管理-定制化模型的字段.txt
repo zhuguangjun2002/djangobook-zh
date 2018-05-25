@@ -1,0 +1,213 @@
+在站点管理中定制化模型的字段
+包括，字段的排序显示，按日期显示，字段的显示顺序，按年份显示。
+
+======================================
+Customizing Change Lists and Forms
+定制`变更列表`和`窗体`
+-------------------------------------
+https://djangobook.com/customizing-change-lists-forms/
+-------------------------------------
+
+==================
+### 定制更改列表
+
+默认情况下，在`admin`管理页面中，只显示模型的`__str__`的返回值，这里是`first_name last_name`。
+----------------------------------------------------------
+class Author(models.Model):
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=40)
+    email = models.EmailField(blank=True, verbose_name ='e-mail')
+
+    def __str__(self):
+        return u'%s %s' % (self.first_name, self.last_name)
+----------------------------------------------------------
+
+=============
+## 显示多个字段
+
+要想在`admin`中，一行显示多个内容，就需要
+1.修改文件`admin.py`,
+2. 定义`admin.ModelAdmin`的派生类--`AuthorAdmin`
+3. 在派生类里面，使用`list_display`，来规定显示的内容和顺序。
+4.修改注册是的方法，添加一个参数，你自定义的`管理员类`- `AuthorAdmin`。
+如下所示：
+----------------------------------------------------------
+from django.contrib import admin
+from .models import Publisher, Author, Book
+
+class AuthorAdmin(admin.ModelAdmin):
+    list_display = ('first_name', 'last_name', 'email')
+
+admin.site.register(Publisher)
+admin.site.register(Author, AuthorAdmin)
+admin.site.register(Book)
+----------------------------------------------------------
+=============
+## 添加搜索功能
+
+添加一个简单的`搜索栏`
+添加字段` search_fields`到管理类` AuthorAdmin`：
+----------------------------------------------------------
+class AuthorAdmin(admin.ModelAdmin):
+    list_display = ('first_name', 'last_name', 'email')
+    search_fields = ('first_name', 'last_name')
+----------------------------------------------------------
+
+重新加载你的浏览器，你会看见一个搜索栏，在顶部。
+=============
+## 添加`日期过滤`到我们的`Book`模型的`change list`页面:
+----------------------------------------------------------
+from django.contrib import admin
+from .models import Publisher, Author, Book
+
+class AuthorAdmin(admin.ModelAdmin):
+    list_display = ('first_name', 'last_name', 'email')
+    search_fields = ('first_name', 'last_name')
+
+class BookAdmin(admin.ModelAdmin):
+    list_display = ('title', 'publisher', 'publication_date')
+    list_filter = ('publication_date',)
+
+admin.site.register(Publisher)
+admin.site.register(Author, AuthorAdmin)
+admin.site.register(Book, BookAdmin)
+----------------------------------------------------------
+
+在这里，因为我们正在处理一组不同的选项，我们创建了一个单独的`ModelAdmin类` -`BookAdmin`。
+首先，我们定义了一个`list_display`，只是为了让`更改列表`看起来更漂亮一些。
+然后，我们使用`list_filter`，它被设置为一个`字段元组`，用来沿着`更改列表`页面的`右侧`创建`过滤器`。
+对于`日期`字段，Django提供了将`列表`筛选为“今日”，“过去7天”，“本月”和“今年”的快捷方式 -  Django开发人员发现的`捷径`符合日常`过滤`的常见情况。图5-10显示了看起来像什么。
+
+`list_filter`也适用于其他类型的字段，而不仅仅是`DateField`。 
+（例如，试试用`BooleanField`和`ForeignKey`字段。）
+只要`至少`有2个值可供选择，就会显示`过滤器`。
+提供`日期过滤器`的另一种方法是使用`date_hierarchy`管理选项，如下所示：
+----------------------------------------------------------
+class BookAdmin(admin.ModelAdmin):
+    list_display = ('title', 'publisher','publication_date')
+    list_filter = ('publication_date',)
+    date_hierarchy = 'publication_date'
+----------------------------------------------------------
+有了这个，`更改列表`页面，会在列表`顶部`获得一个`日期`下拉导航栏，如图5-11所示。
+它从可用`年份`列表开始，然后逐渐演变为`几个月`和`个别日子`。
+
+请注意，`date_hierarchy`接受一个字符串，而`不是`一个`元组`，因为只有一个`日期字段`可用于创建`层次结构`。
+最后，让我们更改`默认排序`，以便`更改列表`页面上的`图书`总是按`发布日期``降序`排列。
+
+默认情况下，`更改列表`根据`类Meta`中的`模型`排序（我们将在第4章中介绍）对`对象`进行排序 - 但您没有指定此`排序`值，则`排序`未定义。
+----------------------------------------------------------
+class BookAdmin(admin.ModelAdmin):
+    list_display = ('title', 'publisher','publication_date')
+    list_filter = ('publication_date',)
+    date_hierarchy = 'publication_date'
+    ordering = ('-publication_date',)
+----------------------------------------------------------
+此`管理``排序选项`与`模型`的`类Meta`中的`排序`完全相同，只是它仅使用列表中的`第一个`字段名称。
+只需传递一个`列表`或`字段名称`的`元组`，并将一个`减号`添加到`字段`以使用`降序`排列顺序。
+
+
+重新加载`书籍`的`更改列表`以查看该操作。
+请注意，“发布日期”标题现在包含一个`小箭头`，指示记录的`排序方式`。 （见图5-12）
+==================
+
+
+==================
+###Customizing Edit Forms
+自定义编辑表单
+
+就像`更改列表`可以`自定义`一样，`编辑表单`（Edit Forms）可以通过多种方式进行`自定义`。
+首先，我们来`定制`字段的`排序`方式。
+默认情况下，`编辑表单`中`字段`的顺序与它们在`模型`中定义的`顺序`相对应。
+我们可以使用`ModelAdmin`子类中的`fields`选项来`更改`它：
+----------------------------------------------------------
+class BookAdmin(admin.ModelAdmin):
+    list_display = ('title', 'publisher', 'publication_date')
+    list_filter = ('publication_date',)
+    date_hierarchy = 'publication_date'
+    ordering = ('-publication_date',)
+    fields = ('title', 'authors', 'publisher', 'publication_date')
+----------------------------------------------------------
+在此更改之后，`书籍`的`编辑表单`将使用`给定的`字段顺序。
+`书名`后,跟着`作者`，感觉稍微更自然。
+当然，实际的`表单`应该取决于您的数据输入`工作流程`。每种`表单`都是不同的。
+
+
+`字段选项`允许您做的另一个有用的事情是`排除`（exclude）某些字段被完全地编辑。
+只需要把你不要的的`字段`排除掉即可。
+如果您的`管理员用户`只能`被信任`编辑您的数据的`某个部分`，或者您的`某些字段`被某些外部`自动化流程`所更改，则可以使用此功能。
+
+
+
+例如，在我们的图书数据库中，我们可以隐藏`publication_date`字段，让其不可以编辑：
+----------------------------------------------------------
+class BookAdmin(admin.ModelAdmin):
+    list_display = ('title', 'publisher','publication_date')
+    list_filter = ('publication_date',)
+    date_hierarchy = 'publication_date'
+    ordering = ('-publication_date',)
+    fields = ('title', 'authors', 'publisher')
+----------------------------------------------------------
+因此，`图书`的`编辑表单`不能提供指定`发布日期`的方法。
+例如，如果你是一位编辑，希望该`书`的`作者`不推迟`出版日期`，这可能是有用的。 （当然这完全是一个假设的例子。）
+当用户使用这个`不完整`的`表单`来添加一本新书时，`Django`会简单地将`publication_date`设置为`None`--所以请确保该字段具有`null = True`。
+
+另一种常用的编辑形式自定义与`多对多`字段有关。
+正如我们在`书籍`的`编辑表格`中看到的，`管理站点`将每个`ManyToManyField`表示为`多选框`，这是最合理的`HTML`输入小部件，但`多选框`可能`很难`使用。
+如果您想选择`多个`条目，则必须按住`控制键`(Ctrl键)或`Mac`上的`命令`（Command键）才能执行此操作。
+
+`管理站点`有助于插入一些解释这一点的文本，但当您的字段包含`数百个`选项时，它仍然很难使用。
+`管理网站`的解决方案是`filter_horizo​​ntal`。让我们将其添加到`BookAdmin`并查看它的`功能`。
+----------------------------------------------------------
+class BookAdmin(admin.ModelAdmin):
+    list_display = ('title', 'publisher','publication_date')
+    list_filter = ('publication_date',)
+    date_hierarchy = 'publication_date'
+    ordering = ('-publication_date',)
+    filter_horizontal = ('authors',)
+----------------------------------------------------------
+（如果你正在跟踪，请注意，我也删除了`字段`选项以显示`编辑表单`中的`所有字段`。）
+重新加载`书籍`的`编辑表单`，您会看到“作者”部分现在使用花哨的`JavaScript``过滤器`界面，可让您动态`搜索`选项，并将特定`作者`从“可用作者”移动到“已选作者”框，反之亦然（图5-13）。
+
+我强烈推荐使用`filter_horizo​​ntal`来处理超过10个项目的任何`ManyToManyField`。
+这比使用简单的`多选部件`要容易得多。
+另外，请注意，您可以对`多个字段`使用`filter_horizo​​ntal`  - 只需在`元组`中指定每个`名称`即可。
+
+`ModelAdmin类`也支持`filter_vertical`选项。
+这与`filter_horizo​​ntal`完全相同，但生成的`JavaScript界面`​​将这两个`框``垂直`而不是`水平地`堆叠起来。
+这是`个人品味`的问题。
+
+`filter_horizo​​ntal`和`filter_vertical`仅适用于`ManyToManyField`字段，而不适用于`ForeignKey`字段。
+默认情况下，`管理站点`对`ForeignKey`字段，使用简单的<select>框，但对于`ManyToManyField`，有时您不希望产生必须选择要在`下拉列表`中显示的所有相关对象的`开销`。
+filter_horizontal and filter_vertical only work on ManyToManyField fields, not ForeignKey fields. 
+By default, the admin site uses simple <select> boxes for ForeignKey fields,
+ but, as for ManyToManyField, sometimes you don’t want to incur the overhead of having to select all the related objects to display in the drop-down.
+
+For example, if our book database grows to include thousands of publishers, the “Add book” form could take a while to load, because it would have to load every publisher for display in the <select> box. 
+The way to fix this is to use an option called raw_id_fields:
+例如，如果我们的`图书``数据库`增长到包含数千个`出版商`（publishers），则“添加图书”表单,可能需要一段时间才能加载，因为它必须`加载`每个`出版商`才能显示在<select>框中。
+解决这个问题的方法是,使用一个名为`raw_id_fields`的选项：
+
+----------------------------------------------------------
+class BookAdmin(admin.ModelAdmin):
+    list_display = ('title', 'publisher','publication_date')
+    list_filter = ('publication_date',)
+    date_hierarchy = 'publication_date'
+    ordering = ('-publication_date',)
+    filter_horizontal = ('authors',)
+    raw_id_fields = ('publisher',)
+----------------------------------------------------------
+Set this to a tuple of ForeignKey field names, and those fields will be displayed in the admin with a simple text input box (<input type="text">) instead of a <select>. See Figure 5-14.
+将其设置为一个`ForeignKey``字段名称`的`元组`，这些`字段`将使用简单的`文本输入框`（<input type =“text”>）而不是`<select>`显示在`站点管理`界面中。见图5-14。
+
+What do you enter in this input box? 
+The database ID of the publisher. 
+Given that humans don’t normally memorize database IDs,
+ there’s also a magnifying-glass icon that you can click to pull up a pop-up window, from which you can select the publisher to add.
+你在这个`输入框`中输入什么内容？
+`出版商`的数据库`ID`。
+鉴于`人类`通常不会记住`数据库ID`，
+ 还有一个`放大镜``图标`，您可以`单击`以拉出一个弹出窗口，您可以从中选择要添加的`出版商`。
+==================
+
+
+======================================-----------------------------

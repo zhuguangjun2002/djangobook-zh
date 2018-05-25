@@ -1,0 +1,309 @@
+====================================
+Authentication in Web Requests
+-------------------
+https://djangobook.com/authentication-web-requests/
+-------------------
+====================================
+Django uses sessions and middleware to hook the authentication system into request objects. 
+These provide a request.user attribute on every request which represents the current user. 
+If the current user has not logged in, this attribute will be set to an instance of AnonymousUser, otherwise it will be an instance of User.
+You can tell them apart with is_authenticated(), like so:
+
+Django使用`会话`和`中间件`将`认证系统`挂接到`请求对象`（`request objects`）。
+这些为每一个请求，都提供了一个`request.user`属性,它代表了`当前用户`。
+如果`当前用户`尚未`登录`，则此`属性`将设置为`AnonymousUser`的一个`实例`，否则它将是`User`的一个`实例`。
+您可以使用`is_authenticated（）`来`区分`它们，如下所示：
+
+-----------------
+if request.user.is_authenticated():
+    # Do something for authenticated users.
+else:
+    # Do something for anonymous users.
+-----------------
+=====================================
+### How to Log a User In
+
+To log a user in, from a view, use login().
+It takes an HttpRequest object and a User object.
+login() saves the user’s ID in the session, using Django’s session framework.
+Note that any data set during the anonymous session is retained in the session after a user logs in.
+This example shows how you might use both authenticate() and login():
+
+要从`视图`登录一个`用户`，请使用`login（）`。
+它需要一个`HttpRequest对象`和一个`User对象`。
+`login（）`使用Django的`会话框架`将这个`用户`的`ID`保存在`会话`中。
+请注意，在`匿名会话期间`的`任何数据集`，在一个`用户`登录后，仍然会保留在`会话`中。
+这个例子，展示了如何使用`authenticate（）`和`login（）`：
+
+-----------------------------
+from django.contrib.auth import authenticate, login
+
+def my_view(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active:
+            login(request, user)
+            # Redirect to a success page.
+        else:
+            # Return a 'disabled account' error message
+    else:
+        # Return an 'invalid login' error message.
+------------------------------
+------------------------------
+## Calling authenticate() first
+
+When you’re manually logging a user in, you must call authenticate() before you call login().
+authenticate() sets an attribute on the User noting which authentication backend successfully authenticated that user, and this information is needed later during the login process.
+An error will be raised if you try to login a user object retrieved from the database directly.
+## 首先调用`authenticate（）
+当您手动`登录`一个`用户`时，你必须在调用`login（）`之前，先调用`authenticate（）`。
+`authenticate（）`在`用户`身上会`设置`一个`属性`，指出`哪个``认证后端`成功地`认证`了该`用户`，并且在稍后的`登录过程中`，需要用到`此信息`。
+如果您尝试将从`数据库`中检索到的一个`用户对象`，把它拿来直接进行`登录`，则会引发一个`错误`。
+------------------------------
+==========================================
+### How to Log a User Out
+
+To log out a user who has been logged in via login(), use logout() within your view. 
+It takes an HttpRequest object and has no return value. Example:
+要注销通过`login()`登录`的`用户`，请在您的`视图`中使用`logout()`。
+它需要一个`HttpRequest对象`,并且没有`返回值`。例：
+---------------------------
+from django.contrib.auth import logout
+
+def logout_view(request):
+    logout(request)
+    # Redirect to a success page.
+---------------------------
+Note that logout() doesn’t throw any errors if the user wasn’t logged in.
+When you call logout(), the session data for the current request is completely cleaned out. 
+All existing data is removed.
+This is to prevent another person from using the same Web browser to log in and have access to the previous user’s session data.
+请注意，如果用户`未登录`，`logout()`不会引发任何错误。
+当您调用`logout()`时，`当前请求`的`会话数据`将被`彻底清除`。
+所有`现有数据`都将被`删除`。
+这是为了防止`其他人`使用同一个`Web浏览器``登录`并访问`先前用户`的`会话数据`。
+
+If you want to put anything into the session that will be available to the user immediately after logging out, do that after calling logout().
+如果你想把任何东西放到`注销`后`立即`对`用户`而言`可用的``会话`中，那么在调用`logouti()`之后执行。
+============================================
+### Limiting Access to Logged-In Users
+## The raw way
+
+The simple, raw way to limit access to pages is to check request.user.is_authenticated() and either redirect to a login page:
+限制访问页面的`简单``原始方法`是检查`request.user.is_authenticated()`,并`重定向`到`登录页面`：
+----------------------------------
+from django.shortcuts import redirect
+
+def my_view(request):
+    if not request.user.is_authenticated():
+        return redirect('/login/?next=%s' % request.path)
+    # ...
+----------------------------------
+… or display an error message:
+或者，显示一个错误消息：
+----------------------------------
+from django.shortcuts import render
+
+def my_view(request):
+    if not request.user.is_authenticated():
+        return render(request, 'books/login_error.html')
+    # ...
+----------------------------------
+=====================================================
+## The login_required decorator
+`login_required`装饰器
+
+As a shortcut, you can use the convenient login_required() decorator:
+作为一个`捷径`，你可以使用方便的`login_required（）`装饰器：
+
+----------------------------------
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def my_view(request):
+    ...
+----------------------------------
+
+login_required() does the following:
+----------------------------------
+++ If the user isn’t logged in, redirect to LOGIN_URL, passing the current absolute path in the query string. Example: /accounts/login/?next=/reviews/3/.
+++ If the user is logged in, execute the view normally. The view code is free to assume the user is logged in.
+
+++如果用户`未登录`，则重定向到`LOGIN_URL`，并在`查询字符串`中传递`当前绝对路径`。例如：`/accounts/login/?next=/reviews/3/`。
+++如果用户`已登录`，则正常执行`视图`。`视图代码`可以`假定`用户`已登录`。
+----------------------------------
+
+By default, the path that the user should be redirected to upon successful authentication is stored in a query string parameter called “next”.
+If you would prefer to use a different name for this parameter, login_required() takes an optional redirect_field_name parameter:
+
+默认情况下，用户在成功验证后应该`重定向`到的路径存储在名为“next”的`查询字符串`参数中。
+如果您希望为此`参数`使用不同的名称，`login_required（）`将采用可选的`redirect_field_name`参数：
+---------------------------
+from django.contrib.auth.decorators import login_required
+
+@login_required(redirect_field_name='my_redirect_field')
+def my_view(request):
+    ...
+---------------------------
+Note that if you provide a value to redirect_field_name, you will most likely need to customize your login template as well, since the template context variable which stores the redirect path will use the value of redirect_field_name as its key rather than “next” (the default). 
+login_required() also takes an optional login_url parameter. Example:
+
+请注意，如果您为`redirect_field_name`提供值，则很可能还需要`自定义``登录模板`，因为存储重定向路径的`模板``上下文变量`将使用`redirect_field_name`的值作为其`键值`而不是“next”（缺省值）。 
+`login_required（）`也采用可选的`login_url`参数。例：
+-------------------------
+from django.contrib.auth.decorators import login_required
+
+@login_required(login_url='/accounts/login/')
+def my_view(request):
+    ...
+-------------------------
+Note that if you don’t specify the login_url parameter, you’ll need to ensure that the LOGIN_URL and your login view are properly associated.
+For example, using the defaults, add the following lines to your URLconf:
+请注意，如果您未指定`login_url`参数，则需要确保`LOGIN_URL`和您的`登录视图`正确关联。
+例如，使用`默认值`，将以下行添加到您的`URLconf`中：
+--------------------------
+from django.contrib.auth import views as auth_views
+
+url(r'^accounts/login/$', auth_views.login),
+--------------------------
+The LOGIN_URL also accepts view function names and named URL patterns. This allows you to freely remap your login view within your URLconf without having to update the setting.
+`LOGIN_URL`还接受`视图函数名称`和`命名的URL模式`。这使您可以在`URLconf`中自由`重新映射``登录视图`，而无需`更新`设置。
+
+Note: The login_required decorator does NOT check the is_active flag on a user.
+注意：`login_required`装饰器,不会检查一个用户的`is_active`标志。
+=====================================
+Limiting access to logged-in users that pass a test
+限制对通过一个测试的`登录用户`的访问
+
+To limit access based on certain permissions or some other test, you’d do essentially the same thing as described in the previous section. 
+The simple way is to run your test on `request.user` in the view directly.
+For example, this view checks to make sure the user has an `email` in the desired domain:
+要根据某些`权限`或某些其他`测试`来限制访问权限，您的操作基本上与上一节中所描述的相同。
+简单的方法是直接在`视图`中的`request.user`上运行测试。
+例如，此`视图`会检查以确保`用户`在所需的域中有`电子邮件`：
+--------------------------
+def my_view(request):
+    if not request.user.email.endswith('@example.com'):
+        return HttpResponse("You can't leave a review for this book.")
+    # ...
+--------------------------
+
+As a shortcut, you can use the convenient user_passes_test decorator:
+作为一个`快捷方式`，你可以使用方便的`user_passes_test`修饰器：
+-----------------------
+from django.contrib.auth.decorators import user_passes_test
+
+def email_check(user):
+    return user.email.endswith('@example.com')
+
+@user_passes_test(email_check)
+def my_view(request):
+    ...
+-----------------------
+
+user_passes_test() takes a required argument: a callable that takes a User object and returns True if the user is allowed to view the page.
+Note that user_passes_test() does not automatically check that the User is not anonymous. 
+user_passes_test() takes two optional arguments:
+
+`user_passes_test（）`需要一个`必需`的`参数`：一个`可调用函数`，接受一个`User对象`，如果允许这个用户来`查看`页面，则返回`True`。
+请注意，`user_passes_test（）`不会自动检查`用户`是否为`匿名用户`。
+`user_passes_test（）`接受两个`可选参数`：
+-----------------------
+++ login_url
+Lets you specify the URL that users who don’t pass the test will be redirected to.
+It may be a login page and defaults to LOGIN_URL if you don’t specify one.
+让您指定`未通过`测试的`用户`将被`重定向`到的`URL`。
+它可能是一个`登录页面`，如果你没有指定`登录页面`，则默认为`LOGIN_URL`。
+
+++ redirect_field_name. 
+Same as for login_required(). 
+Setting it to None removes it from the URL, which you may want to do if you are redirecting users that don’t pass the test to a non-login page where there’s no “next page”.
+与`login_required（）`相同。
+将其设置为`None`,会将其从`URL`中`删除`它，如果您将`未通过测试`的`用户``重定向`到没有“next page”的`非登录页面`，则可能需要执行此操作。
+-----------------------
+For example:
+-----------------------
+@user_passes_test(email_check, login_url='/login/')
+def my_view(request):
+    ...
+-----------------------
+====================================
+## The permission_required decorator
+ `permission_required`装饰器
+
+It’s a relatively common task to check whether a user has a particular permission.
+For that reason, Django provides a shortcut for that case – the permission_required() decorator:
+
+检查一个`用户`是否具有一个`特定`的`权限`，一个是相对常见的任务。
+出于这个原因，Django为这种情况提供了一个`快捷方式` -  `permission_required（）`装饰器：
+------------------------------
+from django.contrib.auth.decorators import permission_required
+
+@permission_required('reviews.can_vote')
+def my_view(request):
+    ...
+------------------------------
+
+Just like the has_perm() method, permission names take the form “<app label>.<permission codename>”
+(i.e. reviews.can_vote for a permission on a model in the reviews application). 
+The decorator may also take a list of permissions. 
+Note that permission_required() also takes an optional login_url parameter. Example:
+就像`has_perm（）`方法一样，`权限`名称的形式为“<app label>.<permission codename>”
+（即`reviews.can_vote`在`reviews application`中的一个`模型`上的一个`权限`）。
+`装饰器`也可以接受一个`权限列表`。
+请注意，`permission_required（）`也可以接受可选的`login_url`参数。例：
+---------------------------------
+from django.contrib.auth.decorators import permission_required
+
+@permission_required('reviews.can_vote', login_url='/loginpage/')
+def my_view(request):
+    ...
+---------------------------------
+As in the login_required() decorator, login_url defaults to LOGIN_URL. 
+If the raise_exception parameter is given, the decorator will raise PermissionDenied, prompting the 403 (HTTP Forbidden) view instead of redirecting to the login page.
+
+和`login_required（）`装饰器一样，`login_url`默认为`LOGIN_URL`。
+如果给出`raise_exception`参数，`装饰器`将引发`PermissionDenied`，提示`403（HTTP禁止）视图`，而不是`重定向`到`登录页面`。
+====================================
+### Session invalidation on password change
+密码更改,会话无效
+
+If your AUTH_USER_MODEL inherits from AbstractBaseUser, or implements its own get_session_auth_hash() method, authenticated sessions will include the hash returned by this function. 
+In the AbstractBaseUser case, this is an Hash Message Authentication Code (HMAC) of the password field.
+
+If the SessionAuthenticationMiddleware is enabled, Django verifies that the hash sent along with each request matches the one that’s computed server-side. 
+This allows a user to log out of all of their sessions by changing their password.
+
+The default password change views included with Django, django.contrib.auth.views.password_change() and the user_change_password view in the django.contrib.auth admin, update the session with the new password hash so that a user changing their own password won’t log themselves out. 
+If you have a custom password change view and wish to have similar behavior, use this function:
+
+如果您的`AUTH_USER_MODEL`继承自`AbstractBaseUser`，或者实现它自己的`get_session_auth_hash（）`方法，`被认证的`会话`将`包含`此函数返回的`散列`。
+在`AbstractBaseUser`的情况下，这是一个`密码字段`的`哈希消息验证码`（HMAC）。
+
+如果启用了`SessionAuthenticationMiddleware`，Django会`验证`与每个`请求`一起发送的`哈希`与`服务器端`计算出的`哈希`相匹配。
+这允许一个`用户`通过`更改密码`来`注销`所有`会话`。
+
+Django包含的`默认`的`密码更改视图`，`django.contrib.auth.views.password_change（）`，`django.contrib.auth`中的`user_change_password`视图，会使用`新的``密码哈希`更新`会话`，以便一个用户`更改`自己的`密码`不会被`注销`。
+如果您有`自定义`的`密码更改视图`，并希望有类似的行为，请使用此功能：
+----------------------
+django.contrib.auth.decorators.update_session_auth_hash (request, user)
+----------------------
+This function takes the current request and the updated user object from which the new session hash will be derived and updates the session hash appropriately. Example usage:
+此`函数`接受当前`请求`和更新的用户对象，这个新的会话哈希会从该对象中派生，并适当地`更新`这个`会话哈希`。用法示例：
+---------------------
+from django.contrib.auth import update_session_auth_hash
+
+def password_change(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+    else:
+        ...
+---------------------
+Since get_session_auth_hash() is based on SECRET_KEY, updating your site to use a new secret will invalidate all existing sessions.
+由于`get_session_auth_hash（）`基于`SECRET_KEY`，因此`更新站点`以使用一个`新秘钥`将使所有现有`会话`都无效。
+===========================================

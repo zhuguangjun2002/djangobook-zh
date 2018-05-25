@@ -1,0 +1,179 @@
+===========================
+Simple Validation
+------------------
+https://djangobook.com/form-validation/
+------------------
+===========================
+
+Error messages should be specific, unambiguous and not confusing. 
+错误消息应该是特定的，明确的而不是容易混淆的。
+
+The problem is in the fact that we’re using a simple boolean value for error, whereas we should be using a list of error message strings. Here’s how we might fix that:
+问题在于，我们使用简单的布尔值来表示错误，而我们应该使用一个错误消息字符串的`列表`。以下是我们如何解决该问题的方法：
+
+============================
+### Making a Contact Form
+制作一个`联系表单`
+
+Django 自带了一个`form library`,叫`django.forms`。可以处理很多问题，包括从HTML form 显示到验证。
+使用这个框架的方法为，定义一个`Form calss` 为每一个你想要处理的`HTML <form>`。
+
+In our case, we only have one `<form>`, so we’ll have one `Form class`. 
+Django community convention is to keep `Form classes` in a separate file called `forms.py`. 
+Create this file in the same directory as your `mysite\views.py`, and enter the following:
+
+在我们的例子中，我们只有一个`<form>`，所以我们有一个`Form class`。
+Django社区的约定是将`Form classes`保存在一个名为`forms.py`的单独文件中。
+在与你的`mysite\views.py`相同的目录下创建这个文件，并输入以下内容：
+-----------------
+from django import forms
+
+class ContactForm(forms.Form):
+    subject = forms.CharField()
+    email = forms.EmailField(required=False)
+    message = forms.CharField()
+----------------
+
+This is pretty intuitive, and it’s similar to Django’s model syntax. 
+Each field in the form is represented by a type of `Field class` – `CharField` and `EmailField` are the only types of fields used here – as attributes of a `Form class`. 
+Each field is required by default, so to make `email` optional, we specify `required=False`.
+
+这非常直观，并且与Django的模型语法相似。
+`表单`中的每个`字段`都由一种“Field class”表示，“CharField”和“EmailField”是这里使用的惟一类型的字段 - 作为一个“Form类”的`属性`。
+每个字段，`默认`都是`必需的`，所以为了使'email'可选，我们指定'required = False'。
+
+Let’s hop into the Python interactive interpreter and see what this class can do. 
+The first thing it can do is display itself as HTML:
+让我们跳进Python交互式解释器，看看这个`类`可以做什么。
+它能做的第一件事就是将自身`显示`为`HTML`：
+-------------------
+(env_mysite) C:\Users\...\mysite> python manage.py shell
+
+>>> from mysite.forms import ContactForm
+>>> f = ContactForm()
+>>> print(f)
+<tr><th><label for="id_subject">Subject:</label></th><td><input type="text" name="subject" required id="id_subject" /></td></tr>
+<tr><th><label for="id_email">Email:</label></th><td><input type="email" name="email" id="id_email" /></td></tr>
+<tr><th><label for="id_message">Message:</label></th><td><input type="text" name="message" required id="id_message" /></td></tr>
+-------------------
+Django adds a label to each field, along with `<label>` tags for accessibility. 
+The idea is to make the default behavior as optimal as possible. 
+This default output is in the format of an `HTML <table>`, but there are a few other built-in outputs:
+Django为每个字段添加一个`标签`，以及用于`访问`的`<label>标签`。
+m个想法是尽可能使默认行为最优化。
+这个默认输出格式为`HTML <table>`，但还有其他一些`内置`输出：
+-------------------------
+>>> print(f.as_ul())
+<li><label for="id_subject">Subject:</label> <input type="text" name="subject" required id="id_subject" /></li>
+<li><label for="id_email">Email:</label> <input type="email" name="email" id="id_email" /></li>
+<li><label for="id_message">Message:</label> <input type="text" name="message" required id="id_message" /></li>
+
+>>> print(f.as_p())
+<p><label for="id_subject">Subject:</label> <input type="text" name="subject" required id="id_subject" /></p>
+<p><label for="id_email">Email:</label> <input type="email" name="email" id="id_email" /></p>
+<p><label for="id_message">Message:</label> <input type="text" name="message" required id="id_message" /></p>
+-------------------------
+Note that the opening and closing `<table>`, `<ul>` and `<form>` tags aren’t included in the output, so that you can add any additional rows and customization if necessary. 
+These methods are just shortcuts for the common case of displaying the entire form. 
+You can also display the HTML for a particular field:
+请注意，打开和关闭`<table>`，`<ul>`和`<form>`标记,并不包含在`输出`中，因此您可以添加任何其他行和根据需要`自定义`。
+这些方法只是显示整个`表单`的常见情况的`shortcuts`。
+您还可以为一个特定字段显示其HTML：
+
+-------------------------
+>>> print(f['subject'])
+<input type="text" name="subject" required id="id_subject" />
+>>> print f['message']
+<input type="text" name="message" required id="id_message" />
+-------------------------
+The second thing `Form` objects can do is validate data.
+To validate data, create a new `Form` object and pass it a `dictionary` of data that maps `field` names to `data`:
+`Form`对象,可以做的第二件事是`验证数据`。
+为了验证数据，创建一个新的`Form对象`，并将它传递给一个将`字段名称`映射为`数据`的数据`字典`(dictionary)：
+-----------------
+>>> f = ContactForm({'subject': 'Hello', 'email': 'nige@example.com', 'message': 'Nice site!'})
+-----------------
+Once you’ve associated data with a `Form` instance, you’ve created a `“bound”` form:
+一旦将数据与一個“Form”实例相关联，就创建了一个“绑定”form(a `bound` form)：
+-----------------
+>>> f.is_bound
+True
+-----------------
+Call the `is_valid()` method on any bound `Form` to find out whether its data is valid. 
+We’ve passed a valid value for each field, so the `Form` in its entirety is valid:
+在任何绑定的Form上调用`is_valid（）`方法来确定它的数据是否有效。
+我们已经为每个字段传递了一个有效的值，所以这个`Form`其完整性能是`有效的`：
+------------------
+>>> f.is_valid()
+True
+------------------
+If we don’t pass the `email` field, it’s still valid, because we’ve specified `required=False` for that field:
+如果我们不传递`email`字段，它仍然是`有效的`，因为我们为该`字段`指定了`required = False`：
+---------------
+>>> f = ContactForm({'subject': 'Hello', 'message': 'Nice site!'})
+>>> f.is_valid()
+True 
+---------------
+But, if we leave off either subject or message, the `Form` is no longer valid:
+但是，如果我们忽略了`主题`或`消息`，“表单”不再有效：
+------------------------
+>>> f = ContactForm({'subject': 'Hello'})
+>>> f.is_valid()
+False
+>>> f = ContactForm({'subject': 'Hello', 'message': ''})
+>>> f.is_valid()
+False 
+------------------------
+You can drill down to get field-specific error messages:
+您可以深入了解获得`特定字段`的`错误消息`：
+------------------------
+>>> f = ContactForm({'subject': 'Hello', 'message': ''})
+>>> f['message'].errors
+['This field is required.']
+>>> f['subject'].errors
+[]
+>>> f['email'].errors
+[]
+------------------------
+
+Each bound `Form` instance has an `errors` attribute that gives you a `dictionary` mapping field names to error-message lists:
+每个绑定的`Form`实例都有一个`errors`属性，它提供给你一个`字典'，将`字段名`映射到`错误信息`的`列表`：
+------------------------
+>>> f = ContactForm({'subject': 'Hello', 'message': ''})
+>>> f.errors
+{'message'`: ['This field is required.']}
+------------------------
+
+Finally, for `Form` instances whose data has been found to be valid, a `cleaned_data` attribute is available.
+This is a `dictionary` of the submitted data, `“cleaned up”`. 
+Django’s `forms` framework not only validates data; it cleans it up by converting values to the appropriate Python types:
+
+最后，对于已发现其数据是有效的“Form”实例，有一个“cleared_data”属性，是`可用的`。
+这是一个`已提交`数据的“字典”，已经“被清理干净”。
+Django的`forms`框架，不仅验证数据，它通过将`值`转换为适当的Python`类型`来`清除`它：
+------------------------
+>>> f = ContactForm({'subject': 'Hello', 'email': 'nige@example.com', 'message': 'Nice site!'})
+>>> f.is_valid() 
+True
+>>> f.cleaned_data
+{'subject': 'Hello', 'email': 'nige@example.com', 'message': 'Nice site!'}
+------------------------
+我们这里使用中文试一下，发现，`cleaned_data`必须要`is_valid()`,然后，才能获得这个属性`cleaned_data`，否则`有毒`～。
+有时候，还获得不到，有时候能获得。比价诡异。
+------------------------
+>>> f = ContactForm({'subject': '抖音', 'email': 'nige@example.com', 'message': '抖音有毒啊!'})
+>>> f.is_valid()
+True
+>>> f.cleaned_data
+{'message': u'\u6296\u97f3\u6709\u6bd2\u554a!', 'email': u'nige@example.com', 'subject': u'\u6296\u97f3'}
+------------------------
+发现，上传的是`str`类型，`cleaned_data`给转换为`unicode`类型。
+
+Our contact form only deals with strings, which are “cleaned” into `string` objects 
+– but if we were to use an `IntegerField` or `DateField`, the forms framework would ensure that `cleaned_data` used proper Python `integers` or `datetime.date` objects for the given fields.
+我们的`联系表单`只处理`字符串`，这些`字符串`被“清理”为“字符串”对象(`string`objects)。
+-- 但是如果我们要使用`IntegerField`或`DateField`，`表单`框架将确保`cleaned_data`为给定`字段`使用适当的Python`integers`或'datetime.date`对象。
+
+==================================
+
+

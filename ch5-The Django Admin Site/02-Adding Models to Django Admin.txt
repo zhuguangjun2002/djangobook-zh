@@ -1,0 +1,200 @@
+================================
+Adding Models to Django Admin
+------------------------
+https://djangobook.com/adding-models-to-django-admin/
+------------------------
+================================
+
+================================
+## 添加应用`books`的三个模型：`Publisher, Author ，Book`到`admin site`
+------------------------
+from django.contrib import admin
+from .models import Publisher, Author, Book
+
+admin.site.register(Publisher)
+admin.site.register(Author)
+admin.site.register(Book)
+------------------------
+================================
+================================
+## 中文编码错误
+
+因为我们使用`python2.7`,而作者要求的是`python3`,所以，我们执行`__str__()`就会报错。
+================================
+
+
+================================
+##Making Fields Optional
+让`字段`可选
+
+
+默认情况下，编辑窗体里的模型字段，都是必须填写的。
+以`Author`模型为例，我们想让其`email`字段，成为`可选的`。换句话说：
+--------------------------
+a blank string should be allowed.
+一个`空白字符串`，应该是被允许的。
+--------------------------
+毕竟，现实中，可能你没有`作家`的`email`。
+
+##  编辑`Author`模型
+添加 `blank=True` 到`email`字段,
+--------------------------
+class Author(models.Model):
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=40)
+    email = models.EmailField(blank=True)
+--------------------------
+This tells Django that a blank value is indeed allowed for authors’ `e-mail` addresses. 
+By default, all fields have `blank=False`, which means blank values are not allowed.
+这告诉Django，`作者`的“电子邮件”地址确实允许空白值。
+默认情况下，所有字段都有`blank = False`，这意味着不允许使用`空值`。
+
+ adding `blank=True`, we have begun expanding our model beyond a simple definition of what the database table looks like.
+添加`blank = True`，我们已经开始扩展我们的模型，而不是简单定义数据库表的样子。
+
+Once you’ve added that `blank=True`, reload the “Add author” edit form (http://127.0.0.1:8000/admin/books/author/add/), and you’ll notice the field’s label – “Email” – is no longer bolded. 
+This signifies it’s not a required field. 
+You can now add authors without needing to provide e-mail addresses; 
+you won’t get the loud red “This field is required” message anymore, if the field is submitted empty.
+一旦你添加了`blank = True`，重新加载“添加作者”编辑表单（http://127.0.0.1:8000/admin/books/author/add/），您会注意到该字段的标签 - “电子邮件” - 不再是`粗体`显示。
+这表示它不是`必填`字段。
+您现在可以添加`作者`而无需提供`电子邮件地址`;
+如果该字段被提交为`空`，您将不会再看到“该字段是必需的”消息。
+
+===============================
+### Making Date and Numeric Fields Optional
+使`日期`和`数字`字段可选
+
+不啰嗦，说结果：
+------------------------------
+修改模型里的字段： 如果字段为`日期`或者`数字`。
+如果想要让他们为可选的，而不是必选的。那么：
+
+`同时`使用`null = True`和`blank = True`。
+别忘了,因为`null = True`,改变了数据库的`schemas`,所以，要同步一下数据库。
+（由于多种原因，Django不会尝试`自动更改`数据库`模式`(schemas)，因此，只要您对`模型`进行了这种`更改`，您就`有责任`执行`python manage.py migrate`命令。）
+---------------
+python manage.py makemigrations
+python manage.py migrate
+---------------
+
+如果，想要让他们是必选填写的，那么，什么也不加：）
+------------------------------
+
+
+A common gotcha related to `blank=True` has to do with date and numeric fields, but it requires a fair amount of background explanation. 
+SQL has its own way of specifying blank values – a special value called `NULL`. 
+`NULL` could mean “unknown,” or “invalid,” or some other application-specific meaning. 
+In SQL, a value of `NULL` is different than an empty string, just as the special Python object `None` is different than an empty Python string `("")`.
+一个与`blank = True`相关的常见问题，与`日期`和`数字`字段有关，但它需要大量的背景知识来解释。
+SQL有自己的指定`空值`的方式 - 一个叫做`NULL`的特殊值。
+“NULL”可能意味着“未知”或“无效”或其他特定于应用程序的含义。
+在SQL中，'NULL'的值与`空字符串`不同，就像特殊的Python对象'None'不同于空的Python字符串'（“”）`一样。
+
+This means it’s possible for a particular character field (e.g., a `VARCHAR` column) to contain both `NULL` values and empty string values. 
+This can cause unwanted ambiguity and confusion: “Why does this record have a NULL but this other one has an empty string? 
+Is there a difference, or was the data just entered inconsistently?” 
+And: “How do I get all the records that have a blank value – should I look for both `NULL` records and empty strings, or do I only select the ones with empty strings?”
+And: “How do I get all the records that have a blank value – should I look for both `NULL` records and empty strings, or do I only select the ones with empty strings?”
+这意味着特定`字符`字段（例如`VARCHAR`列）可能包含`NULL`值和`空字符串`值。
+这可能会导致不必要的模糊和混淆：“为什么此记录具有NULL，但另一个具有空字符串？
+有没有区别，还是刚输入的数据不一致？“
+“我如何获得所有有`空值`的记录 - 我应该查找”NULL“记录还是`空字符串`，还是只选择`空字符串`？”
+
+To help avoid such ambiguity, Django’s automatically generated `CREATE TABLE` statements (which were covered in Chapter 4) add an explicit `NOT NULL` to each column definition. 
+For example, here’s the generated statement for our `Author` model, from Chapter 4:
+---------------
+CREATE TABLE "books_author" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "first_name" varchar(30) NOT NULL,
+    "last_name" varchar(40) NOT NULL,
+    "email" varchar(75) NOT NULL
+);
+---------------
+In most cases, this default behavior is optimal for your application and will save you from data-inconsistency headaches.
+And it works nicely with the rest of Django, such as the Django admin site, which inserts an empty string (not a `NULL` value) when you leave a character field `blank`.
+在大多数情况下，这种默认行为对于您的应用程序是最佳的，并且可以帮助您避免数据不一致性问题。
+它与Django的其他部分很好地协同工作，比如,Django`管理站点`，当你让一个`字符字段`为'blank'时，它会插入一个`空字符串`（不是'NULL'值）。
+
+But there’s an exception with database column types that do not accept empty strings as valid values – such as dates, times and numbers.
+If you try to insert an empty string into a date or integer column, you’ll likely get a database error, depending on which database you’re using. 
+(PostgreSQL, which is strict, will raise an exception here; MySQL might accept it or might not, depending on the version you’re using, the time of day and the phase of the moon.)
+但是，数据库`列类型`有一个例外，它不接受`空字符串`作为`有效值` - 例如,日期，时间和数字。
+如果您尝试在`日期`或`整数`的`列`中插入`空字符串`，则可能会出现`数据库错误`，具体取决于您正在使用的数据库。
+（严格的PostgreSQL在这里会引发一个异常; MySQL可能会接受它，也可能不会，这取决于您使用的版本，一天中的时间和月球的相位。）
+
+In this case, `NULL` is the only way to specify an empty value.
+In Django models, you specify that `NULL` is allowed by adding `null=True` to a field.
+So that’s a long way of saying this – if you want to allow blank values in a `date` field (e.g., `DateField`, `TimeField`, `DateTimeField`) or `numeric` field (e.g., `IntegerField`, `DecimalField`, `FloatField`), you’ll need to use both `null=True` and `blank=True`.
+
+在这种情况下，`NULL`是指定一个`空值`的唯一方法。
+在Django模型中，通过向`字段`添加`null = True`来指定`NULL`。
+所以说,这真是一言难尽啊--
+如果你想允许在'日期时间'字段（例如`DateField`，`TimeField`，`DateTimeField`）或`数字`字段（例如`IntegerField`， DecimalField`，`FloatField`）为可选的`blank`值，
+那么你需要`同时`使用`null = True`和`blank = True`。
+
+For example, let’s change our `Book` model to allow a blank `publication_date`. Here’s the revised code:
+例如，让我们更改我们的`Book`模型,以允许`publication_date`字段为`空白`。这是修改后的代码：
+
+---------------
+class Book(models.Model):
+    title = models.CharField(max_length=100)
+    authors = models.ManyToManyField(Author)
+    publisher = models.ForeignKey(Publisher)
+    publication_date = models.DateField(blank=True, null=True)
+---------------
+Adding `null=True` is more complicated than adding `blank=True`, because `null=True` changes the semantics of the database – that is, it changes the `CREATE TABLE` statement to remove the `NOT NULL` from the `publication_date` field. 
+To complete this change, we’ll need to update the database.
+添加`null = True`比添加`blank = True`更加复杂，因为`null = True`改变了数据库的语义 - 也就是说，它改变了`CREATE TABLE`语句,以从中 `publication_date`字段上，删除`NOT NULL`。
+要完成此更改，我们需要`更新`数据库。
+
+Fke that change and reload the server, and you should see the field’s new label on the author edit form. Note that you shouldn’t capitalize the first letter of a verbose_name unless it should always be capitalized (e.g., "USA state"). Django will automatically capitalize it when it needs to, and it will use the exact verbose_name value in other places that don’t require capitalization.or a number of reasons, Django does not attempt to automate changes to database schemas, so it’s your own responsibility to execute the `python manage.py migrate` command whenever you make such a change to a model. 
+Bringing this back to the admin site, now the “Add book” edit form should allow for empty publication date values.
+由于多种原因，Django不会尝试`自动更改`数据库`模式`(schemas)，因此，只要您对`模型`进行了这种`更改`，您就`有责任`执行`python manage.py migrate`命令。
+回到`管理网站`，现在“添加书籍”的`编辑表单`应该允许`发布日期`为`空值`。
+
+================================
+
+### Customizing Field Labels
+自定义`字段`的`标签`
+
+On the admin site’s edit forms, each field’s label is generated from its model field name.
+The algorithm is simple – Django just replaces underscores with spaces and capitalizes the first character, so, for example, the `Book` model’s `publication_date` field has the label “Publication date.”
+在`管理网站`的`编辑表单`上，每个`字段`的`标签`都是从其`模型``字段名称`生成的。
+该算法很简单 -  Django只是用`空格`替换`下划线`，并将`第一个字符``大写`，因此，例如，“Book”模型的“publication_date”字段的标签为“Publication date”。
+
+However, field names don’t always lend themselves to nice admin field labels, so in some cases you might want to customize a label.
+You can do this by specifying `verbose_name` in the appropriate model field. 
+For example, here’s how we can change the label of the `Author.email` field to `“e-mail”` with a hyphen:
+但是，`字段名称`并不总是适合于很好的`管理页面`的`字段标签`，所以在某些情况下，您可能需要`自定义标签`。
+您可以通过在相应的`模型字段`中指定`verbose_name`来完成此操作。
+例如，以下是我们如何使用连字符将“Author.email”字段的标签更改为“e-mail”：
+---------------------------
+class Author(models.Model):
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=40)
+    email = models.EmailField(blank=True, verbose_name ='e-mail')
+---------------------------
+
+Make that change and reload the server, and you should see the field’s new label on the author edit form.
+Note that you shouldn’t capitalize the first letter of a `verbose_name` unless it should always be capitalized (e.g., `"USA state"`).
+Django will automatically capitalize it when it needs to, and it will use the exact `verbose_name` value in other places that don’t require capitalization.
+进行更改并重新加载服务器，并且您应该在`作者``编辑表单`上看到该`字段`的`新标签`。
+请注意，除非它总是`大写`（例如，“USA state”``），否则,不应该`大写`“verbose_name”的`第一个`字母。
+Django会在需要时`自动`将其`大写`，并且它会在其他不需要`大写`的地方使用确切的`verbose_name`值。
+================================
+================================
+### Custom ModelAdmin classes
+定制 `ModelAdmin`类
+
+The changes we’ve made so far – `blank=True`, `null=True` and `verbose_name` – are really `model-level` changes, not `admin-level` changes. 
+That is, these changes are a fundamental part of the model and just so happen to be used by the `admin site`; there’s nothing `admin-specific` about them.
+到目前为止我们所做的修改 - 'blank = True`，`null = True`和`verbose_name`  - 实际上是'模型级别'的变化，而不是'管理级别'的变化。
+也就是说，这些变化是`模型`的基本组成部分，恰恰恰好被“管理站点”使用;关于它们没有任何“管理专用”。
+
+
+Beyond these, the Django `admin site` offers a wealth of options that let you customize how the admin site works for a particular model. 
+Such options live in `ModelAdmin` classes, which are classes that contain configuration for a specific model in a specific `admin site` instance.
+除此之外，Django`管理站点`提供了丰富的选项，可让您`自定义``管理站点`对`特定模型`的工作方式。
+这些`选项`存在于`ModelAdmin`类中，这些类是包含特定“admin site”实例中,`特定模型`的`配置`的`类`。
+================================

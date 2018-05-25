@@ -1,0 +1,71 @@
+===========================
+Django Views and URLconfs
+--------------------
+https://djangobook.com/views-urlconfs/
+--------------------
+===========================
+
+Most of your URLpatterns will start with carets and end with dollar signs, but it’s nice to have the flexibility to perform more sophisticated matches. 
+You may be wondering what happens if someone requests the URL `/hello` (that is, without a trailing slash). 
+Because our URLpattern requires a trailing slash, that URL would not match. 
+However, by default, any request to a URL that doesn’t match a URLpattern and doesn’t end with a slash will be redirected to the same URL with a trailing slash 
+(This is regulated by the APPEND_SLASH Django setting, which is covered in Appendix D).
+
+你的URL模式大部分将以`插入符号`开头并以`美元符号`结尾，但能够灵活地执行更复杂的匹配是很好的。
+您可能想知道如果有人请求URL`/ hello`会发生什么（也就是说，没有`结尾`的`斜杠`）。
+由于我们的URLpattern需要一个`尾部``斜线`，因此该URL`不匹配`。
+但是，默认情况下，对`URL不匹配`并且不以`斜线`结尾的URL的任何`请求`,将被`重定向`到具有`尾部`斜杠`的相同`URL`。
+（这由`附录D`中的`APPEND_SLASH Django`设置来规定）。
+
+
+The other thing to note about this URLconf is that we’ve passed the `hello` view function as an `object` without `calling` the function. 
+This is a key feature of `Python` (and other dynamic languages): functions are `first-class` `objects`, which means you can pass them around just like any other `variables`.
+ Cool stuff, eh?
+关于这个`URLconf`的另一个要注意的是，我们已经把`hello`视图函数，当作一个`object`进行传递，而没有去调用这个`函数`。
+这是“Python”（以及其他动态语言）的一个关键特性：函数是“第一类”`对象`，这意味着您可以像其他任何“变量”一样`传递`它们。
+
+
+
+
+The most important setting is called `ROOT_URLCONF`. 
+`ROOT_URLCONF` tells Django which Python module should be used as the `URLconf` for this web site. 
+Remember when `django-admin startproject` created the files `settings.py` and `urls.py`?
+ The auto-generated `settings.py` contains a `ROOT_URLCONF` setting that points to the auto-generated `urls.py`. 
+Open the `settings.py` file and see for yourself; it should look like this:
+最重要的设置叫做`ROOT_URLCONF`。
+ `ROOT_URLCONF`告诉Django，哪个Python`模块`应该被用作这个`网站`的`URLconf`。
+还记得`django-admin startproject`创建文件`settings.py`和`urls.py`吗？
+自动生成的`settings.py`包含一个指向自动生成的`urls.py`的`ROOT_URLCONF`设置。
+打开settings.py文件并亲自查看;它应该看起来像这样：
+----------------------------
+ROOT_URLCONF = 'mysite.urls' 
+----------------------------
+
+When it finds one that matches, it calls the view function associated with that pattern, passing it an `HttpRequest` object as the first parameter. 
+(We’ll cover the specifics of `HttpRequest` later.)
+ As we saw in our first view example, a view function must return an `HttpResponse`.
+当它找到一个匹配的对象时，它会调用与该模式关联的`视图函数`，并将它传递给一个“HttpRequest”对象作为第一个参数。
+（我们稍后会介绍`Http Request`的细节。）
+正如我们在第一个视图示例中看到的，视图函数必须返回一个`HttpResponse`。
+
+Once it does this, Django does the rest, converting the Python object to a proper web response with the appropriate HTTP `headers` and `body` (i.e., the content of the web page). 
+In summary:
+一旦这样做，Django就会完成剩下的工作，将Python对象转换为适当的Web响应，并使用适当的HTTP`headers`和`body`（即网页内容）。
+ 综上所述：
+---------------------------------------
+1. A request comes in to `/hello/`.
+2. Django determines the `root` `URLconf` by looking at the `ROOT_URLCONF` setting.
+3. Django looks at all of the `URLpatterns` in the `URLconf` for the `first one` that matches `/hello/`.
+4. If it finds a match, it calls the associated view function.
+5. The view function returns an `HttpResponse`.
+6. Django converts the `HttpResponse` to the proper `HTTP response`, which results in a web page.
+---------------------------------------
+---------------------------------------
+1.一个`请求`进入，达到`/hello/`。
+2. Django通过查看“ROOT_URLCONF”设置来确定“root” `URLconf`。
+3. Django查看`URLconf`中的所有'URLpatterns`，找到第一个匹配`/hello/`的'URL'。
+4.如果发现匹配，则调用相关的`视图函数`。
+5.`视图函数`返回一个`HttpResponse`。
+6. Django将`HttpResponse`转换为正确的`HTTP response`，这会产生一个`网页`。
+---------------------------------------
+

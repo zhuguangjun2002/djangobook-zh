@@ -1,0 +1,385 @@
+Authentication Views
+
+
+Django provides several views that you can use for handling login, logout, and password management.
+These make use of the built-in auth forms but you can pass in your own forms as well.
+Django provides no default template for the authentication views – however the template context is documented for each view below.
+
+Django提供了几个`视图`，可用于处理`登录`，`注销`和`密码管理`。
+这些使用了`内置`的`auth forms`(`auth 表单`)，但您也可以将其`传入`自己的`表单`。
+Django没有为`认证视图`提供`默认模板` - 但是为下面的每个`视图`记录了`模板`的`上下文`（`context`）。
+
+There are different methods to implement these views in your project, however the easiest and most common way is to include the provided URLconf in django.contrib.auth.urls in your own URLconf, for example:
+在您的项目中实现这些`视图`有不同的方法，但最简单和最常用的方法是将提供的`URLconf`包含在您自己的`URLconf`中的`django.contrib.auth.urls`中，例如：
+-----------------
+urlpatterns = [url('^', include('django.contrib.auth.urls'))]
+-----------------
+This will make each of the views available at a default URL (detailed below).
+这将使每个视图在默认URL（详见下文）中可用。
+
+The built-in views all return a TemplateResponse instance, which allows you to easily customize the response data before rendering. Most built-in authentication views provide a URL name for easier reference.
+`内置`的`视图`都会返回一个`TemplateResponse实例`，这使您可以在`渲染`之前轻松`定制``响应数据`。
+大多数`内置`的`身份验证视图`提供了一个`URL名称`以便于引用。
+
+===============================
+login
+登录
+
+Logs a user in.
+让一个`user`登录
+
+Default URL: /login/
+
+==========================
+Optional arguments:
+可选参数：
+----------------------------------
+++ template_name: The name of a template to display for the view used to log the user in. Defaults to `registration/login.html`.
+用于登录用户的视图显示模板的名称。缺省为`registration / login.html`。
+
+++ redirect_field_name: The name of a GET field containing the URL to redirect to after login. Defaults to next.
+包含要在`登录`后,`重定向`到的`URL`的一个`GET字段`的`名称`。默认为，`next`。
+
+++ authentication_form: A callable (typically just a form class) to use for authentication. Defaults to AuthenticationForm.
+一个可用于`身份验证`的`可调用对象`（通常只是一个`表单类`（`a form class`））。默认为,`AuthenticationForm`。
+
+++ current_app: A hint indicating which application contains the current view. See the namespaced URL resolution strategy for more information.
+一个提示，提示哪个应用程序包含当前`视图`。有关更多信息，请参阅命名空间URL解析策略。
+
+++ extra_context: A dictionary of context data that will be added to the default context data passed to the template.
+一个上下文数据的字典，将被添加到传递给`模板`的`默认`的`上下文数据`。
+----------------------------------
+
+Here’s what login does:
+--------------------
+++ If called via GET, it displays a login form that POSTs to the same URL. More on this in a bit.
+++ 如果通过`GET`进行调用，它将显示一个`登录表单`，它可以`POST`到同一个`UR`L。更多关于这一点。
+
+++ If called via POST with user submitted credentials, it tries to log the user in.
+If login is successful, the view redirects to the URL specified in next.
+If next isn’t provided, it redirects to LOGIN_REDIRECT_URL (which defaults to /accounts/profile/).
+If login isn’t successful, it redisplays the login form.
+It’s your responsibility to provide the html for the login template, called registration/login.html by default.
+
+++ 如果使用`用户`提交的`凭证`,通过`POST`调用，它会尝试`登录``用户`。
+如果`登录``成功`，该`视图`将`重定向`到`next`所指定的`URL`。
+如果未提供`next`，则`重定向`到`LOGIN_REDIRECT_URL`（默认为/accounts/profile/）。
+如果`登录``失败`，它将重新显示`登录表单`.
+您有责任为`登录模板`提供`html`，默认情况下为`registration/login.html`。
+---------------------
+==========================
+Template Context
+
+---------------------
+++ form: A Form object representing the `AuthenticationForm`.
+一个表示`AuthenticationForm`的`Form对象`。
+
+++ next: The URL to redirect to after successful login. This may contain a query string, too.
+在`成功``登录`后，`重定向`到的`URL`。这也可能包含一个`查询字符串`。
+
+++ site: The current Site, according to the `SITE_ID` setting. 
+当前的网站，根据“SITE_ID”设置。
+
+If you don’t have the site framework installed, this will be set to an instance of `RequestSite`, which derives the site name and domain from the current `HttpRequest`.
+如果您没有安装`网站框架`(`site framework`)，则会将其设置为一个“RequestSite”的`实例`，该`实例`从当前的“HttpRequest”中解析出`站点名称`和`域`。
+
+++ site_name: An alias for site.name. 
+If you don’t have the site framework installed, this will be set to the value of request.META['SERVER_NAME']. 
+如果您没有安装`网站框架`，则会将其设置为`request.META ['SERVER_NAME']`的`值`。
+If you’d prefer not to call the template `registration/login.html`, you can pass the `template_name` parameter via the extra arguments to the view in your `URLconf`.
+如果您不想调用模板`registration/login.html`，则在你的`URLconf`中，你可以传递`template_name`参数最为额外的参数，传递给`视图`。
+---------------------
+==========================
+===============================
+logout
+Logs a user out.
+
+Default URL: /logout/
+
+==========================
+Optional arguments:
+
+---------------------
+==========================
+++ next_page: The URL to redirect to after logout. 
+登录之后的，重定向的URL.
+
+++ template_name: The full name of a template to display after logging the user out. Defaults to 'registration/logged_out.html' if no argument is supplied.
+`用户登录`之后，要显示的一个`模板`的`全名`。如果没有参数提供，则`默认`为'registration/logged_out.html'。
+
+++ redirect_field_name: The name of a GET field containing the URL to redirect to after log out. Defaults to next. Overrides the next_page URL if the given GET parameter is passed.
+一个`GET字段`的`名称`，包含了`注销后`要`重定向`的那个`URL`。默认为，`next`。如果传递给定的`GET参数`，则覆盖`next_page` URL。
+
+++ current_app: A hint indicating which application contains the current view. See the namespaced URL resolution strategy for more information.
+++ extra_context: A dictionary of context data that will be added to the default context data passed to the template.
+---------------------
+==========================
+==========================
+Template context:
+
+---------------------
+++ title: The string “Logged out”, localized.
+++标题：字符串“已注销”，已本地化。
+
+++ site: The current Site, according to the SITE_ID setting. If you don’t have the site framework installed, this will be set to an instance of RequestSite, which derives the site name and domain from the current HttpRequest.
+++网站：根据SITE_ID设置的当前网站。如果您没有安装网站框架，则会将其设置为RequestSite的一个实例，该实例从当前的HttpRequest中派生网站名称和域。
+
+++ site_name: An alias for site.name. If you don’t have the site framework installed, this will be set to the value of request.META['SERVER_NAME'].
+`site.name`的`别名`。如果您没有安装网站框架，则会将其设置为`request.META ['SERVER_NAME']`的值。
+
+++ current_app: A hint indicating which application contains the current view. See the namespaced URL resolution strategy for more information.
+一个提示,`哪个应用程序`包含`当前视图`的提示。有关更多信息，请参阅命名空间URL解析策略。
+
+++ extra_context: A dictionary of context data that will be added to the default context data passed to the template.
+一个`上下文数据`的词典，将被添加到传递给`模板`的`默认上下文数据`。
+---------------------
+
+==========================
+===============================
+
+===============================
+logout_then_login
+
+Logs a user out, then redirects to the login page.
+注销一个用户，然后`重定向`到`登录`页面。
+
+Default URL: None provided.
+
+Optional arguments:
+
+---------------------
+login_url: The URL of the login page to redirect to. Defaults to LOGIN_URL if not supplied.
+current_app: A hint indicating which application contains the current view. See the namespaced URL resolution strategy for more information.
+extra_context: A dictionary of context data that will be added to the default context data passed to the template.
+---------------------
+===============================
+password_change
+Allows a user to change their password.
+
+Default URL: /password_change/
+
+Optional arguments:
+
+---------------------
+++ template_name: The full name of a template to use for displaying the password change form. 
+Defaults to `registration/password_change_form.html` if not supplied.
+用于显示`密码更改`表单的`模板`的`全名`。
+如果没有提供，则默认为`registration /password_change_form.html`。
+
+++ post_change_redirect: The URL to redirect to after a successful password change.
+成功更改密码后重定向到的URL。
+
+++ password_change_form: A custom “change password” form which must accept a user keyword argument. The form is responsible for actually changing the user’s password. Defaults to PasswordChangeForm.
+一个自定义的“更改密码”表单，必须接受一个`user``关键字``参数`。该`表单`负责`实际地`更改这个`用户`的`密码`。
+默认为`PasswordChangeForm`。
+
+++ current_app: A hint indicating which application contains the current view. See the namespaced URL resolution strategy for more information.
+++ extra_context: A dictionary of context data that will be added to the default context data passed to the template.
+---------------------
+
+Template context:
+模板上下文：
+---------------------
+`form`: The password change form (see password_change_form above).
+`表单`：`密码更改表单`（请参阅上面的`password_change_form`）。
+===============================
+password_reset
+密码重置
+
+Allows a user to reset their password by generating a one-time use link that can be used to reset the password, and sending that link to the user’s registered email address.
+允许用户通过生成`一次性`使用`链接`,`重置密码`，该`链接`可用于`重置密码`，并将该`链接`发送到用户的`注册`的`电子邮件地址`。
+
+If the email address provided does not exist in the system, this view won’t send an email, but the user won’t receive any error message either.
+This prevents information leaking to potential attackers.
+如果提供的`电子邮件地址`在`系统`中`不存在`，则此`视图`不会`发送``电子邮件`，但`用户`也不会收到任何`错误`消息。
+这可以防止`信息``泄露`给潜在的`攻击者`。
+
+If you want to provide an error message in this case, you can subclass PasswordResetForm and use the password_reset_form argument.
+如果您想在这种情况下提供一个`错误消息`，您可以继承`PasswordResetForm`，并使用`password_reset_form`参数。
+
+Users flagged with an unusable password aren’t allowed to request a password reset to prevent misuse when using an external authentication source like LDAP.
+Note that they won’t receive any error message since this would expose their account’s existence but no mail will be sent either.
+标记为`不可用密码`的`用户`不允许`请求``重置密码`,以`防止`在使用一个`外部身份验证来源`（如，LDAP）时，发生`误用`。
+请注意，他们不会收到任何错误消息，因为这会暴露他们的`帐户`的存在，不会发送`邮件`。
+
+Default URL: /password_reset/
+
+===============
+Optional arguments:
+------------------
+++ template_name: The full name of a template to use for displaying the password reset form.
+Defaults to `registration/password_reset_form.html` if not supplied.
+
+++ email_template_name: The full name of a template to use for generating the email with the reset password link.
+Defaults to `registration/password_reset_email.html` if not supplied.
+
+++ subject_template_name: The full name of a template to use for the subject of the email with the reset password link. 
+Defaults to `registration/password_reset_subject.txt` if not supplied.
+
+++ password_reset_form: Form that will be used to get the email of the user to reset the password for.
+Defaults to `PasswordResetForm`.
+
+++ token_generator: Instance of the class to check the one-time link. 
+This will default to `default_token_generator`, it’s an instance of `django.contrib.auth.tokens.PasswordResetTokenGenerator`.
+
+++ post_reset_redirect: The URL to redirect to after a successful password reset request.
+
+++ from_email: A valid email address. 
+By default, Django uses the `DEFAULT_FROM_EMAIL`.
+
+++ current_app: A hint indicating which application contains the current view. 
+See the namespaced URL resolution strategy for more information.
+
+++ extra_context: A dictionary of context data that will be added to the default context data passed to the template.
+
+++ html_email_template_name: The full name of a template to use for generating a text/html multipart email with the password reset link.
+By default, HTML email is not sent.
+------------------
+===============
+Template context:
+
+------------------
+form: The form (see password_reset_form above) for resetting the user’s password.
+------------------
+
+===============
+Email template context:
+
+------------------
+++ email: An alias for `user.email`
+++ user: The current `User`, according to the email form field. 
+Only active users are able to reset their passwords (`User.is_active` is True).
+
+++ site_name: An alias for `site.name`. 
+If you don’t have the site framework installed, this will be set to the value of `request.META['SERVER_NAME']`.
+
+++ domain: An alias for `site.domain`. 
+If you don’t have the site framework installed, this will be set to the value of `request.get_host()`.
+
+++ protocol:`http` or `https`
+
+++ uid: The user’s primary key encoded in base 64.
+
+++ token: Token to check that the reset link is valid.
+------------------
+Sample `registration/password_reset_email.html` (email body template):
+
+------------------
+Someone asked for password reset for email {{ email }}. Follow the link below:
+{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token %}
+------------------
+The same template context is used for subject template. Subject must be single line plain text string.
+`主题模板`使用`相同的``模板上下文`。`主题`必须是`单行``纯文本字符串`。
+===============================
+password_reset_done
+密码重置完成
+
+The page shown after a user has been emailed a link to reset their password.
+在发送给一个用户一封`电子邮件`，其包含了一个重置他们密码的的`链接`；这之后要显示的页面。
+
+This view is called by default if the `password_reset()` view doesn’t have an explicit `post_reset_redirect` URL set.
+如果`password_reset（）`视图,没有一个显式的`post_reset_redirect` URL设置，则`默认`会调用此`视图`---`password_reset_done`。
+
+Default URL: /password_reset_done/
+----------------
+If the email address provided does not exist in the system, the user is inactive, or has an unusable password, the user will still be redirected to this view but no email will be sent.
+如果提供的`电子邮件地址`在`系统中`不存在，用户处于`非活动状态`或`密码不可用`，`用户`仍将被`重定向`到`该视图`，但不会`发送电子邮件`。
+----------------
+===================
+Optional arguments:
+
+----------------
+++ template_name: The full name of a template to use. 
+Defaults to `registration/password_reset_done.html` if not supplied.
+
+++ current_app: A hint indicating which application contains the current view.
+See the namespaced URL resolution strategy for more information.
+
+++ extra_context: A dictionary of context data that will be added to the default context data passed to the template.
+----------------
+===============================
+password_reset_confirm
+
+Presents a form for entering a new password.
+提供一个表单，用于输入一个新密码。
+
+Default URL: /password_reset_confirm/
+
+================
+Optional arguments:
+
+----------------
+++ uidb64: The user’s id encoded in base 64. 
+Defaults to `None`.
+
+++ token: Token to check that the password is valid. 
+Defaults to `None`.
+
+++ template_name: The full name of a template to display the confirm password view. 
+显示`确认密码视图`的一个`模板`的`全名`。
+Default value is `registration/password_reset_confirm.html`.
+
+++ token_generator: Instance of the class to check the password.
+This will default to default_token_generator, it’s an instance of `django.contrib.auth.tokens.PasswordResetTokenGenerator`.
+
+++ set_password_form: Form that will be used to set the password. 
+Defaults to `SetPasswordForm`
+
+++ post_reset_redirect: URL to redirect after the password reset done.
+Defaults to `None`.
+
+++ current_app: A hint indicating which application contains the current view.
+See the namespaced URL resolution strategy for more information.
+
+++ extra_context: A dictionary of context data that will be added to the default context data passed to the template.
+----------------
+================
+Template context:
+
+----------------
+++ form: The form (see `set_password_form` above) for setting the new user’s password.
+++ validlink: Boolean, `True` if the link (combination of uidb64 and token) is valid or unused yet.
+----------------
+===============================
+password_reset_complete
+
+Presents a view which informs the user that the password has been successfully changed.
+显示一个`视图`，其负责通知用户`密码`已`成功更改`。
+
+Default URL: /password_reset_complete/
+
+================
+Optional arguments:
+
+----------------
+++ template_name: The full name of a template to display the view. 
+Defaults to `registration/password_reset_complete.html`.
+
+++ current_app: A hint indicating which application contains the current view. 
+See the namespaced URL resolution strategy for more information.
+
+++ extra_context: A dictionary of context data that will be added to the default context data passed to the template.
+----------------
+===============================
+The redirect_to_login helper function
+
+Django provides a convenient function, `redirect_to_login` that can be used in a view for implementing custom access control. 
+It redirects to the login page, and then back to another URL after a successful login.
+
+================
+Required arguments:
+
+----------------
+next: The URL to redirect to after a successful login.
+----------------
+================
+Optional arguments:
+
+----------------
+++ login_url: The URL of the login page to redirect to. 
+Defaults to `LOGIN_URL` if not supplied.
+
+++ redirect_field_name: The name of a GET field containing the URL to redirect to after log out.
+Overrides next if the given GET parameter is passed.
+----------------
+===============================

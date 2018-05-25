@@ -1,0 +1,107 @@
+==========================
+The Django Admin Site
+--------------
+https://djangobook.com/django-admin-site/
+--------------
+==========================
+For most modern web sites, an admin interface is an essential part of the infrastructure. 
+This is a web-based interface, limited to trusted site administrators, that enables the adding, editing and deletion of site content. 
+Some common examples include the interface you use to post to your blog, the backend site managers use to moderate user-generated comments and the tool your clients use to update the press releases on the web site you built for them.
+
+对于大多数现代网站，`管理界面`是基础架构的重要组成部分。
+这是一个基于Web的界面，仅限于`受信任`的`站点管理员`，可以添加，编辑和删除站点内容。
+一些常见的例子包括您用来`发布`到`博客`的界面，`后端网站管理员`用来调节用户生成的`评论`以及客户用来更新您为其构建的网站上的`新闻稿`的工具。
+
+==========================
+### Using the Django Admin Site
+
+## 创建项目的时候，就创建了`admin`
+-----------
+django-admin startproject mysite
+-----------
+## 创建`超级管理员`
+-----------
+(env_mysite) C:\...\mysite_project\mysite> python manage.py createsuperuser 
+-----------
+
+# 打开管理员页面
+-----------
+http://127.0.0.1:8000/admin/.
+-----------
+
+## 多语言支持
+# 让管理界面显示`中文`
+编辑`settings.py`文件：
+--------
+LANGUAGE_CODE = 'en-us'
+--------
+替换为：
+--------
+LANGUAGE_CODE = 'zh-hans'
+--------
+
+==========================
+
+==========================
+You should see two types of editable content: `Groups` and `Users`. 
+They are provided by `django.contrib.auth`, the authentication framework shipped by Django. 
+您应该看到两种类型的可编辑内容：`组`和`用户`。
+English> 它们由Django发布的`认证框架`---`django.contrib.auth`提供。
+
+Each type of data in the Django admin site has a change list and an edit form.
+Change lists show you all the available objects in the database, and edit forms let you add, change or delete particular records in your database. 
+Click the “Change” link in the “Users” row to load the change list page for users (Figure 5-3).
+Django管理站点中的每种数据都有一个`更改列表`和一个`编辑表单`。
+`更改列表`显示数据库中的所有可用对象，`编辑表单`可以添加，更改或删除数据库中的特定记录。
+单击“用户”行中的“更改”链接,以加载用户的`更改列表`页面（图5-3）。
+
+Filtering options are at right, sorting is available by clicking a column header, and the search box at the top lets you search by username.
+Click the username of the user you created, and you’ll see the edit form for that user (Figure 5-4).
+This page lets you change the attributes of the user, like the first/last names and various permissions.
+`过滤选项`位于`右边`的，可通过`单击``列标题`进行`排序`，`顶部`的`搜索框`可让您通过`用户名`进行`搜索`。
+`点击`您创建的用户的`用户名`，您将看到该用户的`编辑表单`（图5-4）。
+通过此页面可以更改用户的`属性`，如`姓名`和各种`权限`。
+
+Note that the user’s password in not shown.
+As a security measure, Django doesn’t store raw passwords, so there is no way to retrieve a password, you have to change it.
+请注意，用户的`密码`未`显示`。
+作为一项安全措施，Django`不`存储`原始密码`，因此无法检索`密码`，您必须`更改`密码。
+
+When you edit an existing object, you’ll notice a History link in the upper-right corner of the window.
+Every change made through the admin interface is logged, and you can examine this log by clicking the History link (see Figure 5-6).
+编辑现有对象时，您会注意到窗口右上角的`历史`链接。
+通过`管理界面`进行的每一项`更改`都会被`记录`下来，并且您可以通过单击“历史记录”链接来查看该记录（请参阅图5-6）。
+
+==============================
+How the Admin Site Works
+管理网站的工作原理
+
+It’s pretty straightforward.
+When Django loads at server startup, it runs the `admin.autodiscover()` function. 
+In earlier versions of Django, you used to call this function from `urls.py`, but now Django runs it automatically. 
+This function iterates over your `INSTALLED_APPS` setting and looks for a file called `admin.py` in each installed `app`. 
+If an `admin.py` exists in a given app, it executes the code in that file.
+这非常简单。
+当Django在`服务器启动`时加载时，它运行`admin.autodiscover（）`函数。
+在早期的Django版本中，你曾经从`urls.py`调用这个函数，但是`现在`,Django自动运行它。
+这个`函数``遍历`你的`INSTALLED_APPS`设置,并在每个已安装的`app`中查找名为`admin.py`的文件。
+如果给定`应用`中存在`admin.py`，它将`执行`该文件中的代码。
+
+The admin site will only display an edit/change interface for models that have been explicitly registered with `admin.site.register()` entered into the app’s `admin.py` file.
+This is why your `books` model is not displaying yet – we have not registered the model with the `admin`. We will get to that next.
+`管理网站`将只显示，在`app`的`admin.py`文件中,使用了`admin.site.register（）`显式注册的`模型`的一个`编辑/更改`界面。
+这就是为什么你的`books`模型没有显示 - 我们还没有用`admin`注册该模型。我们将接下来的内容。
+
+The app `django.contrib.auth` includes its own `admin.py`, which is why `Users` and `Groups` showed up automatically in the admin. 
+Other `django.contrib` apps, such as `django.contrib.redirects`, also add themselves to the `admin`, as do many third-party Django applications you might download from the web.
+应用程序`django.contrib.auth`包含它自己的`admin.py`，这就是为什么`Users`和`Groups`在`管理页面`中会`自动显示`的原因。
+其他`django.contrib`应用程序，例如`django.contrib.redirects`，也会将自己添加到`admin`，就像您可能从Web上下载的许多`第三方`Django应用程序一样。
+
+Beyond that, the Django admin site is just a Django application, with its own models, templates, views and URLpatterns. 
+You add it to your application by hooking it into your `URLconf`, just as you hook in your own views. 
+You can inspect its templates, views and URLpatterns by poking around in `django/contrib/admin` in your copy of the Django codebase – but don’t be tempted to change anything directly in there, as there are plenty of hooks for you to customize the way the admin site works.
+除此之外，Django管理站点只是一个Django`应用程序`，具有自己的模型，模板，视图和URL模式。
+你可以通过将它挂到你的`URLconf`中来将它添加到你的应用程序中，就像`挂钩`你自己的`视图`一样。
+你可以通过在`Django代码库`中的`django/contrib/admin`来检查它的模板，视图和URL模式 - 但是`不要`试图直接在那里改变任何东西，因为有很多`钩子`可以让你`自定义`管理网站的工作方式。
+
+

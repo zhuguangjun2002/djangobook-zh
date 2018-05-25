@@ -1,0 +1,202 @@
+======================================
+Generating Non-HTML Content
+生成`非-HTML`内容
+---------------------
+https://djangobook.com/generating-non-html-content/
+---------------------
+
+Usually when we talk about developing Web sites, we’re talking about producing HTML. Of course, there’s a lot more to the Web than HTML; we use the Web to distribute data in all sorts of formats: RSS,
+PDFs, images, and so forth.
+通常当我们谈论开发`Web站点`时，我们正在讨论产生`HTML`。
+当然，`Web`上的不只是`HTML`，还有很多其他东西;我们使用`Web`以各种`格式`分发数据：RSS，PDF，`图像`等等。
+
+So far, we’ve focused on the common case of HTML production, but in this chapter we’ll take a detour and look at using Django to produce other types of content. Django has convenient built-in tools that you can use to produce some common non-HTML content:
+到目前为止，我们已经`关注`了`HTML生成`的常见情况，但在本章中，我们将`绕路`并考虑使用Django来生成`其他类型`的`内容`。
+Django具有方便的`内置工具`，您可以使用这些`工具`生成一些常见的`非HTML``内容`：
+-----------------------
++ Comma-delimited (CSV) files for importing into spreadsheet applications.
++ PDF files.
++ RSS/Atom syndication feeds.
++ Sitemaps (an XML format originally developed by Google that gives hints to search engines).
+
++ 用于导入`电子表格``应用程序`的`逗号分隔（CSV）文件`。
++ PDF文件
++ RSS/Atom联合feeds
++ Sitemaps（最初由Google开发的XML格式，为搜索引擎提供提示）。
+-----------------------
+We’ll examine each of those tools a little later, but first we’ll cover the basic principles.
+稍后我们将研究这些工具，但首先我们将介绍基本原则。
+
+======================================
+The basics: views and MIME types
+Recall from Chapter 2 that a view function is simply a Python function that takes a Web request and returns a Web response. This response can be the HTML contents of a Web page, or a redirect, or a 404 error, or an XML document, or an image â€¦or anything, really. More formally, a Django view function must:
+回想`第2章`，一个`视图函数`只是一个`Python函数`，它接受一个`Web请求`并返回一个`Web响应`。
+此响应可以是`网页`，`重定向`，`404错误`，`XML文档`或`图像`的`HTML内容`，或者任何`其他内容`。
+更正式的说，一个`Django``视图函数`必须：
+---------------------
+1. Accept an HttpRequest instance as its first argument; and
+2. Return an HttpResponse instance.
+---------------------
+The key to returning non-HTML content from a view lies in the HttpResponse class, specifically the content_type argument. By default, Django sets content_type to “text/html”. You can however, set content_type to any of the official Internet media types (MIME types) managed by IANA.
+从一个`视图`中返回`非-HTML内容`的`关键`在于，`HttpResponse类`，特别是`content_type`参数。
+默认情况下，`Django`将`content_type`设置为“text/html”。
+但是，您可以将`content_type`设置为由`IANA`管理的任何官方`Internet媒体类型`（MIME类型）。
+
+By tweaking the MIME type, we can indicate to the browser that we’ve returned a response of a different format. For example, let’s look at a view that returns a PNG image. To keep things simple,
+we’ll just read the file off the disk:
+通过调整`MIME类型`，我们可以向`浏览器`表明,我们已经返回了一个`不同格式`的`响应`。
+例如，让我们看一看返回一个`PNG图像`的一个`视图`。为了简单起见，
+我们只是从磁盘读取文件：
+-------------------------
+from django.http import HttpResponse
+
+def my_image(request):
+    image_data = open("/path/to/my/image.png", "rb").read()
+    return HttpResponse(image_data, content_type="image/png")
+-------------------------
+That’s it! If you replace the image path in the open() call with a path to a real image, you can use this very simple view to serve an image, and the browser will display it correctly.
+就是这样！如果将`open（）`调用中的`图像路径`替换为`实际图像`的`路径`，则可以使用此非常简单的`视图`来提供`图像`，并且浏览器将正确`显示`它。
+
+The other important thing to keep in mind is that HttpResponse objects implement Python’s standard file-like object API. This means that you can use an HttpResponse instance in any place Python (or a third-party library) expects a file. For an example of how that works, let’s take a look at producing CSV with Django.
+
+需要牢记的另一件重要事情是,`HttpResponse对象`实现了`Python`的`标准文件类对象API`。
+这意味着您可以在任何地方使用一个`HttpResponse`实例` Python（或`第三方库`）`需要`一个`文件`。
+有关如何工作的示例，我们来看看如何使用Django生成`CSV`。
+======================================
+Producing CSV
+
+Python comes with a CSV library, csv. The key to using it with Django is that the csv module’s CSV-creation capability acts on file-like objects, and Django’s HttpResponse objects are file-like objects. Here’s an example:
+
+Python附带一个`CSV库`-`csv`。
+在Django中使用它的`关键`在于,`csv`模块的`CSV-创建功能`作用于`file-like`对象，而`Django`的`HttpResponse对象`则是`file-like`对象。这是一个例子：
+-------------------------
+import csv
+from django.http import HttpResponse
+
+def some_view(request):
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; 
+      filename="somefilename.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
+    writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"'])
+
+    return response  
+-------------------------
+The code and comments should be self-explanatory, but a few things deserve a mention:
+代码和评论应该是不言自明的，但有几件事情值得一提：
+-------------------------
+++ The response gets a special MIME type, text/csv. This tells browsers that the document is a CSV file, rather than an HTML file. If you leave this off, browsers will probably interpret the output as HTML, which will result in ugly, scary gobbledygook in the browser window.
+++ The response gets an additional Content-Disposition header, which contains the name of the CSV file. This filename is arbitrary; call it whatever you want. It’ll be used by browsers in the Save asâ€¦
+++ dialogue, etc.
+++ Hooking into the CSV-generation API is easy: Just pass response as the first argument to csv.writer. The csv.writer function expects a file-like object, and HttpResponse objects fit the bill.
+++ For each row in your CSV file, call writer.writerow, passing it an iterable object such as a list or tuple.
+++ The CSV module takes care of quoting for you, so you don’t have to worry about escaping strings with quotes or commas in them. Just pass writerow() your raw strings, and it’ll do the right thing.
+
+++ `response`获得一个`特殊`的`MIME类型``text/csv`。
+这告诉`浏览器`该文档是一个`CSV文件`，而不是`HTML文件`。
+如果你不这样做，浏览器可能会将输出解释为`HTML`，这会在浏览器窗口中产生`丑陋`，`可怕`的`gobbledygook`。
+++ `response`获得一个额外的`Content-Disposition``标头`，其中包含`CSV文件`的`名称`。
+这个`文件名`是`任意`的;随心所欲地称呼它。它将被`浏览器`在`另存为`对话框中`使用`.
+++ 挂钩到`CSV`生成API`非常`简单`：
+只需将`response`作为`第一个参数`传递给`csv.writer`即可。 
+`csv.writer`函数,需要一个`类似文件`的`对象`，并且`HttpResponse`对象`适合`该`账单`。
+++ 对于`CSV文件`中的`每一行`，调用`writer.writerow`，将它传递给一个`可迭代对象`，如`列表`或`元组`。
+++ `CSV模块`为您提供`引用`，因此您不必担心使用`引号`或`逗号`在`字符串`中`转义`字符串。
+只要通过`authorow（）`你的`原始字符串`，它会做`正确`的事情。
+-------------------------
+======================================
+Streaming large CSV files
+流式传输大型CSV文件
+
+When dealing with views that generate very large responses, you might want to consider using Django’s StreamingHttpResponse instead. For example, by streaming a file that takes a long time to generate you can avoid a load balancer dropping a connection that might have otherwise timed out while the server was generating the response. In this example, we make full use of Python generators to efficiently handle the assembly and transmission of a large CSV file:
+当处理生成非常大的`响应`的`视图`时，您可能需要考虑使用Django的`StreamingHttpResponse`。
+例如，通过`流式`一个文件，该文件需要很长时间才能生成，你可以避免一个`负载均衡器`丢弃一个连接，这可能在`服务器`生成`响应`时，导致`超时`。
+在这个例子中，我们充分利用`Python生成器`来高效地处理`大型CSV文件`的`汇编`和`传输`：
+-----------------------------
+import csv
+
+from django.utils.six.moves import range
+from django.http import StreamingHttpResponse
+
+class Echo(object):
+    """An object that implements just the write method of the file-like
+    interface.
+    """
+    def write(self, value):
+        """Write the value by returning it, instead of storing in a buffer."""
+        return value
+
+def some_streaming_csv_view(request):
+    """A view that streams a large CSV file."""
+    # Generate a sequence of rows. The range is based on the maximum number of
+    # rows that can be handled by a single sheet in most spreadsheet
+    # applications.
+    rows = (["Row {}".format(idx), str(idx)] for idx in range(65536))
+    pseudo_buffer = Echo()
+    writer = csv.writer(pseudo_buffer)
+    response = StreamingHttpResponse((writer.writerow(row)  
+      for row in rows), content_type="text/csv")
+    response['Content-Disposition'] = 'attachment;    
+      filename="somefilename.csv"'
+    return response 
+-----------------------------
+======================================
+Using The Template System
+使用模板系统
+
+Alternatively, you can use the Django template system to generate CSV. This is lower-level than using the convenient Python csv module, but the solution is presented here for completeness. The idea here is to pass a list of items to your template, and have the template output the commas in a for loop. Here’s an example, which generates the same CSV file as above:
+或者，您可以使用Django`模板系统`来生成`CSV`。
+这比使用方便的`Python csv模块`要低一些，但是为了`完整性`，这里给出了`解决方案`。
+这里的想法是将一个条目`列表`传递给您的`模板`，并使`模板`在`for循环`中输出`逗号`。
+这里有一个例子，它生成与上面`相同`的`CSV文件`：
+--------------------------------
+from django.http import HttpResponse
+from django.template import loader, Context
+
+def some_view(request):
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment;    
+      filename="somefilename.csv"'
+
+    # The data is hard-coded here, but you could load it 
+    # from a database or some other source.
+    csv_data = (
+        ('First row', 'Foo', 'Bar', 'Baz'),
+        ('Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"),
+    )
+
+    t = loader.get_template('my_template_name.txt')
+    c = Context({'data': csv_data,})
+    response.write(t.render(c))
+    return response 
+-----------------------------------------
+The only difference between this example and the previous example\
+ is that this one uses template loading instead of the CSV module. 
+The rest of the code - such as the `content_type='text/csv'` - is the same. 
+Then, create the template `my_template_name.txt`, with this template code:
+---------------------------------
+{% for row in data %}
+            "{{ row.0|addslashes }}",
+            "{{ row.1|addslashes }}",
+            "{{ row.2|addslashes }}",
+            "{{ row.3|addslashes }}",
+            "{{ row.4|addslashes }}"
+{% endfor %}
+---------------------------------
+------------------------------------------
+This template is quite basic. It just iterates over the given data and displays a line of CSV for each row. It uses the addslashes template filter to ensure there aren’t any problems with quotes.
+这个模板很基础。它只是遍历给定的数据，并为每一行显示一行CSV。它使用addslashes模板过滤器来确保引号没有任何问题。
+======================================
+Other Text-Based Formats
+其他给予文本的格式
+
+Notice that there isn’t very much specific to CSV here – just the specific output format. You can use either of these techniques to output any text-based format you can dream of. You can also use a similar technique to generate arbitrary binary data; For example, generating PDFs.
+请注意，这里没有特定的CSV，只是特定的输出格式。
+您可以使用这些技术中的任何一种来输出您可以梦想的任何基于文本的格式。
+您也可以使用类似的技术来生成任意的`二进制`数据;
+例如，生成PDF。
+======================================

@@ -1,0 +1,512 @@
+======================
+Django Forms
+----------------------------------
+https://djangobook.com/django-forms/
+----------------------------------
+
+======================
+HTML forms are the backbone of interactive web sites, from the simplicity of Google’s single search box to ubiquitous blog comment submission forms, to complex custom data-entry interfaces. 
+This chapter covers how you can use Django to access user-submitted form data, validate it and do something with it. Along the way, we’ll cover HttpRequest and Form objects.
+
+HTML表单,是交互式网站的支柱，从Google的单一搜索框的`简单性`,到无处不在的`博客``评论`提交表单，以及复杂的自定义数据输入界面。
+本章介绍如何使用Django`访问`用户提交的`表单数据`，`验证`它并对其`执行`操作。一路走来，我们将介绍`HttpRequest`和`Form`对象。
+======================
+### Getting Data from the Request Object
+从`请求`对象获取数据
+
+--------------------------------
+from django.http import HttpResponse
+
+def hello(request):
+    return HttpResponse("Hello world")
+--------------------------------
+HttpRequest objects, such as the variable request here, have a number of interesting attributes and methods that you should familiarize yourself with, so that you know what’s possible. 
+You can use these attributes to get information about the current request (i.e., the user/web browser that’s loading the current page on your Django-powered site), at the time the view function is executed.
+
+HttpRequest对象，比如这里的变量`request`，有许多你应该熟悉的有趣的`属性`和`方法`，以便你知道`什么是可能的`。
+在`视图函数`被`执行`时，您可以使用这些`属性`来获取有关当前`request`的信息（即，在Django支持的网站上,加载当前页面的`用户`/`Web浏览器`）。
+
+======================
+Information About the URL
+
+HttpRequest objects contain several pieces of information about the currently requested URL (Table 6-1).
+--------------------------------
+Attribute/method	Description	Example
+`request.path`	The full path, not including the domain but including the leading slash.	“/hello/“
+`request.get_host()`	The host (i.e., the “domain,” in common parlance).	“127.0.0.1:8000” or “www.example.com“
+`request.get_full_path()`	The path, plus a query string (if available).	“/hello/?print=true“
+`request.is_secure()` True if the request was made via HTTPS. Otherwise, False.	True or False
+--------------------------------
+
+Always use these attributes/methods instead of hard-coding URLs in your views. This makes for more flexible code that can be reused in other places. A simplistic example:
+始终使用这些`属性`/`方法`，而不是在视图中对`URL`进行`硬编码`。这使得更灵活的代码可以在其他地方重复使用。一个简单的例子：
+
+
+Note that because `request.META` is just a basic Python dictionary, you’ll get a `KeyError` exception if you try to access a key that doesn’t exist. 
+(Because HTTP headers are external data – that is, they’re submitted by your users’ browsers – they shouldn’t be trusted, and you should always design your application to fail gracefully if a particular header is empty or doesn’t exist.) 
+You should either use a `try/except` clause or the `get()` method to handle the case of undefined keys:
+请注意，因为`request.META`只是一个基本的Python字典，所以如果你试图访问一个`不存在`的`键`，你会得到一个`KeyError`异常。
+（因为HTTP标头是外部数据 - 也就是说，它们是由用户的`浏览器`提交的 - 它们`不应该`被信任，并且您应该始终将您的应用程序设计为,如果某个`特定标头`为`空`或`不存在`时,会`优雅地``失败`。 ）
+您应该使用`try / except`子句或`get（）`方法来处理`未定义键`的情况：
+
+------------------------------------
+# BAD!
+def ua_display_bad(request):
+    ua = request.META['HTTP_USER_AGENT']  # Might raise KeyError!
+    return HttpResponse("Your browser is %s" % ua)
+
+# GOOD (VERSION 1)
+def ua_display_good1(request):
+    try:
+        ua = request.META['HTTP_USER_AGENT']
+    except KeyError:
+        ua = 'unknown'
+    return HttpResponse("Your browser is %s" % ua)
+
+# GOOD (VERSION 2)
+def ua_display_good2(request):
+    ua = request.META.get('HTTP_USER_AGENT', 'unknown')
+    return HttpResponse("Your browser is %s" % ua)
+----------------------------------------
+
+I encourage you to write a small view that displays all of the `request.META` data so you can get to know what’s in there. Here’s what that view might look like:
+我鼓励你写一个`小视图`来显示所有`request.META`数据，这样你就可以知道那里有什么。以下是该视图看起来像：
+----------------------------------------
+def display_meta(request):
+    values = request.META   
+    html = []
+    for k in sorted(values):
+        html.append('<tr><td>%s</td><td>%s</td></tr>' % (k, values[k]))
+    return HttpResponse('<table>%s</table>' % '\n'.join(html))
+----------------------------------------
+
+Another good way to see what sort of information that the request object contains is to look closely at the Django error pages when you crash the system
+ – there is a wealth of useful information in there, including all the HTTP headers and other request objects (request.path for example).
+查看`请求对象`包含哪些信息的另一个好方法是,在系统`崩溃`时，仔细查看`Django`的`错误页面`。
+  - 那里有大量有用的信息，包括所有`HTTP标头`和其他`请求对象`（例如request.path）。
+======================
+
+======================
+Information About Submitted Data
+关于`被提交的数据`的`信息`
+
+Beyond basic metadata about the request, `HttpRequest` objects have two attributes that contain information submitted by the user: `request.GET` and `request.POST`. 
+Both of these are dictionary-like objects that give you access to `GET` and `POST` data. 
+`POST data` generally is submitted from an HTML <form>, while `GET data` can come from a <form> or the query string in the page’s URL.
+除了关于`请求`的基本`元数据`之外，`HttpRequest`对象还有两个属性，包含用户提交的信息：`request.GET`和`request.POST`。
+这两个都是类似字典的对象，可以让您访问“GET”和“POST”数据。
+`POST data`，通常是从`HTML <form>`提交的，而`GET data`可以来自`<form>`或`页面URL`中的`查询字符串`。
+
+----------------------------------
+Dictionary-like objects
+类似`字典`的对象
+
+When I say `request.GET` and `request.POST` are “dictionary-like” objects, I mean that they behave like standard Python dictionaries but aren’t technically dictionaries under the hood. 
+For example, `request.GET` and `request.POST` both have `get()`, `keys()` and `values()` methods, and you can iterate over the keys by doing `for key in request.GET`.
+当我说'request.GET`和`request.POST`是“类似字典”的对象时，我的意思是它们表现得像标准的Python字典，但是，它实际上并不是技术层面意义上的`字典`。
+例如，`request.GET`和`request.POST`都有`get（）`，`keys（）`和`values（）`方法，并且可以通过`for key in in request.GET`迭代`keys`。
+
+So why the distinction?
+那这个区别有什么意思呢？
+
+Because both `request.GET` and `request.POST` have additional methods that normal dictionaries don’t have. 
+We’ll get into these in a short while. 
+You might have encountered the similar term “file-like objects” – Python objects that have a few basic methods, like read(), that let them act as stand-ins for “real” file objects.
+
+因为`request.GET`和`request.POST`都有普通`字典`所没有的`其他方法`。
+我们会在一会儿介绍这些。
+您可能遇到类似的术语-`file-like objects`- 具有几个基本方法的Python对象，如`read（）`，它们可以作为“真实”文件对象的替身。
+----------------------------------
+============================================
+A Simple Django Form-Handling Example
+一个简单的Django `表单处理`示例
+
+Continuing the ongoing example of `books`, `authors` and `publishers`, let’s create a simple view that lets users search our book database by title. 
+继续进行“书籍”，“作者”和“出版社”的例子，让我们创建一个简单的`视图`，让用户按`title`(`标题`)搜索我们的图书数据库。
+
+Generally, there are two parts to developing a form: the HTML user interface and the backend view code that processes the submitted data. 
+The first part is easy; let’s just set up a view that displays a search form. 
+When you used `startapp` to create your `books app`, Django created a new `views.py` file for you in your `\books` folder. Go ahead and add a new view to this file:
+通常，开发一个`表单`，分成两个部分：
+1. `HTML用户界面；
+2. 后端的`视图`代码`； 其只要负责处理被提交的数据。
+
+第一部分很容易;
+让我们设置一个`视图`，它用来显示一个搜索的`表单`。
+当你使用`startapp`来创建你的`books app`时，Django在`\books`文件夹中,为你创建了一个新的`views.py`文件。让我们继续，并为该文件添加一个新的`视图`：
+-----------------------------
+# \books\views.py
+
+from django.shortcuts import render
+
+def search_form(request):
+    return render(request, 'books/search_form.html')
+-----------------------------
+Next step is to create the template, however we first need to create a couple of new folders for the template. 
+If you haven’t changed it, the 'APP_DIRS' in your settings file is set to True.
+This means that Django will search all of your apps for a folder named \templates.
+
+下一步是`创建`这个`模板`，但是我们首先需要为`模板`创建几个新的`文件夹`。
+如果你没有改变它，在你的`设置文件`中的'APP_DIRS'项，应该是被设置为`True`。
+这意味着`Django`将搜索您的所有`应用程序`,以查找名为`\templates`的文件夹。 
+
+Create a new \templates folder inside your books app folder. 
+Then go ahead and create another folder inside the new \templates folder and call it books. 
+Your final folder structure will be books\templates\books\.
+在你的`books app`文件夹中,创建一个新的文件夹：`\templates`。
+然后继续在新的`\templates`文件夹内,创建另一个`文件夹`并将其称为`books`。
+
+您的最终`文件夹`结构将为,`books\templates\books\`。
+
+This inner books folder is important for namespacing your templates. 
+Because Django will search all apps for a matching template, creating a namespace for the app templates ensures that Django uses the correct template if two apps used the same template name.
+这个内部的`books`文件夹，对于`命名空间`你的`模板`是非常重要的。
+由于Django将搜索所有`应用程序`以获取一个匹配的`模板`，因此如果两个`应用程序`使用相同的`模板名称`，则为`app templates`创建一个`名称空间`,可以确保Django使用正确的`模板`。
+
+Create the following `search_form.html` file and save it to your new folder:
+创建以下`search_form.html`文件,并将其保存到您的新文件夹中：
+-----------------------------
+# mysite_project\mysite\books\templates\books\search_form.html
+
+<html>
+<head>
+    <title>Search</title>
+</head>
+<body>
+    <form action="/search/" method="get">
+        <input type="text" name="q">
+        <input type="submit" value="Search">
+    </form>
+</body>
+</html>
+-----------------------------
+Now we need to create a `URLconf` so Django can find our new view. 
+Inside your `books` folder, create a new `urls.py` file (`startapp` doesn’t create this file). 
+Add the following URL pattern to this new `urls.py`:
+
+现在,我们需要创建一个`URLconf`，以便Django可以找到我们创建的新的`视图`。
+在你的`books`文件夹中，创建一个新的`urls.py`文件（`startapp`不会创建这个文件）。
+将以下网址格式添加到这个新的`urls.py`中：
+-------------------------------
+# mysite\books\urls.py
+
+from django.conf.urls import url
+from books import views
+
+urlpatterns = [
+    url(r'^search-form/$', views.search_form),
+]
+-------------------------------
+(Note that we’re importing the `views` module directly, instead of something like `from books.views import search_form`, 
+because the former is less verbose. We’ll cover this importing approach in more detail in Chapter 7.)
+（请注意，我们直接导入`views`模块，而不是`from books.views import search_form`，
+因为前者不那么冗长。我们将在第7章更详细地介绍这种导入方法。）
+
+One last thing – when Django searches for URL patterns, it will only search the base `mysite\urls.py` file, unless we explicitly include the `URL patterns` from other apps. 
+So let’s go ahead and modify our site `urlpatterns`:
+最后一件事 - 当Django搜索`URL模式`时，`除非`我们明确包含来自其他`应用程序`的“URL模式”，否则它只会搜索基本的`mysite\urls.py`文件。
+所以，让我们继续并修改我们的`网站`的`urlpatterns`：
+-----------------------------
+# mysite\urls.py
+
+from django.conf.urls import include, url
+
+urlpatterns = [
+# ...
+    url(r'^', include('books.urls')),
+]
+-----------------------------
+This new URL pattern `must` be added to the end of the urlpatterns list. 
+This is because the `r'^'` regex sends everything to `books.urls`, so we want to make sure none of the other patterns match, before sending Django to check `books\urls.py` for a matching pattern.
+这个新的`URL模式`,必须被添加到`urlpatterns`列表的`末尾`。
+这是因为`'r'^'`正则表达式,会将所有的`内容`都发送到`books.urls`，所以在我们想要发送给`Django`去检查`books\urls.py`，以便寻找一个所匹配的模式时，需要在之前，先确保其他的`模式`都是`不匹配`的。
+
+Now, if you run the development server and visit `http://127.0.0.1:8000/search-form/`, you’ll see the search interface (Figure 6.1). Simple enough.
+现在，如果您运行开发服务器并访问`http:/127.0.0.1:8000/search-form/`，您将看到搜索界面（图6.1）。够简单。
+
+Try submitting the form, though, and you’ll get a Django 404 error. 
+The form points to the URL `/search/`, which hasn’t yet been implemented. 
+Let’s fix that with a second view function:
+当你尝试提交`表单`，但是，你却得到了一个`Django 404`错误。
+`表单`指向的那个URL为：`/search/`，它尚未实现。
+让我们用`第二个``视图函数`修复它：
+
+--------------------
+【译者注】
+当我在`搜索框`中，输入`good`,点击`Search`按钮时，发现链接重定向为：
+--------------
+http://127.0.0.1:8000/search/?q=good
+-------------
+然后，显示`Page not found (404)`
+--------------------
+
+修复的代码如下：
+
+首先，要在`books/urls.py`文件中，建立URL`/search/`到`view.search`的映射联系。
+-----------------------------
+# books/urls.py
+
+urlpatterns = [
+    url(r'^search-form/$', views.search_form),
+    url(r'^search/$', views.search),
+]
+-----------------------------
+
+然后，在`books/view.py`中，实现搜索的功能。
+-----------------------------
+# books/views.py
+
+from django.http import HttpResponse
+
+# ...
+
+def search(request):
+    if 'q' in request.GET:
+        message = 'You searched for: %r' % request.GET['q']
+    else:
+        message = 'You submitted an empty form.'
+    return HttpResponse(message)
+-----------------------------
+For the moment, this merely displays the user’s search term, so we can make sure the data is being submitted to Django properly, and so you can get a feel for how the search term flows through the system (Figure 6-2).
+目前，这仅仅显示用户的搜索的`内容`，所以我们可以确信，`数据`被正确地提交给了Django，因此您可以直观的感受到`搜索词`是如何在系统中的流动的（图6-2）。
+
+
+In short:
+简言之：
+
+1.The HTML <form> defines a variable `q`. 
+When it’s submitted, the value of `q` is sent via `GET` `(method="get")` to the URL `/search/`.
+2. The Django view that handles the URL `/search/` `(search())` has access to the `q` value in `request.GET`.
+
+1. HTML <form>定义一个变量`q`。
+当它被提交时，`q`的值，是通过`GET`方法---（method =“get”）被发送到URL`/search/`。
+2.Django视图-`search()`,其负责理URL`/search/`，它可以访问在`request.GET`中的`q`值。
+
+An important thing to point out here is that we explicitly check that `'q'` exists in `request.GET`. 
+As I pointed out in the `request.META` section above, you shouldn’t trust anything submitted by users or even assume that they’ve submitted anything in the first place. 
+If we didn’t add this check, any submission of an empty form would raise `KeyError` in the view：
+
+这里指出的一个重要的事情是，我们`明确地`检查`request.GET`中是否存在'q'。
+正如我在上面的`request.META`部分中指出的那样，您不应该相信用户提交的任何内容，甚至不认为他们已经提交了任何内容。
+如果我们没有添加这个检查，任何`空表单`的提交都会在视图中引发`KeyError`：
+------------------
+# BAD!
+def bad_search(request):
+    # The following line will raise KeyError if 'q' hasn't been submitted!
+    message = 'You searched for: %r' % request.GET['q']
+    return HttpResponse(message)
+------------------
+========================================
+### Query String Parameters
+查询字符串参数
+
+Because `GET` data is passed in the query string (e.g., `/search/?q=django`), you can use `request.GET` to access query string variables. 
+In Chapter 2’s introduction of Django’s `URLconf` system, I compared Django’s pretty URLs to more traditional `PHP/Java` URLs such as `/time/plus?hours=3` and said I’d show you how to do the latter in Chapter 6.
+
+由于被传递的`GET`数据包含了`查询字符串`（例如`/search/?q=django`），因此可以使用`request.GET`来访问查询字符串`变量`。
+在第2章介绍Django的`URLconf`系统时，我将Django的`漂亮URL`与更传统的`PHP/Java`URL（比如`/time/plus?hours=3`）进行了比较，并说我会告诉你如何在`第6章`中做到这一点。
+
+Now you know how to access query string parameters in your views (like `hours=3` in this example) – use `request.GET`.
+`POST data` works the same way as `GET data` – just use `request.POST` instead of `request.GET`. 
+What’s the difference between `GET` and `POST`?
+现在你知道如何在视图中访问`查询字符串参数`（例如在本例中为`hours = 3`） - 使用`request.GET`。
+`POST data`与`GET data`的工作方式相同 - 只需使用`request.POST`而不是`request.GET`。
+`GET`和`POST`有什么区别？
+
+Use `GET` when the act of submitting the form is just a request to `“get”` data. 
+Use `POST` whenever the act of submitting the form will have some side effect – changing data, or sending an e-mail, or something else that’s beyond simple display of data. 
+In our book search example, we’re using `GET` because the query doesn’t change any data on our server. 
+(See the `w3.org site` if you want to learn more about `GET` and `POST`.)
+
+使用`GET`，一个提交表单的请求，只是为了`获取`数据。
+使用“POST”,当提交表单的行为会产生一些`副作用` - 更改数据，发送电子邮件或其他超出简单地显示数据的内容。
+在我们的`图书搜索`示例中，我们使用`GET`，因为`查询`不会`更改`我们`服务器`上的任何数据。
+（如果你想了解更多关于`GET`和`POST`的信息，请参阅`w3.org网站`。）
+
+Now that we’ve verified `request.GET` is being passed in properly, let’s hook the user’s search query into our book database (again, in `views.py`):
+现在我们已经验证了`request.GET`被正确地`传入`，让我们将用户的`搜索查询`，连接到我们的`图书数据库`（再次，在`views.py`中）：
+----------------------------
+from django.http import HttpResponse
+from django.shortcuts import render
+from books.models import Book
+
+def search(request):
+    if 'q' in request.GET and request.GET['q']:
+        q = request.GET['q']
+        books = Book.objects.filter(title__icontains=q)
+        return render(request, 'books/search_results.html',
+                      {'books': books, 'query': q})
+    else:
+        return HttpResponse('Please submit a search term.')
+----------------------------
+
+A couple of notes on what we did here:
+需要注意如下两点：
+------------------
+++ Aside from checking that 'q' exists in `request.GET`, we also make sure that `request.GET['q']` is a non-empty value before passing it to the database query.
+
+++ We’re using `Book.objects.filter(title__icontains=q)` to query our book table for all books whose `title` includes the given submission. 
+The `icontains` is a lookup type (as explained in `Chapter 4` and `Appendix B`), and the statement can be roughly translated as `Get the books whose title contains q, without being case-sensitive.`
+
+++ 除了检查`request.GET`中是否存在'q'，我们还要确保`request.GET['q']`在传递给数据库查询之前是一个`非空的`值。
+
+++ 我们使用`Book.objects.fitler(title__icontains = q)`来查询我们的图书表，查找所有其“标题”包含给定提交的图书。
+`icontains`是一个查找类型（正如在第4章和附录B中所解释的），并且该语句可以大致翻译为“获取`标题`包含`q`的`书籍`，而`不区分`大小写。”
+--------------------
+
+This is a very simple way to do a book search. 
+I wouldn’t recommend using a simple `icontains` query on a large production database, as it can be slow. 
+(In the real world, you’d want to use a custom search system of some sort. Search the web for open-source full-text search to get an idea of the possibilities.)
+
+这是一个非常简单的`书籍搜索`方式。
+我不建议在`大型生产数据库`上使用简单的`icontains`查询，因为它可能`很慢`。
+（在现实世界中，您希望使用一个某种类型的自定义的搜索系统。在网络上搜索`开源``全文搜索`以了解可能性。）
+
+We pass `books`, a list of `Book` objects, to the template. 
+To get our new search form working, let’s create the `search_results.html` file:
+
+我们将`books`,一个`Book`对象列表,传递给`模板`。 
+为了使我们的新搜索表单正常工作，我们来创建`search_results.html`文件：
+----------------------
+# \books\templates\books\search_results.html
+
+<html>     
+    <head>         
+    <title>Book Search</title>     
+    </head>     
+    <body>       
+        <p>You searched for: <strong>{{ query }}</strong></p>
+   
+        {% if books %}           
+            <p>Found {{ books|length }} book{{ books|pluralize }}.</p>
+            <ul>               
+                {% for book in books %}               
+                <li>{{ book.title }}</li>               
+                {% endfor %}           
+            </ul>       
+        {% else %}           
+            <p>No books matched your search criteria.</p>       
+        {% endif %}     
+    </body>
+</html>
+----------------------
+
+Note usage of the `pluralize` template filter, which outputs an `“s”` if appropriate, based on the number of `books` found.
+请注意`pluralize`模板过滤器的用法，根据找到的`books`的数量，判断是否输出`s`。
+
+Now, when you run the development server and visit `http://127.0.0.1:8000/search-form/`, your search term should return a more useful result (Figure 6-3).
+现在，当您运行`开发服务器`,并访问`http://127.0.0.1:8000/search-form/`时，您的搜索词应该会返回更有用的结果（图6-3）。
+
+========================================
+
+=========================================
+### Improving Our Simple Form-Handling Example
+改进我们简单的`表单处理`示例
+
+As in previous chapters, I’ve shown you the simplest thing that could possibly work. 
+Now I’ll point out some problems and show you how to improve it.
+First, our `search()` view’s handling of an empty query is poor – we’re just displaying a `Please submit a search term.` message, requiring the user to hit the browser’s back button. 
+This is horrid and unprofessional, and if you ever actually implement something like this in the wild, your Django privileges will be revoked.
+
+就像在前面的章节中，我向你展示了可能可行的最简单的事情。
+现在我将指出一些`问题`并告诉你如何`改进`它。
+首先，我们的'search（）'视图,处理一个`空查询`是很糟糕的 - 我们只是显示一个'请提交一个搜索条件'（`Please submit a search term.`）的消息，要求用户点击浏览器的`后退`按钮。
+这是可怕的和不专业的，如果你真的在野外实现这样的东西，你的Django特权将被撤销。
+
+It would be much better to redisplay the form, with an error above it, so that the user can try again immediately.
+The easiest way to do that would be to render the template again, like this:
+`重新`显示`表单`会更好，并且在表单的上方，给出一个`错误`，以便用户可以立即再次尝试。
+最简单的方法是再次`渲染`这个模板，如下所示：
+-----------------------
+from django.shortcuts import render
+from django.http import HttpResponse
+from books.models import Book
+
+def search_form(request):
+    return render(request, 'books/search_form.html')
+
+def search(request):
+    error = False
+    if 'q' in request.GET:
+        q = request.GET['q']
+        if not q:
+            error = True
+        else:
+            books = Book.objects.filter(title__icontains=q)
+            return render(request, 'books/search_results.html', {'books': books, 'query': q})
+    return render(request, 'books/search_form.html', {'error': error})
+-----------------------
+(Note that I’ve included `search_form()` here so you can see both views in one place.) 
+Here, we’ve improved `search()` to `render` the `search_form.html` template again, if the query is empty. 
+And because we need to display an error message in that template, we pass a template variable. 
+Now we can edit `search_form.html` to check for the `error` variable:
+
+(请注意，我在这里包含了`search_form（）`，所以你可以在一个地方看到两个视图。）
+在这里，如果`查询字符串`是`空的`，我们已经改进了`search（）`来再次`渲染``search_form.html`模板。
+而且因为我们需要在该模板中显示`错误消息`，所以我们传递一个模板`变量`。
+现在我们可以编辑`search_form.html`来检查`error`变量：
+-------------------
+<html>
+<head>
+    <title>Search</title>
+</head>
+<body>
+    {% if error %}
+        <p style="color: red;">Please submit a search term.</p>
+    {% endif %}
+    <form action="/search/" method="get">
+        <input type="text" name="q">
+        <input type="submit" value="Search">
+    </form>
+</body>
+</html>
+-------------------
+With this change in place, it’s a better application, but it now begs the question: is a dedicated `search_form()` view really necessary? 
+As it stands, a request to the URL `/search/` (without any `GET` parameters) will display the empty form (but with an error). 
+We can remove the `search_form()` view, along with its associated `URLpattern`, as long as we change `search()` to hide the error message when somebody visits `/search/` with no `GET` parameters:
+随着这种变化，这是一个更好的应用程序，但它现在提出了一个问题：是否需要一个专门的`search_form（）`视图？
+就目前而言，对URL`/search/`的请求（不含任何`GET`参数）将显示空表单（但是会带有一个`错误`提示信息）。
+只要我们改变`search()`方法，`隐藏`这个错误信息，那么就可以`删除`视图`search_form()`以及相关的`URLpattern`；当有人想要访问`/search/`，而没有`GET`参数的时候，就OK了：
+------------------
+def search(request):
+    error = False
+    if 'q' in request.GET:
+        q = request.GET['q']
+        if not q:
+            error = True
+        else:
+            books = Book.objects.filter(title__icontains=q)
+            return render(request, 'books/search_results.html', {'books': books, 'query': q})
+    return render(request, 'books/search_form.html', {'error': error})
+-----------------------
+In this updated view, if a user visits `/search/` with no `GET` parameters, they’ll see the search form with no error message. 
+If a user submits the form with an empty value for `'q'`, they’ll see the search form with an error message. 
+And, finally, if a user submits the form with a non-empty value for 'q', they’ll see the search results.
+
+在这个`更新`的`视图`中，如果用户访问不带`GET`参数的`/search/`，他们将看到`没有错误信息`的`搜索表单`。
+如果用户提交的表单中有'q'的空值，他们会看到带有`错误信息`的`搜索表单`。
+最后，如果用户提交的表单中包含'q'的`非空值`，他们将看到`搜索结果`。
+
+We can make one final improvement to this application, to remove a bit of redundancy. 
+Now that we’ve rolled the two views and URLs into one and `/search/` handles both `search-form` display and result display, the `HTML <form>` in `search_form.html` doesn’t have to hard-code a URL. 
+Instead of this:
+我们可以对此应用程序进行最后的一个改进，以消除一些`冗余`。
+现在我们已经将两个`视图`和`URL`合并为`一个`，而且`/search/`处理`search-form`的`显示`和`搜索结果`的显示，在`search_form.html`中，`HTML <form>`不必`硬编码`一个`URL`。
+-------------------
+[译者注：我们在`templates/books/search_form.html`文件中，为了让我们的`form`表单，能够知道跳转`访问` URL`/search/`,我们在代码里面，硬编码该搜索页面的URL。这样不利于以后`调整更换`我们的`搜索页面`的`URL`。
+-------------------
+    <form action="/search/" method="get">
+-------------------
+不应该在使用下面的方式了：
+-------------------
+<form action="/search/" method="get">
+-------------------
+应该改为：
+-------------------
+<form action="" method="get">
+-------------------
+The `action=""` means “Submit the form to the same URL as the current page.” 
+With this change in place, you won’t have to remember to change the action if you ever hook the `search()` view to another URL.
+'action =""`,表示“将这个`表单`提交到`当前页面`相同的`URL`。”
+通过这种更改，如果您将`search（）`视图，挂接到另一个`URL`，则不必记住更改这个`action`。
+=================================

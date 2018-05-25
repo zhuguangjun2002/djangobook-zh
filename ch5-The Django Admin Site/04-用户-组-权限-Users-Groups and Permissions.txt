@@ -1,0 +1,161 @@
+=======================
+Users, Groups and Permissions
+用户，组和权限
+----------------------------------
+https://djangobook.com/users-groups-permissions/
+----------------------------------
+=======================
+
+
+========================================
+由于你是以`超级用户身份`登录的，因此您可以`创建`，`编辑`和`删除`任何对象。
+当然，不同的环境需要不同的`许可`系统 - 不是每个人都可以或应该成为`超级用户`。
+
+Django’s admin site uses a permissions system that you can use to give specific users access only to the portions of the interface that they need. 
+These user accounts are meant to be generic enough to be used outside of the admin interface, but we’ll just treat them as admin user accounts for now. 
+In Chapter 11, we’ll cover how to manage users site-wide (i.e. not just the admin site) with Django’s authentication system.
+
+Django的`管理后台`使用了一个`权限系统`，您可以使用该系统为`特定`用户提供仅访问所需`界面`部分的权限。
+这些用户`帐户`应该足够通用，可以在`管理后台`之外`使用`，但我们现在将其视为`管理用户帐户`。
+在第11章中，我们将介绍使用`Django`的`身份验证系统`如何去管理`整个网站范围`(site-wide)内的`用户`
+（即不仅仅是`后台管理后台`-admin site的用户）。
+
+You can edit users and permissions through the admin interface just like any other object. 
+We saw this earlier in this chapter, when we played around with the User and Group sections of the admin. 
+User objects have the standard username, password, e-mail and real name fields you might expect, along with a set of fields that define what the user is allowed to do in the admin interface.
+就像任何其他对象一样，您可以通过`管理后台`，`编辑``用户`(users)和`权限`(permissions)。
+我们在本章前面看到了这一点，当时我们使用`管理`的`用户`和`组`部分。
+`用户`对象,具有标准的`用户名`，`密码`，`电子邮件`和您可能期望的`实名`字段，以及一组用于定义用户在`管理后台`中允许执行的`操作`的`字段`。
+
+First, there’s a set of three boolean flags:
+首先，有一组三个布尔标志：
+-------------------------------------
+++The active flag controls whether the user is active at all. If this flag is off and the user tries to log in, they won’t be allowed in, even with a valid password.
+++ The staff flag controls whether the user is allowed to log in to the admin interface (i.e., whether that user is considered a staff member in your organization). 
+Since this same user system can be used to control access to public (i.e., non-admin) sites (see Chapter 11), this flag differentiates between public users and administrators.
+++ The superuser flag gives the user full access to add, create and delete any item in the admin interface. If a user has this flag set, then all regular permissions (or lack thereof) are ignored for that user.
+
+++ `active`falg ,`活动标志`,控制`用户`是否`激活的`。如果此标志已`关闭`且用户尝试`登录`，则即使使用有效的`密码`，他们也是不允许进入的。
+++ `staff flag`，员工标志，控制用户是否被允许`登录`到`管理后台`（即，该用户是否被视为您组织中的`员工`）。
+由于这个相同的`用户系统`可以被用来控制对公共（即非管理`non=admin`）站点的访问（见第11章），所以这个`标志``区分`了`公共用户`和`管理员`。
+++ `superuser flag`,`超级用户`,标志赋予`用户`完全访问权限以`添加`，`创建`和`删除`,`管理后台`中的任何条目。如果用户设置了该标志，则该用户将忽略所有常规权限（或缺少该权限）。
+-------------------------------------
+
+Normal admin users – that is, active, non-superuser staff members – are granted admin access through assigned permissions. 
+Each object editable through the admin interface (e.g., books, authors, publishers) has three permissions: a create permission, an edit permission and a delete permission.
+
+`普通管理员用户` - 即`活动的`，`非超级用户``员工成员` - 通过分配的权限被授予管理员访问权限。
+通过`管理后台`可`编辑`的每个对象（例如，书籍，作者，出版商）都有三个权限：`创建`权限，`编辑`权限和`删除`权限。
+
+Assigning permissions to a user grants the user access to do what is described by those permissions. 
+When you create a user, that user has no permissions, and it’s up to you to give the user specific permissions. 
+For example, you can give a user permission to add and change publishers, but not permission to delete them.
+
+为一个`用户`分配`权限`，`授予`了这个`用户`访问权限以执行这些权限所描述的内容。
+当你创建一个`用户`时，该用户`没有`权限，这取决于你给予该用户`特定的`权限。
+例如，您可以授予用户`添加`和`更改``出版商`的权限，但不允许`删除`它们。
+
+Note that these permissions are defined per-model, not per-object – so they let you say “John can make changes to any book,” but they don’t let you say “John can make changes to any book published by Apress.” 
+The latter functionality, per-object permissions, is a bit more complicated and is outside the scope of this book but is covered in the Django documentation.
+请注意，这些权限是按`模型`定义的，而不是按`对象`定义的，因此他们会让您说“John可以对任何书进行更改”，但他们不会让您说“John可以对Apress发布的任何书进行更改。 ”
+后者的功能，即每个对象的权限，有点复杂，超出了本书的范围，但在`Django文档`中有所介绍。
+
+
+--------------------------------------------
+Warning!  警告
+
+Access to edit users and permissions is also controlled by this permission system.
+ If you give someone permission to edit users, they will be able to edit their own permissions, which might not be what you want! 
+Giving a user permission to edit users is essentially turning a user into a superuser.
+
+访问`编辑``用户`和`权限`也受此`权限系统`的控制。
+ 如果您授予某人`编辑用户`的权限，他们将能够`编辑`自己的`权限`，这可能不是您想要的！
+赋予用户`编辑用户`的权限实质上是将`用户`转变为`超级用户`。
+--------------------------------------------
+
+You can also assign `users` to `groups`. 
+A `group` is simply a set of permissions to apply to all members of that group. 
+`Groups` are useful for granting identical permissions to a subset of users.
+
+您也可以将`用户`分配到“组”。
+“组”只是一组`权限`，这组权限会应用到这个组的所有成员上。
+“组”对于授予相同的权限给一组用户（users子集)是很有用。
+========================================
+
+========================================
+When and Why to Use the Admin Interface – And When Not to
+什么时候和为什么要使用`管理后台` - 什么时候不要
+
+After having worked through this chapter, you should have a good idea of how to use Django’s admin site. 
+But I want to make a point of covering when and why you might want to use it – and when not to use it.
+完成本章之后，您应该对如何使用Django的管理后台有个很好的想法。
+但我想说明何时以及为什么您可能会使用它 - 何时不使用它。
+
+Django’s admin site shines when nontechnical users need to be able to enter data; 
+that’s the purpose behind the feature, after all. 
+At the newspaper where Django was first developed, development of a typical online feature – say, a special report on water quality in the municipal supply – would go something like this:
+当`非技术用户`需要`输入数据`时，Django的管理后台才会`闪耀`;
+毕竟，这是该功能背后的`目的`。
+在Django最初开发的`报纸`上，开发了一个典型的`在线功能` - 比如说,一份关于`市政`供应`水质`的`特别报告` - 会是这样的：
+------------------------------------------------------
+++ The reporter responsible for the project meets with one of the developers and describes the available data.
+++ The developer designs Django models to fit this data and then opens up the admin site to the reporter.
+++ The reporter inspects the admin site to point out any missing or extraneous fields – better now than later. The developer changes the models iteratively.
+++ When the models are agreed upon, the reporter begins entering data using the admin site. At the same time, the programmer can focus on developing the publicly accessible views/templates (the fun part!).
+
+++ 负责该项目的`记者`,与其中一位`开发人员`会面,并描述`可用`的`数据`。
+++`开发人员`设计了适合这些`数据`的`Django模型`，然后向`记者`打开了`管理后台`。
+++`记者`检查`管理后台`，以指出任何的`遗漏`或`额外的``字段` - `现在`比`以后`更好。`开发者`不断迭代`改变`现有的`模型`。
+++当`模型`达成一致时，`记者`开始使用`管理后台``输入数据`。同时，程序员可以专注于开发`可公开访问`的`视图`/`模板`（有趣的部分！）。
+----------------------------------------------------
+
+In other words, the raison d’etre of Django’s admin interface is facilitating the simultaneous work of content producers and programmers. 
+However, beyond these obvious data entry tasks, the admin site is useful in a few other cases:
+换句话说，Django的`管理后台`存在的理由是，`促进``内容制作者`和`程序员`的`同时`工作。
+但是，除了这些明显的`数据输入`任务之外，`管理后台`在其他一些情况下也很有用：
+----------------------------------------------------
+++ Inspecting data models. 
+Once you’ve defined a few models, it can be quite useful to call them up in the admin interface and enter some dummy data. 
+In some cases, this might reveal data-modelling mistakes or other problems with your models.
+++检查数据`模型`。
+一旦定义了一些`模型`，在`管理后台`中`调用`它们，并输入一些`虚拟数据`会非常有用。
+在某些情况下，这可能会揭示`数据建模`的`错误`或其他与您的模型有关的`问题`。
+
+
+++ Managing acquired data. 
+For applications that rely on data coming from external sources (e.g., users or web crawlers), the admin site gives you an easy way to inspect or edit this data. 
+You can think of it as a less powerful, but more convenient, version of your database’s command-line utility.
+++管理获取的数据。
+对于依赖来自`外部来源`（例如，`用户`或`网络抓取工具`）的`数据`的`应用程序`，
+`管理后台`为您提供了一种`检查`或`编辑`此数据的简单方法。
+您可以将其视为`数据库命令行实用程序`的功能`较弱`但`更方便`的版本。
+
+
+++ Quick and dirty data-management apps. 
+You can use the admin site to build yourself a very lightweight data management app – say, to keep track of expenses. 
+If you’re just building something for your own needs, not for public consumption, the admin site can take you a long way. 
+In this sense, you can think of it as a beefed up, relational version of a spreadsheet.
+++快速和`脏`数据管理应用程序。
+您可以使用`管理后台`，为`自己`构建一个非常`轻量级`的`数据管理`应用程序 - 例如，以跟踪`费用`。
+如果你只是为了`自己`的`需要`而建立一些东西，而不是为了`公共消费`，`管理网站`可以让你走很长的路。
+从这个意义上说，你可以把它看作是一个`威力加强版`的`电子表格`。
+----------------------------------------------------
+
+The admin site is not, however, a be-all and end-all. 
+It’s not intended to be a public interface to data, nor is it intended to allow for sophisticated sorting and searching of your data. 
+As I said at the beginning of this chapter, it’s for trusted site administrators. 
+Keeping this sweet spot in mind is the key to effective admin-site usage.
+
+然而，`管理后台`并不是一个`万能的`和`最终的`。
+它并不是想要成为`数据`的一个`公共接口`，也不打算`允许`对你的`数据`进行复杂的`排序`和`搜索`。
+正如我在本章开头所说的那样，它是为`受信任`的`网站管理员`服务的。
+`牢记`这一`甜蜜点`是`有效`使用该`管理后台`的`关键`。
+=========================================
+What’s Next?
+下一步是什么？
+
+So far we’ve created a few models and configured a top-notch interface for editing data. 
+In the next chapter we’ll move on to the real meat and potatoes of web development: form creation and processing.
+到目前为止，我们已经创建了一些`模型`，并配置了一个用于编辑数据的`顶级界面`。
+在下一章中，我们将继续讨论Web开发的真正内容：`表单`创建和处理。
+========================================

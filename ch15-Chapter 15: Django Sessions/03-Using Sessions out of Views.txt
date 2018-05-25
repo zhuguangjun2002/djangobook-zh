@@ -1,0 +1,120 @@
+Using Sessions out of Views
+在`视图`外使用`会话`
+
+The examples in this section import the SessionStore object directly from the django.contrib.sessions.backends.db backend. In your own code, you should consider importing SessionStore from the session engine designated by SESSION_ENGINE, as below:
+
+本节中的`示例`,直接从`django.contrib.sessions.backends.db 后端`,导入`SessionStore对象`。
+在你自己的代码中，你应该考虑从`SESSION_ENGINE`指定的`会话引擎`中导入`SessionStore`，如下所示：
+--------------------------
+>>> from importlib import import_module
+>>> from django.conf import settings
+>>> SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
+--------------------------
+An API is available to manipulate session data outside of a view:
+一个API，是可用于在一个`视图`之外操作`会话数据`：
+-----------------------------
+>>> from django.contrib.sessions.backends.db import SessionStore
+>>> s = SessionStore()
+>>> # stored as seconds since epoch since datetimes are not serializable in JSON.
+>>> s['last_login'] = 1376587691
+>>> s.save()
+>>> s.session_key
+'2b1189a188b44ad18c35e113ac6ceead'
+
+>>> s = SessionStore(session_key='2b1189a188b44ad18c35e113ac6ceead')
+>>> s['last_login']
+1376587691 
+----------------------------
+In order to mitigate session fixation attacks, sessions keys that don’t exist are regenerated:
+为了减轻会话修复攻击，会重新生成不存在的会话密钥：
+---------------------
+>>> from django.contrib.sessions.backends.db import SessionStore
+>>> s = SessionStore(session_key='no-such-session-here')
+>>> s.save()
+>>> s.session_key
+'ff882814010ccbc3c870523934fee5a2'
+---------------------
+If you’re using the django.contrib.sessions.backends.db backend, each session is just a normal Django model. The Session model is defined in django/contrib/sessions/models.py. Because it’s a normal model, you can access sessions using the normal Django database API:
+如果你使用`django.contrib.sessions.backends.db``后端`，每个`会话`只是一个普通的`Django模型`。
+`会话模型`在`django/contrib/sessions/models.py`中`定义`。
+因为这是一个普通的`模型`，所以可以使用普通的`Django数据库``API`访问`会话`：
+--------------------------
+>>> from django.contrib.sessions.models import Session
+>>> s = Session.objects.get(pk='2b1189a188b44ad18c35e113ac6ceead')
+>>> s.expire_date
+datetime.datetime(2005, 8, 20, 13, 35, 12)
+--------------------------
+
+Note that you’ll need to call get_decoded() to get the session dictionary. This is necessary because the dictionary is stored in an encoded format:
+请注意，您需要调用`get_decoded（）`来获取`会话``字典`。这是`必要的`，因为`字典`以一种`编码`格式进行`存储`：
+----------------------------
+>>> s.session_data
+'KGRwMQpTJ19hdXRoX3VzZXJfaWQnCnAyCkkxCnMuMTExY2ZjODI2Yj...'
+>>> s.get_decoded()
+{'user_id': 42}
+----------------------------
+=====================================
+When Sessions Are Saved
+何时`会话`被存储
+
+By default, Django only saves to the session database when the session has been modified – that is if any of its dictionary values have been assigned or deleted:
+默认情况下，当`会话`被`修改`时，Django只保存到`会话数据库` - 即如果任何`字典值`已被`分配`或`删除`：
+--------------------
+# Session is modified.
+request.session['foo'] = 'bar'
+
+# Session is modified.
+del request.session['foo']
+
+# Session is modified.
+request.session['foo'] = {}
+
+# Gotcha: Session is NOT modified, because this alters
+# request.session['foo'] instead of request.session.
+request.session['foo']['bar'] = 'baz'
+--------------------
+In the last case of the above example, we can tell the session object explicitly that it has been modified by setting the modified attribute on the session object:
+在上例的最后一种情况下，我们可以通过在`会话对象`上`设置`修改后的`属性`来`显式地`告诉`会话对象`,它已被`修改`：
+----------------------
+request.session.modified = True 
+----------------------
+To change this default behavior, set the SESSION_SAVE_EVERY_REQUEST setting to True. When set to True, Django will save the session to the database on every single request. Note that the session cookie is only sent when a session has been created or modified. If SESSION_SAVE_EVERY_REQUEST is True, the session cookie will be sent on every request. Similarly, the expires part of a session cookie is updated each time the session cookie is sent. The session is not saved if the response’s status code is 500.
+
+要更改此默认行为，请将`SESSION_SAVE_EVERY_REQUEST`设置设置为`True`。
+当设置为`True`时，`Django`会在每个`请求`中将`会话`保存到`数据库`。
+请注意，`会话cookie`仅在`创建`或`修改``会话`时`发送`。
+如果`SESSION_SAVE_EVERY_REQUEST`为真，`会话cookie`将在每个`请求`中`发送`。
+同样，每次`会话cookie`发送时，`会话cookie`的`expires部分`都会`更新`。
+如果`响应`的状态码是`500`，则`会话`不会被`保存`。
+=====================================
+Browser-Length Sessions Vs. Persistent Sessions
+浏览器-长度会话 VS 持续会话
+
+You can control whether the session framework uses browser-length sessions vs. persistent sessions with the SESSION_EXPIRE_AT_BROWSER_CLOSE setting. By default, SESSION_EXPIRE_AT_BROWSER_CLOSE is set to False, which means session cookies will be stored in users’ browsers for as long as SESSION_COOKIE_AGE. Use this if you don’t want people to have to log in every time they open a browser.
+您可以通过`SESSION_EXPIRE_AT_BROWSER_CLOSE`设置控制`会话框架`是使用`浏览器长度会话`还是`持久会话`。
+默认情况下，`SESSION_EXPIRE_AT_BROWSER_CLOSE`设置为`False`，这意味着`会话Cookie`将存储在`用户浏览器`中的时间长达`SESSION_COOKIE_AGE`。
+如果您`不希望`每次打开`浏览器`时都必须`登录`，请使用此`选项`。
+
+If SESSION_EXPIRE_AT_BROWSER_CLOSE is set to True, Django will use browser-length cookies – cookies that expire as soon as the user closes their browser.
+如果`SESSION_EXPIRE_AT_BROWSER_CLOSE`设置为`True`，则Django将使用`浏览器长度`的`cookie`  - 一旦`用户``关闭浏览器`就cookie会`过期`。
+-----------------------
+Some browsers (Chrome, for example) provide settings that allow users to continue browsing sessions after closing and re-opening the browser. In some cases, this can interfere with the SESSION_EXPIRE_AT_BROWSER_CLOSE setting and prevent sessions from expiring on browser close. Please be aware of this while testing Django applications which have the SESSION_EXPIRE_AT_BROWSER_CLOSE setting enabled.
+某些`浏览器`（例如`Chrome`）提供的`设置`,允许`用户`在`关闭`并`重新打开浏览器`后,`继续`浏览`会话`。
+在某些情况下，这可能会干扰`SESSION_EXPIRE_AT_BROWSER_CLOSE`设置,并阻止`会话`在`浏览器关闭`时`过期`。
+在测试启用了`SESSION_EXPIRE_AT_BROWSER_CLOSE`设置的`Django应用程序`时请注意这一点。
+-----------------------
+=====================================
+Clearing The Session Store
+清除会话存储
+
+As users create new sessions on your website, session data can accumulate in your session store. Django does not provide automatic purging of expired sessions. Therefore, it’s your job to purge expired sessions on a regular basis. Django provides a clean-up management command for this purpose: clearsessions. It’s recommended to call this command on a regular basis, for example as a daily cron job.
+随着`用户`在您的网站上`创建``新会话`，`会话数据`可能会累积到`会话存储`中。 
+Django不提供`自动清除``过期会话`。
+因此，您的工作是`定期清除过期`的`会话`。 
+Django为此提供了清理管理命令：`clearsessions`。
+建议定期调用此命令，例如,作为每日`cron作业`。
+
+Note that the cache backend isn’t vulnerable to this problem, because caches automatically delete stale data. Neither is the cookie backend, because the session data is stored by the users’ browsers.
+请注意，`缓存后端`不容易出现此`问题`，因为`缓存`会`自动删除``陈旧`的`数据`。 
+`Cookie后端`也不是，因为`会话数据`是由`用户`的`浏览器``存储`的。
+=====================================

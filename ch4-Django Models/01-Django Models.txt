@@ -1,0 +1,95 @@
+============================
+Django Models
+----------------------------------
+https://djangobook.com/django-models/
+----------------------------------
+============================
+
+============================
+## Your First App
+
+## 创建第一个APP： `books`
+------------------------
+python manage.py startapp books 
+------------------------
+
+
+## Your First Model
+
+--------------------------------
+from django.db import models
+
+class Publisher(models.Model):
+    name = models.CharField(max_length=30)
+    address = models.CharField(max_length=50)
+    city = models.CharField(max_length=60)
+    state_province = models.CharField(max_length=30)
+    country = models.CharField(max_length=50)
+    website = models.URLField()
+
+class Author(models.Model):
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=40)
+    email = models.EmailField()
+
+class Book(models.Model):
+    title = models.CharField(max_length=100)
+    authors = models.ManyToManyField(Author)
+    publisher = models.ForeignKey(Publisher)
+    publication_date = models.DateField()
+--------------------------------
+
+## Installing the Model
+1.  first step is to `activate` these models in our Django project.
+激活我们的`模型`
+
+Edit the `settings.py` file again, and look for the `INSTALLED_APPS` setting. 
+`INSTALLED_APPS` tells Django which `apps` are `activated` for a given project. 
+By default, it looks something like this:
+再次编辑`settings.py`文件，然后查找`INSTALLED_APPS`设置。
+ `INSTALLED_APPS`告诉Django对于一个给定的项目来说'apps'是'激活'的。
+默认情况下，它看起来像这样：
+----------------------------------
+INSTALLED_APPS = [
+'django.contrib.admin',
+'django.contrib.auth',
+'django.contrib.contenttypes',
+'django.contrib.sessions',
+'django.contrib.messages',
+'django.contrib.staticfiles',
+]
+----------------------------------
+To register our “books” app, add 'books.apps.BooksConfig' to INSTALLED_APPS, so the setting ends up looking like this:
+要`注册`我们的“书籍”应用程序，请将'books.apps.BooksConfig'添加到`INSTALLED_APPS`，以便设置结果如下所示：
+----------------------------------
+INSTALLED_APPS = [
+'books.apps.BooksConfig',
+'django.contrib.admin',
+'django.contrib.auth',
+'django.contrib.contenttypes',
+'django.contrib.sessions',
+'django.contrib.messages',
+'django.contrib.staticfiles',
+]
+----------------------------------
+Each app in `INSTALLED_APPS` is represented by its full Python path – that is, the path of packages, separated by `dots`, leading to the app package. 
+The dotted path in this case points to the `BooksConfig class` that Django created for you in the `apps.py` file. 
+Well will look at app configurations in more detail later in the book.
+`INSTALLED_APPS`中的每个`应用程序`都由其完整的`Python路径`表示，也就是由`dots`分隔的软件包路径，这些路径通向这个应用程序包。
+在这种情况下，`dotted`路径,指向Django在`apps.py`文件中为您创建的`BooksConfig类`。
+那么将在本书后面更详细地讨论应用程序配置。
+
+Now that the Django app has been activated in the settings file, we can create the database tables in our database. 
+First, let’s validate the models by running this command:
+现在Django`应用程序`,已经在设置文件中被`激活`，我们可以在我们的数据库中`创建``数据库表`。
+首先，让我们通过运行这个命令来`验证模型`：
+----------------------------------
+python manage.py check 
+----------------------------------
+----------------------------------
+## 做变更
+python manage.py makemigrations books 
+## 迁移
+python manage.py migrate 
+----------------------------------
+

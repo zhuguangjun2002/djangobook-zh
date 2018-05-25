@@ -1,0 +1,65 @@
+==============================
+## Adding Models to Django Admin
+
+------------------------------------
+https://djangobook.com/adding-models-to-django-admin/
+------------------------------------
+
+==============================
+## Making Fields Optional
+让字段可选
+
+To specify that the `email` field is optional, edit the `Author` model (which, as you’ll recall from Chapter 4, lives in mysite/books/models.py). 
+Simply add `blank=True` to the `email` field, like so:
+要指定`email`字段是`可选的`，请编辑`Author`模型（您将从第4章回忆，它位于mysite / books / models.py中）。
+只需将`blank = True`添加到`email`字段，如下所示：
+------------------------------
+class Author(models.Model):
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=40)
+    email = models.EmailField(blank=True)
+------------------------------
+
+
+==============================
+
+==============================
+## 如何处理 `日期`，`数字字段`的`空值`
+
+In this case, `NULL` is the only way to specify an empty value. 
+In Django models, you specify that `NULL` is allowed by adding `null=True` to a field. 
+So that’s a long way of saying this – if you want to allow blank values in a date field (e.g., DateField, TimeField, DateTimeField) or numeric field (e.g., IntegerField, DecimalField, FloatField), 
+you’ll need to use both `null=True` and `blank=True`.
+在这种情况下，`NULL`是指定`空值`的唯一方法。
+在Django模型中，您可以指定`允许``NULL`，通过添加一个`null = True`到一个`字段`上。
+所以说这很长 - 如果你想允许`日期字段`（例如DateField，TimeField，DateTimeField）或`数字字段`（例如，IntegerField，DecimalField，FloatField）中的`空值`，
+你需要`同时`使用`null = True`和`blank = True`。
+
+For example, let’s change our `Book` model to allow a blank `publication_date`. Here’s the revised code:
+例如，让我们更改我们的`Book`模型以允许空白`publication_date`。这是修改后的代码：
+------------------------------
+class Book(models.Model):
+    title = models.CharField(max_length=100)
+    authors = models.ManyToManyField(Author)
+    publisher = models.ForeignKey(Publisher)
+    publication_date = models.DateField(blank=True, null=True)
+------------------------------
+==============================
+
+
+==============================
+Custom `ModelAdmin` classes
+自定义`ModelAdmin`类
+
+The changes we’ve made so far – `blank=True`, `null=True` and `verbose_name` – are really `model-level` changes, not `admin-level` changes. 
+That is, these changes are a fundamental part of the model and just so happen to be used by the `admin site`; there’s nothing `admin-specific` about them.
+到目前为止我们所做的修改 - 'blank = True`，`null = True`和`verbose_name`  - 实际上是'模型级别'(`model-level` )的变化，而不是'管理级别'(`admin-level`)的变化。
+也就是说，这些变化是`模型`的基本组成部分，恰恰恰好被“管理站点”使用;关于它们，没有任何的“管理级别-特定”。
+
+
+Beyond these, the Django admin site offers a wealth of options that let you customize how the `admin site` works for a particular model. 
+Such options live in `ModelAdmin` classes, which are classes that contain configuration for a specific model in a specific admin site instance.
+
+除此之外，Django`站点管理`提供了丰富的选项，可让您自定义“站点管理”对`特定``模型`的工作方式。
+这些选项存在于`ModelAdmin`类中，这些类是包含了对于一个特定的模型的配置，在一个特定的站点管理实例。
+==============================

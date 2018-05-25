@@ -1,0 +1,149 @@
+=================================
+Templates in Views
+-------------------
+https://djangobook.com/templates-in-views/
+-------------------
+=================================
+##使用 `django.template.loader.get_template()`方法，加载模板文件`templates/current_datetime.html`
+
+---------------------------------------------------
+#mysite\mysite\views.py
+
+from django.template.loader import get_template
+from django.http import HttpResponse
+import datetime
+
+def current_datetime(request):
+    now = datetime.datetime.now()
+    t = get_template('current_datetime.html')
+    html = t.render({'current_date': now})
+    return HttpResponse(html)
+---------------------------------------------------
+Generally, you will use a Django template `loader` rather than using the low-level template API as in the previous examples. 
+In this example, we’re using the function `django.template.loader.get_template()` rather than loading the template from the filesystem manually. 
+The `get_template()` function takes a template name as its argument, figures out where the template lives on the filesystem, opens that file, and returns a compiled Template object.
+通常，您将使用Django模板的“loader”，而不是像前面的示例中那样使用`底层模板API`。
+在这个例子中，我们使用函数`django.template.loader.get_template（）`，而不是`手动`从`文件系统`加载`模板`。
+ `get_template（）`函数将`模板名称`作为其`参数`，找到`模板`在文件系统中的`位置`，打开`该文件`并返回`编译`后的`Template对象`。
+
+Also note the difference between the `render()` method here and the previous examples. 
+In the previous examples we are calling `django.template.Template.render`, which requires you to pass in a `Context` object. 
+`get_template()` returns a backend-dependent Template from `django.template.backends.base.Template`, in which the `render()` method only accepts a `dictionary object`, not a `Context object`.
+还要注意这里的`render（）`方法和前面的例子之间的区别。
+在前面的例子中，我们调用`django.template.Template.render`，它要求你传递一个`Context`对象。
+`get_template（）`从`django.template.backends.base.Template`返回一个`后端`相关`模板`，其中`render（）`方法只接受一个`字典对象`，而不是一个`Context对象`。
+
+To determine the location of the template on your filesystem, `get_template()` will look in order:
+要确定文件系统上模板的位置，`get_template（）`将按顺序查找：
+------------------------------------------------
+++ If `APP_DIRS` is set to `True`, and assuming you are using the `DTL`, it will look for a `/templates` directory in the current `app`.
+++ If it does not find your template in the current `app`, `get_template()` combines your template directories from `DIRS` with the template name that you pass to `get_template()` and steps through each of them in order until it finds your template. 
+For example, if the first entry in your `DIRS` is set to `/home/django/mysite/templates`, the above `get_template()` call would look for the template `/home/django/mysite/templates/current_datetime.html`.
+++ If `get_template()` cannot find the template with the given name, it raises a `TemplateDoesNotExist` exception.
+
+++如果`APP_DIRS`被设置为`True`，并且假设你正在使用`DTL`，它将在当前`app`中查找`/ templates`目录。
+++如果它没有在当前`app`中找到你的模板，`get_template（）`将来自`DIRS`的`模板目录`与传递给`get_template（）`的模板名称结合起来，并按顺序逐步遍历它们直到找到你的模板。
+例如，如果'DIRS`中的第一个条目设置为`/ home / django / mysite / templates`，则上面的`get_template（）`调用会查找模板`/ home / django / mysite / templates / current_datetime .html`。
+++如果`get_template（）`无法找到具有给定名称的模板，则会引发`TemplateDoesNotExist`异常。
+------------------------------------------------
+=================================
+render()
+
+So far, I’ve shown you how to `load` a template, fill a `Context` and return an `HttpResponse object` with the result of the rendered template. 
+Next step was to optimize it to use `get_template()` instead of hard-coding templates and template paths.
+到目前为止，我已经向您展示了如何`加载`（load）一个模板，填充一个`Context`，并返回一个带有渲染模板结果的`HttpResponse对象`。
+下一步是优化它以使用`get_template（）`而不是`硬编码`模板和模板路径。
+
+Django’s developers recognized that, because this is such a common idiom, Django needed a shortcut that could do all this in one line of code. 
+This shortcut is a function called `render()`, which lives in the module `django.shortcuts`.
+.Django的开发人员认识到，因为这是一个常见的习惯用法，所以Django需要一个可以在`一行代码`中完成`所有`这些工作的`捷径`(shortcut)。
+这个`快捷方式`是一个名为`render（）`的函数，它位于模块`django.shortcuts`中。
+
+Most of the time, you’ll be using `render()` rather than `loading` templates and creating `Context` and `HttpResponse` objects manually 
+– however, it’s useful to remember the complete process because it does come in handy for some non-standard use-cases.
+大多数情况下，您将使用`render（）`而不是`loading`模板，并`手动`创建`Context`和`HttpResponse`对象
+--但是，记住完整的过程很有用，因为它适用于某些`非标准`用例。
+
+Here’s the ongoing `current_datetime` example rewritten to use `render()`:
+以下是正在进行的`current_datetime`示例，它被重写为使用`render（）`：
+----------------------------------------
+from django.shortcuts import render
+import datetime
+
+def current_datetime(request):
+    now = datetime.datetime.now()
+    return render(request, 'current_datetime.html', {'current_date': now})
+----------------------------------------
+What a difference! Let’s step through the code changes:
+有什么不同！让我们逐步了解代码更改：
+----------------------------------------
+++ We no longer have to import `get_template, `Template`, `Context`, or `HttpResponse`.
+Instead, we import `django.shortcuts.render`. The import `datetime` remains.
+++我们不再需要导入`get_template，`Template`，`Context`或`HttpResponse`。
+相反，我们导入`django.shortcuts.render`。导入`日期时间'仍然存在。
+
+++ Within the `current_datetime` function, we still calculate now, but the template loading, context creation, template rendering, and HttpResponse creation are all taken care of by the `render()` call.
+Because `render()` returns an `HttpResponse` object, we can simply return that value in the view.
+++在`current_datetime`函数中，我们仍在计算`now`，但`模板`的`加载`，`上下文`创建，`模板渲染`和`HttpResponse`创建，都由`render（）`调用处理。
+因为`render（）`返回一个`HttpResponse`对象，所以我们可以直接在`视图`中返回该值。
+
+The first argument to `render()` is the request, the second is the name of the template to use. 
+The third argument, if given, should be a `dictionary` to use in creating a `Context` for that template. 
+If you don’t provide a third argument, `render()` will use an empty dictionary.
+`render（）`的第一个参数是`request`，第二个参数,是要使用的模板的名称。
+第三个参数，如果给出的话，应该是一个“字典”，用于为该模板创建一个“上下文”。
+如果你没有提供第三个参数，`render（）`将使用一个`空`字典。
+----------------------------------------
+
+==================================
+### Template Inheritance
+模板继承
+
+Django’s template inheritance system solves these problems.
+You can think of it as an “inside-out” version of server-side includes.
+Instead of defining the snippets that are common, you define the snippets that are different.
+Django的模板继承系统解决了这些问题。
+您可以将其视为`服务器端`包含的“内外”版本。
+不要定义`相同的`片段，而要定义`不同的`片段。
+
+The first step is to define a base template – a skeleton of your page that child templates will later fill in. Here’s a base template for our ongoing example:
+
+第一步是定义一个`基本模板`(base template) -一个你的网页的骨架， `子模板`稍后将填充的其里面的内容。以下是我们正在进行的示例的基本模板：
+------------------------
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+<head>
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <h1>My helpful timestamp site</h1>
+    {% block content %}{% endblock %}
+
+    {% block footer %}
+    <hr>
+    <p>Thanks for visiting my site.</p>
+    {% endblock %}
+</body>
+</html>
+------------------------
+
+This template, which we’ll call `base.html`, defines a simple HTML skeleton document that we’ll use for all the pages on the site.
+这个我们称之为“base.html”的模板定义了一个简单的HTML骨架文档，我们将使用它为该网站的所有页面。
+
+It’s the job of child templates to override, or add to, or leave alone the `contents` of the `blocks`.
+ (If you’re following along, save this file to your template directory as `base.html`.)
+
+`子模板`的任务就是，`覆盖`或`添加`或单独保留“blocks”的`“contents”。
+（如果您正在跟踪，请将此文件以`base.html`格式保存到您的`模板目录`中。）
+
+We’re using a template tag here that you haven’t seen before: the `{% block %}` tag.
+All the `{% block %}` tags do is tell the template engine that a child template may override those portions of the template.
+我们在这里使用了一个您以前没有见过的`模板标签`：`{％ block ％}`标签。
+所有`{％ block ％}`标签,都会告诉`模板引擎`，`子模板`可能会覆盖`模板`的这些部分。
+
+Now that we have this base template, we can modify our existing `current_datetime.html` template to use it:
+现在我们有了这个`基础模板`，我们可以修改我们现有的`current_datetime.html`模板来使用它：
+-----------------------------
+-----------------------------
+
+

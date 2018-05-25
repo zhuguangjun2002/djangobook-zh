@@ -1,0 +1,6 @@
+DjangoBook
+----------------------
+https://djangobook.com/the-django-book/
+----------------------
+
+文章《一些 Django 学习指南 - V2EX.mhtml》，里面推荐Django的入门书籍《DjangoBook》,果然好书。

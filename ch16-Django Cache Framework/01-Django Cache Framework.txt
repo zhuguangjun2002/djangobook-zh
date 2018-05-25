@@ -1,0 +1,566 @@
+Django’s Cache Framework
+
+A fundamental trade-off in dynamic Web sites is, well, they’re dynamic. Each time a user requests a page, the Web server makes all sorts of calculations, from database queries to template rendering to business logic to creating the page that your site’s visitors see. This is a lot more expensive, from a processing-overhead perspective, than your standard read-a-file-off-the-filesystem server arrangement.
+`动态Web站点`的一个基本`取舍`是，它们是`动态`的。
+用户`每次`请求`页面`时，`Web服务器`都会进行各种`计算`，从`数据库查询`到`模板呈现`到`业务逻辑`，以创建网站访问者看到的`页面`。
+从处理`开销`的角度来看，这比昂贵的`标准读取一个从文件系统`在`服务器安排`要`昂贵`得多。
+
+For most Web applications, this overhead isn’t a big deal. Most Web applications aren’t washingtonpost.com or slashdot.org; they’re simply small- to medium-sized sites with so-so traffic.
+But for medium- to high-traffic sites, it’s essential to cut as much overhead as possible.
+对于大多数`Web应用程序`来说，这个`开销`并不是什么大问题。
+大多数`Web应用程序`不是`washingtonpost.com`或`slashdot.org`;
+他们只是`中等规模`的`流量`如此之大的站点。
+
+That’s where caching comes in. To cache something is to save the result of an expensive calculation so that you don’t have to perform the calculation next time. Here’s some pseudocode explaining how this would work for a dynamically generated Web page:
+但对于`中高流量`的`网站`，尽可能减少`开销`至关重要。
+这就是`缓存`进来的地方。
+`缓存`某些内容是为了节省`昂贵`的`计算结果`，以便下次不必执行`计算`。
+下面是一些`伪代码`，解释了这对于`动态生成`的`Web页面`是如何工作的：
+-------------------------
+given a URL, try finding that page in the cache if the page is in the cache:
+    return the cached page
+else:
+    generate the page
+    save the generated page in the cache (for next time)
+    return the generated page 
+-------------------------
+Django comes with a robust cache system that lets you save dynamic pages so they don’t have to be calculated for each request. For convenience, Django offers different levels of cache granularity: You can cache the output of specific views, you can cache only the pieces that are difficult to produce, or you can cache your entire site.
+Django带有一个强大的`缓存系统`，可让您`保存``动态页面`，因此无需为`每个请求``计算`它们。
+为了方便起见，Django提供了`不同级别`的`缓存粒度`：
+您可以`缓存`特定`视图`的`输出`，您只`缓存`难以生成的`片段`，或者可以`缓存`整个`站点`。
+
+Django also works well with downstream caches, such as Squid and browser-based caches. These are the types of caches that you don’t directly control, but to which you can provide hints (via HTTP headers) about which parts of your site should be cached, and how.
+Django也可以很好地与`下游缓存`配合使用，
+例如,`Squid`和`基于浏览器的缓存`。
+这些是您`不直接控制`的`缓存类型`，但您可以通过`HTTP标头`提供有关`缓存`网站`哪些部分`的`提示`以及`如何缓存`。
+======================================================
+Setting Up the Cache
+设置缓存
+
+The cache system requires a small amount of setup. Namely, you have to tell it where your cached data should live; whether in a database, on the filesystem or directly in memory. This is an important decision that affects your cache’s performance.
+`缓存系统`需要少量的`设置`。
+也就是说，你必须告诉`它`你的`缓存数据`应该存在的`位置`;
+无论是在`数据库`中，在`文件系统`上还是直接在`内存`中。
+这是影响`缓存性能`的重要`决定`。
+
+Your cache preference goes in the CACHES setting in your settings file.
+您的`缓存首选项`位于你的`设置文件settings file`的`CACHES设置`中。
+=============================
+Memcached
+
+The fastest, most efficient type of cache supported natively by Django, Memcached is an entirely memory-based cache server, originally developed to handle high loads at LiveJournal.com and subsequently open-sourced by Danga Interactive. It’s used by sites such as Facebook and Wikipedia to reduce database access and dramatically increase site performance.
+
+`Memcached`是Django本地支持的`最快速`，`最高效`的`高速缓存类型`，
+它是一个完全`基于内存`的`缓存服务器`，最初开发用于处理`LiveJournal.com`的`高负载`，
+随后由Danga Interactive开源。 
+`Facebook`和`维基百科`等`网站`使用它来`减少``数据库访问`并显着提高`网站性能`。
+
+Memcached runs as a daemon and is allotted a specified amount of RAM. All it does is provide a fast interface for adding, retrieving and deleting data in the cache. All data is stored directly in memory, so there’s no overhead of database or filesystem usage.
+`Memcached`作为一个`守护进程`运行，并分配了指定数量的`RAM`。
+它所做的就是提供一个`快速接口`来`添加`，`检索`和`删除``缓存中`的`数据`。
+所有`数据`都直接`存储`在`内存`中，因此不会产生`数据库`或`文件系统`使用的`开销`。
+
+After installing Memcached itself, you’ll need to install a Memcached binding. There are several Python Memcached bindings available; the two most common are python-memcached and pylibmc. To use Memcached with Django:
+在安装`Memcached`之后，您需要安装一个`Memcached绑定`。
+有几个`Python Memcached绑定`可用;
+最常见的两个是：`python-memcached`和`pylibmc`。
+在Django中使用`Memcached`：
+----------------------
+++ Set BACKEND to django.core.cache.backends.memcached.MemcachedCache or django.core.cache.backends.memcached.PyLibMCCache (depending on your chosen memcached binding)
+++ Set LOCATION to ip:port values, where ip is the IP address of the Memcached daemon and port is the port on which Memcached is running, or to a unix:path value, where path is the path to a Memcached Unix socket file.
+
+++ 将`BACKEND`设置为`django.core.cache.backends.memcached.MemcachedCache`或`django.core.cache.backends.memcached.PyLibMCCache`（具体取决于`您`选择的`memcached绑定`）
+++ 将`LOCATION`设置为`ip:port` values，其中`ip`是`Memcached守护程序`的`IP地址`，`port`是运行`Memcached`的`端口`，或者是`unix:path`值，其中`path`是一个到达`Memcached Unix套接字文件`的`路径`。
+----------------------
+In this example, Memcached is running on localhost (127.0.0.1) port 11211, using the python-memcached binding:
+在本例中，`Memcached`使用`python-memcached 绑定`在`本地主机`（127.0.0.1）端口`11211`上运行：
+
+----------------------
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
+----------------------
+In this example, Memcached is available through a local Unix socket file /tmp/memcached.sock using the python-memcached binding:
+在本例中，`Memcached`通过使用`python-memcached绑定`的`本地Unix套接字文件``/tmp/memcached.sock`可用：
+----------------------
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': 'unix:/tmp/memcached.sock',
+    }
+}
+----------------------
+One excellent feature of Memcached is its ability to share a cache over multiple servers. This means you can run Memcached daemons on multiple machines, and the program will treat the group of machines as a single cache, without the need to duplicate cache values on each machine. To take advantage of this feature, include all server addresses in LOCATION, either separated by semicolons or as a list.
+`Memcached`的一个`优秀功能`是它能够在`多个服务器`上`共享缓存`。
+这意味着您可以在`多台机器`上运行`Memcached守护进程`，并且`程序`会将`这组机器`视为`单个缓存`，而无需在`每台机器`上`复制`（`duplicate`）`缓存值`。
+要充分利用此功能，请在`LOCATION`中包含`所有服务器地址`，以`分号`或`列表`分隔。
+In this example, the cache is shared over Memcached instances running on IP address 172.19.26.240 and 172.19.26.242, both on port 11211:
+
+在此示例中，`缓存`通过在`IP地址` `172.19.26.240`和`172.19.26.242`上运行的`Memcached实例``共享`，这两个`实例`都位于`端口11211`上：
+----------------------
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': [
+            '172.19.26.240:11211',
+            '172.19.26.242:11211',
+        ]
+    }
+}
+----------------------
+In the following example, the cache is shared over Memcached instances running on the IP addresses 172.19.26.240 (port 11211), 172.19.26.242 (port 11212), and 172.19.26.244 (port 11213):
+在以下示例中，`缓存`是通过运行在`IP地址`172.19.26.240（端口11211），172.19.26.242（端口11212）和172.19.26.244（端口11213）上的`Memcached``实例``共享`的：
+----------------------
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': [
+            '172.19.26.240:11211',
+            '172.19.26.242:11212',
+            '172.19.26.244:11213',
+        ]
+    }
+}
+----------------------
+A final point about Memcached is that memory-based caching has a disadvantage: because the cached data is stored in memory, the data will be lost if your server crashes.
+关于`Memcached`的`最后一点`是,`基于内存`的`缓存`有一个`缺点`：
+因为`缓存`的`数据`存储在`内存`中，所以如果`服务器``崩溃`，`数据`将会`丢失`。
+
+Clearly, memory isn’t intended for permanent data storage, so don’t rely on memory-based caching as your only data storage. Without a doubt, none of the Django caching backends should be used for permanent storage – they’re all intended to be solutions for caching, not storage – but we point this out here because memory-based caching is particularly temporary.
+
+很明显，`内存`不适用于`永久数据存储`，因此不要将`基于内存`的`缓存`作为唯一的`数据存储`。
+毫无疑问，没有一个Django`缓存后端`应该用于`永久存储` - 它们都是为了`缓存`而不是`存储`的`解决方案` 
+-但是我们在这里指出了这一点，因为`基于内存`的`缓存`特别是`暂时`的。
+==================================
+Database Caching
+数据库缓存
+
+Django can store its cached data in your database. This works best if you’ve got a fast, well-indexed database server. To use a database table as your cache backend:
+Django可以将其`缓存`的`数据``存储`在`数据库`中。
+如果你有一个`快速`，`索引`良好的`数据库服务器`，这最好。
+将`数据库表`用作`缓存后端`：
+---------------------------
+++ Set BACKEND to django.core.cache.backends.db.DatabaseCache
+++ Set LOCATION to tablename, the name of the database table. This name can be whatever you want, as long as it’s a valid table name that’s not already being used in your database.
+
+++ 将`BACKEND`设置为`django.core.cache.backends.db.DatabaseCache`
+++ 将`LOCATION`设置为`表名`，即`数据库表`的`名称`。
+这个`名称`可以是任何你想要的，只要它是一个`尚未`在`数据库`中使用的`有效``表名`即可。
+---------------------------
+In this example, the cache table’s name is my_cache_table:
+在这个例子中，`缓存表`的`名字`是`my_cache_table`：
+---------------------------
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'my_cache_table',
+    }
+}
+---------------------------
+=================
+Creating The Cache Table
+创建缓存表
+
+Before using the database cache, you must create the cache table with this command:
+在使用`数据库缓存`之前，您必须使用以下命令`创建``缓存表`：
+---------------
+python manage.py createcachetable 
+---------------
+
+This creates a table in your database that is in the proper format that Django’s database-cache system expects. The name of the table is taken from LOCATION. If you are using multiple database caches, createcachetable creates one table for each cache. If you are using multiple databases, createcachetable observes the allow_migrate() method of your database routers (see below). Like migrate, createcachetable won’t touch an existing table. It will only create missing tables.
+
+这将在您的`数据库`中`创建`一个`表`，该`表`采用Django的`数据库缓存``系统`所需的适当`格式`。
+该`表`的名称取自`LOCATION`。
+如果您使用`多个``数据库缓存`，`createcachetable`会为`每个``缓存`创建一个`表`。
+如果您使用`多个数据库`，`createcachetable`会观察`数据库路由器`的`allow_migrate（）`方法（请参阅下文）。
+像`迁移`一样，`createcachetable`不会触及现有的`表`。它只会`创建``缺少的``表`。
+=================
+Multiple Databases
+多个数据库
+
+If you use database caching with multiple databases, you’ll also need to set up routing instructions for your database cache table. For the purposes of routing, the database cache table appears as a model named CacheEntry, in an application named django_cache. This model won’t appear in the models cache, but the model details can be used for routing purposes.
+如果你用`多个数据库`使用`数据库缓存`，则还需要为你的`数据库缓存表`设置`路由指令`。
+为了进行`路由`，`数据库缓存表`在名为`django_cache`的`应用程序`中显示为`名`为`CacheEntry`的`模型`。
+该`模型`不会出现在`模型缓存`中，但`模型`细节可用于`路由``目的`。
+
+For example, the following router would direct all cache read operations to cache_replica, and all write operations to cache_primary. The cache table will only be synchronized onto cache_primary:
+例如，以下`路由器`会将所有`缓存``读取操作`指向`cache_replica`，并将所有`写入操作`指向`cache_primary`。
+`缓存表`只会`同步`到`cache_primary`：
+---------------------
+class CacheRouter(object):
+    """A router to control all database cache operations"""
+
+    def db_for_read(self, model, **hints):
+        # All cache read operations go to the replica
+        if model._meta.app_label in ('django_cache',):
+            return 'cache_replica'
+        return None
+
+    def db_for_write(self, model, **hints):
+        # All cache write operations go to primary
+        if model._meta.app_label in ('django_cache',):
+            return 'cache_primary'
+        return None
+
+    def allow_migrate(self, db, model):
+        # Only install the cache model on primary
+        if model._meta.app_label in ('django_cache',):
+            return db == 'cache_primary'
+        return None 
+---------------------
+If you don’t specify routing directions for the database cache model, the cache backend will use the default database. Of course, if you don’t use the database cache backend, you don’t need to worry about providing routing instructions for the database cache model.
+如果您未指定`数据库缓存模型`的`路由方向`，则`缓存后端`将使用`默认数据库`。
+当然，如果您不使用`数据库缓存后端`，则无需担心为`数据库缓存模型`提供`路由指令`。
+=======================
+==================================
+Filesystem Caching
+文件系统缓存
+
+The file-based backend serializes and stores each cache value as a separate file. To use this backend set BACKEND to 'django.core.cache.backends.filebased.FileBasedCache' and LOCATION to a suitable directory.
+`基于文件`的`后端`将每个`缓存值``序列化`并`存储`为`单独`的`文件`。
+要使用此`后端`,将`BACKEND`设置为'django.core.cache.backends.filebased.FileBasedCache'和`LOCATION`到合适的`目录`。
+
+For example, to store cached data in /var/tmp/django_cache, use this setting:
+例如，要将`缓存`的`数据``存储`在`/var/tmp/django_cache`中，请使用以下设置：
+----------------------
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/var/tmp/django_cache',
+    }
+}
+----------------------
+If you’re on Windows, put the drive letter at the beginning of the path, like this:
+如果您在`Windows`上，请将`驱动器`盘符`放在`路径`的`开头`，如下所示：
+-----------------------
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': 'c:/foo/bar',
+    }
+}
+-----------------------
+The directory path should be absolute – that is, it should start at the root of your filesystem. It doesn’t matter whether you put a slash at the end of the setting. Make sure the directory pointed to by this setting exists and is readable and writable by the system user under which your Web server runs. Continuing the above example, if your server runs as the user apache, make sure the directory /var/tmp/django_cache exists and is readable and writable by the user apache.
+`目录``路径`应该是`绝对的` - 也就是说，它应该从`文件系统`的`根目录`开始。
+在`设置`结束时,是否放置`斜线`并不重要。
+确保此`设置`指向的`目录``存在`，并且可以由`运行Web服务器`的`系统用户``读写`。
+继续上面的例子，如果你的`服务器`作为`user apache`运行，确保`目录``/var/tmp/django_cache`存在,并且可以由`用户apache``读写`。
+==================================
+Local-Memory Caching
+本地内存缓存
+
+This is the default cache if another is not specified in your settings file. If you want the speed advantages of in-memory caching but don’t have the capability of running Memcached, consider the local-memory cache backend. To use it, set BACKEND to django.core.cache.backends.locmem.LocMemCache. For example:
+如果在`设置文`件中`未指定``另一个`，则这是`默认缓存`。
+如果您想要`内存缓存`的`速度优势`，但无法运行`Memcached`，请考虑`本地内存缓存后端`。
+要使用它，请将`BACKEND`设置为`django.core.cache.backends.locmem.LocMemCache`。例如：
+-------------------
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake'
+    }
+}
+-------------------
+
+The cache LOCATION is used to identify individual memory stores. If you only have one locmem cache, you can omit the LOCATION; however, if you have more than one local memory cache, you will need to assign a name to at least one of them in order to keep them separate.
+`缓存`的`LOCATION`用于`标识``单个`内存存储`。
+如果您只有一个`locmem缓存`，则可以省略`LOCATION`;
+但是，如果您有`多个``本地内存缓存`，则需要为其中的`至少一个`分配一个`名称`，以便将它们`分开`。
+
+Note that each process will have its own private cache instance, which means no cross-process caching is possible. This obviously also means the local memory cache isn’t particularly memory-efficient, so it’s probably not a good choice for production environments. It’s nice for development.
+
+请注意，每个`进程`都有自己的`私有缓存实例`，这意味着`无法`进行`跨进程缓存`。
+这显然也意味着`本地内存缓存`不是特别有效的`内存`，所以它可能`不适合``生产环境`。
+`开发`很好。
+==================================
+Dummy Caching (For Development)
+虚拟缓存（用于开发）
+
+Finally, Django comes with a dummy cache that doesn’t actually cache – it just implements the cache interface without doing anything. This is useful if you have a production site that uses heavy-duty caching in various places but a development/test environment where you don’t want to cache and don’t want to have to change your code to special-case the latter. To activate dummy caching, set BACKEND like so:
+最后，Django带有一个`虚拟缓存`，它实际上并不`缓存` 
+--它只是在`不做任何事情`的情况下,`实现``缓存接口`。
+如果您有一个`生产站点`在`各个地方`使用`重型缓存`(`heavy-duty caching`)，但是您不希望`缓存`并且不希望将`代码`更改为`特殊情况`的`开发/测试环境`，则这非常有用。
+要激活`虚拟缓存`，请像这样设置`BACKEND`：
+------------------
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
+------------------
+==================================
+Using A Custom Cache Backend
+使用一个自定义`缓存后端`
+
+While Django includes support for a number of cache backends out-of-the-box, sometimes you might want to use a customized cache backend. To use an external cache backend with Django, use the Python import path as the BACKEND of the CACHES setting, like so:
+虽然`Django`支持大量`缓存后端`，但有时您可能需要使用`自定义`的`缓存后端`。
+要在Django中使用`外部缓存后端`，请使用`Python导入路径`作为`CACHES`设置的`BACKEND`，如下所示：
+------------------
+CACHES = {
+    'default': {
+        'BACKEND': 'path.to.backend',
+    }
+}
+------------------
+If you’re building your own backend, you can use the standard cache backends as reference implementations. You’ll find the code in the django/core/cache/backends/ directory of the Django source.
+如果您构建自己的后端，则可以将`标准缓存后端`用作`参考实现`。
+您将在Django源代码的`django/core/cache/backends/`目录中,找到该`代码`。
+
+Without a really compelling reason, such as a host that doesn’t support them, you should stick to the cache backends included with Django. They’ve been well-tested and are easy to use.
+没有一个非常令人信服的理由，比如,`不支持`它们的`主机`，你应该坚持使用`Django`中包含的`缓存后端`。
+它们已经过很好的测试并易于使用。
+==================================
+Cache Arguments
+缓存参数
+
+Each cache backend can be given additional arguments to control caching behavior. These arguments are provided as additional keys in the CACHES setting. Valid arguments are as follows:
+每个`缓存后端`可以被赋予额外的`参数`来控制`缓存行为`。
+这些`参数`作为`CACHES``设置`中的其他`键`提供。
+有效参数如下：
+----------------------------
+++ TIMEOUT: The default timeout, in seconds, to use for the cache. This argument defaults to 300 seconds (5 minutes). You can set TIMEOUT to None so that, by default, cache keys never expire. A value of 0 causes keys to immediately expire (effectively don’t cache).
+++ OPTIONS: Any options that should be passed to the cache backend. The list of valid options will vary with each backend, and cache backends backed by a third-party library will pass their options directly to the underlying cache library.
+++ Cache backends that implement their own culling strategy (i.e., the locmem, filesystem and database backends) will honor the following options:
+++ MAX_ENTRIES: The maximum number of entries allowed in the cache before old values are deleted. This argument defaults to 300.
+++ CULL_FREQUENCY: The fraction of entries that are culled when MAX_ENTRIES is reached. The actual ratio is 1 / CULL_FREQUENCY, so set CULL_FREQUENCY to 2 to cull half the entries when MAX_ENTRIES is reached. This argument should be an integer and defaults to 3.A value of 0 for CULL_FREQUENCY means that the entire cache will be dumped when MAX_ENTRIES is reached. On some backends (database in particular) this makes culling much faster at the expense of more cache misses.
+++ KEY_PREFIX: A string that will be automatically included (prepended by default) to all cache keys used by the Django server.
+++ VERSION: The default version number for cache keys generated by the Django server.
+++ KEY_FUNCTION: A string containing a dotted path to a function that defines how to compose a prefix, version and key into a final cache key.
+----------------------------
+In this example, a filesystem backend is being configured with a timeout of 60 seconds, and a maximum capacity of 1000 items:
+在此示例中，正在`配置`一个`文件系统后端`，其`超时时间`为`60秒`，`最大容量`为`1000个`条目：
+
+----------------------------
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/var/tmp/django_cache',
+        'TIMEOUT': 60,
+        'OPTIONS': {'MAX_ENTRIES': 1000}
+    }
+}
+----------------------------
+==================================
+The Per-Site Cache
+每站点缓存
+
+Once the cache is set up, the simplest way to use caching is to cache your entire site. You’ll need to add 'django.middleware.cache.UpdateCacheMiddleware' and 'django.middleware.cache.FetchFromCacheMiddleware' to your MIDDLEWARE_CLASSES setting, as in this example:
+`缓存`被`设置`完成后，使用`缓存`的`最简单方法`是`缓存`整个网站。
+您需要将'django.middleware.cache.UpdateCacheMiddleware'和'django.middleware.cache.FetchFromCacheMiddleware'添加到`MIDDLEWARE_CLASSES`设置中，如下例所示：
+-----------------------------
+MIDDLEWARE_CLASSES = [
+    'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
+]
+-----------------------------
+No, that’s not a typo: the update middleware must be first in the list, and the fetch middleware must be last. The details are a bit obscure, but see Order of MIDDLEWARE_CLASSES in the next chapter if you’d like the full story.
+Then, add the following required settings to your Django settings file:
+不，这不是一个`错字`：`更新中间件`必须在`列表`中位于`第一位`，并且`提取中间件`必须是`最后一个`。
+细节有点模糊，但如果您想要`全文`，请参阅下一章中的`MIDDLEWARE_CLASSES`命令。
+然后，将以下必需`设置`添加到您的`Django``设置文件`中：
+---------------------------
+++ CACHE_MIDDLEWARE_ALIAS – The cache alias to use for storage.
+++ CACHE_MIDDLEWARE_SECONDS – The number of seconds each page should be cached.
+++ CACHE_MIDDLEWARE_KEY_PREFIX – If the cache is shared across multiple sites using the same Django installation, set this to the name of the site, or some other string that is unique to this Django instance, to prevent key collisions. Use an empty string if you don’t care.
+---------------------------
+FetchFromCacheMiddleware caches GET and HEAD responses with status 200, where the request and response headers allow. Responses to requests for the same URL with different query parameters are considered to be unique pages and are cached separately. This middleware expects that a HEAD request is answered with the same response headers as the corresponding GET request; in which case it can return a cached GET response for HEAD request. Additionally, UpdateCacheMiddleware automatically sets a few headers in each HttpResponse:
+
+`FetchFromCacheMiddleware``缓存`状态为`200`的`GET`和`HEAD``响应`，`请求`和`响应头`允许。
+对具有不同`查询参数`的`相同URL`的`请求`的`响应`,被认为是独特的`页面`并被`分开缓存`。
+该`中间件`期望`HEAD请求`的`响应头`与相应的`GET请求`相同;
+在这种情况下，它可以为`HEAD请求`返回`缓存`的`GET响应`。
+另外，`UpdateCacheMiddleware`会在每个`HttpResponse`中`自动设置`一些标题：
+----------------------
+++ Sets the Last-Modified header to the current date/time when a fresh (not cached) version of the page is requested.
+++ Sets the Expires header to the current date/time plus the defined CACHE_MIDDLEWARE_SECONDS.
+++ Sets the Cache-Control header to give a max age for the page – again, from the CACHE_MIDDLEWARE_SECONDS setting.
+----------------------
+If a view sets its own cache expiry time (i.e. it has a max-age section in its Cache-Control header) then the page will be cached until the expiry time, rather than CACHE_MIDDLEWARE_SECONDS. Using the decorators in django.views.decorators.cache you can easily set a view’s expiry time (using the cache_control decorator) or disable caching for a view (using the never_cache decorator). See the using other headers section for more on these decorators.
+如果一个`视图`设置了自己的`缓存到期时间`（即它的`Cache-Control`头部中有一个`max-age`部分），那么该`页面`将被`缓存`直到`到期时间`，而不是`CACHE_MIDDLEWARE_SECONDS`。
+使用`django.views.decorators.cache`中的`装饰器`，可以轻松地设置`视图`的`到期时间`（使用cache_control装饰器）或`禁用`视图的`缓存`（使用`never_cache`装饰器）。
+有关这些`装饰器`的更多信息，请参阅使用其他`标题部分`。
+
+If USE_I18N is set to True then the generated cache key will include the name of the active language. This allows you to easily cache multilingual sites without having to create the cache key yourself.
+如果`USE_I18N`设置为`True`，则生成的`缓存键`将包含`活动语言`的`名称`。这使您可以轻松地`缓存``多语言网站`，而`无需`自己创建`缓存密钥`。
+
+Cache keys also include the active language when USE_L10N is set to True and the current time zone when USE_TZ is set to True.
+当`USE_L10N`设置为`True`时，`缓存键`还包括`活动语言`，当`USE_TZ`设置为`True`时，`缓存键`包含`当前时区`。
+==================================
+The Per-View Cache
+每个视图缓存
+
+A more granular way to use the caching framework is by caching the output of individual views. django.views.decorators.cache defines a cache_page decorator that will automatically cache the view’s response for you. It’s easy to use:
+
+使用`缓存框架`的`更细化`的方式是,`缓存``单个视图`的`输出`。 
+`django.views.decorators.cache`定义了一个`cache_page修饰器`，它可以`自动缓存``视图`的`响应`。
+它很容易使用：
+------------------------
+from django.views.decorators.cache import cache_page
+
+@cache_page(60 * 15)
+def my_view(request):
+    ...
+------------------------
+cache_page takes a single argument: the cache timeout, in seconds. In the above example, the result of the my_view() view will be cached for 15 minutes. (Note that I’ve written it as 60 * 15 for the purpose of readability. 60 * 15 will be evaluated to 900 – that is, 15 minutes multiplied by 60 seconds per minute.)
+`cache_page`只有一个参数：`缓存超时`，以`秒`为单位。
+在上面的例子中，`my_view（）视图`的`结果`将被`缓存``15分钟`。
+（请注意，为了便于`阅读`，我已将其写为`60 * 15`，`60 * 15`将评估为`900`--即`15分钟`乘以`60秒/分钟`。）
+
+The per-view cache, like the per-site cache, is keyed off of the URL. If multiple URLs point at the same view, each URL will be cached separately. 
+Continuing the my_view example, if your URLconf looks like this:
+按照`每个视图`的`缓存`，就像`每个站点`的`缓存`一样，从`URL`中`取消`。
+如果`多个网址`指向`相同`的`视图`，则每个`网址`将`分开缓存`。
+继续`my_view`示例，如果您的URLconf如下所示：
+--------------------
+urlpatterns = [
+    url(r'^foo/([0-9]{1,2})/$', my_view),
+]
+--------------------
+then requests to /foo/1/ and /foo/23/ will be cached separately, as you may expect. But once a particular URL (e.g., /foo/23/) has been requested, subsequent requests to that URL will use the cache.
+
+那么`请求``/foo/1/`和`/foo/23/`将分开`缓存`，如您所料。
+但是一旦请求了特定的`URL`（例如`/foo/23/`），对该`URL`的`后续请求`将使用`缓存`。
+
+cache_page can also take an optional keyword argument, cache, which directs the decorator to use a specific cache (from your CACHES setting) when caching view results.
+`cache_page`还可以带一个`可选`的`关键字参数``cache`，当`缓存``视图结果`时，它指示`装饰器`使用`特定`的`缓存`（来自`CACHES设置`）。
+By default, the default cache will be used, but you can specify any cache you want:
+默认情况下，将使用`默认缓存`，但您可以指定所需的任何`缓存`：
+--------------------------
+@cache_page(60 * 15, cache="special_cache")
+def my_view(request):
+    ...
+--------------------------
+You can also override the cache prefix on a per-view basis. cache_page takes an optional keyword argument, key_prefix, which works in the same way as the CACHE_MIDDLEWARE_KEY_PREFIX setting for the middleware. It can be used like this:
+
+您也可以在`每个``视图`的基础上`覆盖``缓存前缀`。 
+`cache_page`采用`可选`的`关键字参数``key_prefix`，其`工作方式`与`中间件`的`CACHE_MIDDLEWARE_KEY_PREFIX`设置相同。
+它可以像这样使用：
+--------------------------- 
+@cache_page(60 * 15, key_prefix="site1")
+def my_view(request):
+    ...
+--------------------------- 
+The key_prefix and cache arguments may be specified together. The key_prefix argument and the KEY_PREFIX specified under CACHES will be concatenated.
+==================================
+Specifying Per-View Cache in the Urlconf
+在`Urlconf`中指定`每个``视图缓存`
+
+The examples in the previous section have hard-coded the fact that the view is cached, because cache_page alters the my_view function in place. This approach couples your view to the cache system, which is not ideal for several reasons. For instance, you might want to reuse the view functions on another, cache-less site, or you might want to distribute the views to people who might want to use them without being cached.
+上一节中的`示例`对`视图`进行了`缓存`这一事实进行了`硬编码`，因为`cache_page`会更改`my_view`函数。
+这种方法将您的观点与`高速缓存系统``耦合`在`一起`，由于多种原因，这并不`理想`。
+例如，您可能希望在另一个`无缓存``站点`上`重用``视图函数`，或者您可能希望将`视图`分发给可能希望在`不缓存`的情况下使用它们的`人员`。
+
+The solution to these problems is to specify the per-view cache in the URLconf rather than next to the view functions themselves. Doing so is easy: simply wrap the view function with cache_page when you refer to it in the URLconf.
+
+解决这些问题的方法是,在`URLconf`中指定`每个视图缓存`，而不是在`视图函数`本身`旁边`。
+这样做很简单：只需在`URLconf`中`引用``视图函数`时，可以使用`cache_page``包装视图函数`。
+
+Here’s the old URLconf from earlier:
+以下是早期的旧URLconf：
+-------------------------
+urlpatterns = [
+    url(r'^foo/([0-9]{1,2})/$', my_view),
+]
+-------------------------
+Here’s the same thing, with my_view wrapped in cache_page:
+下面是同样的事情，`my_view`包装在`cache_page`中：
+---------------------
+from django.views.decorators.cache import cache_page
+
+urlpatterns = [
+    url(r'^foo/([0-9]{1,2})/$', cache_page(60 * 15)(my_view)),
+]
+---------------------
+==================================
+Template Fragment Caching
+模板片段缓存
+
+If you’re after even more control, you can also cache template fragments using the cache template tag. To give your template access to this tag, put {% load cache %} near the top of your template. The {% cache %} template tag caches the contents of the block for a given amount of time.
+
+如果您在更多控制之后，还可以使用`缓存模板`标记来`缓存模板片段`。
+要让您的`模板`可以访问此`代码`，请将`{％load cache％}`放在`模板`顶部附近。
+`{％cache％}`模板标签,将`块`的内容`缓存`给定的`时间量`。
+
+It takes at least two arguments: the cache timeout, in seconds, and the name to give the cache fragment. The name will be taken as is, do not use a variable.
+它至少需要`两个``参数`：以`秒`为单位的`高速缓存超时`以及给出`高速缓存片段`的`名称`。该`名称`将被视为`不使用`一个`变量`。
+
+For example:
+----------------------------
+{% load cache %}
+{% cache 500 sidebar %}
+    .. sidebar ..
+{% endcache %}
+----------------------------
+Sometimes you might want to cache multiple copies of a fragment depending on some dynamic data that appears inside the fragment.
+有时您可能想要`缓存片段`的多个`副本`，具体取决于`片段`中出现的一些`动态数据`。
+
+For example, you might want a separate cached copy of the sidebar used in the previous example for every user of your site. Do this by passing additional arguments to the {% cache %} template tag to uniquely identify the cache fragment:
+例如，您可能需要为您的`网站`的每个`用户`使用上一个`示例`中使用的`侧栏`的`单独缓存副本`。
+通过将其他`参数`传递给`{％cache％}模板标签`来唯一`标识``缓存片段`：
+---------------------
+{% load cache %}
+{% cache 500 sidebar request.user.username %}
+    .. sidebar for logged in user ..
+{% endcache %}
+---------------------
+It’s perfectly fine to specify more than one argument to identify the fragment. Simply pass as many arguments to {% cache %} as you need. If USE_I18N is set to True the per-site middleware cache will respect the active language.
+
+指定多个参数来标识`片段`是完全`正确`的。
+只需根据需要将许多`参数`传递给`{％cache％}`。
+如果`USE_I18N`设置为`True`，则每个`站点``中间件缓存`将遵循`活动语言`。
+
+For the cache template tag you could use one of the translation-specific variables available in templates to achieve the same result:
+
+对于缓存模板标签，您可以使用模板中提供的某个特定于翻译的变量来获得相同的结果：
+--------------------
+{% load i18n %}
+{% load cache %}
+
+{% get_current_language as LANGUAGE_CODE %}
+
+{% cache 600 welcome LANGUAGE_CODE %}
+    {% trans "Welcome to example.com" %}
+{% endcache %}
+--------------------
+The cache timeout can be a template variable, as long as the template variable resolves to an integer value.
+
+只要`模板变量`解析为`整数值`，`缓存超时`就可以是一个`模板变量`。
+
+For example, if the template variable my_timeout is set to the value 600, then the following two examples are equivalent:
+例如，如果模板变量my_timeout设置为值600，则以下两个示例是等效的：
+------------------------
+{% cache 600 sidebar %} ... {% endcache %}
+{% cache my_timeout sidebar %} ... {% endcache %}
+------------------------
+
+This feature is useful in avoiding repetition in templates. You can set the timeout in a variable, in one place, and just reuse that value. By default, the cache tag will try to use the cache called template_fragments. If no such cache exists, it will fall back to using the default cache. You may select an alternate cache backend to use with the using keyword argument, which must be the last argument to the tag.
+此功能可用于`避免`模板中的`重复`。
+您可以在一个`地方``设置``变量`的`超时时间`，然后`重新`使用`该值`。
+默认情况下，`缓存标记`将尝试使用名为`template_fragments`的`缓存`。
+如果不存在这样的`缓存`，则它将回退到使用`默认缓存`。
+您可以选择一个`备用缓存后端`与`using关键字参数`一起使用，该`关键字参数`必须是该`标记`的`最后一个参数`。
+-------------------------
+{% cache 300 local-thing ...  using="localcache" %}
+-------------------------
+It is considered an error to specify a cache name that is not configured.
+指定`未配置`的`缓存名称`被认为是一个`错误`。
+
+If you want to obtain the cache key used for a cached fragment, you can use make_template_fragment_key. fragment_name is the same as second argument to the cache template tag; vary_on is a list of all additional arguments passed to the tag. This function can be useful for invalidating or overwriting a cached item, for example:
+
+如果您想获取用于一个`缓存片段`的`缓存键`，则可以使用`make_template_fragment_key`。 
+`fragment_name`与`缓存模板标签`的`第二个参数`相同; 
+`vary_on`是传递给`标签`的所有`附加参数`的`列表`。
+此功能对于`无效`或`覆盖``已缓存`的`项目`很有用，例如：
+--------------------------
+>>> from django.core.cache import cache
+>>> from django.core.cache.utils import make_template_fragment_key
+# cache key for {% cache 500 sidebar username %}
+>>> key = make_template_fragment_key('sidebar', [username])
+>>> cache.delete(key) # invalidates cached template fragment 
+--------------------------
+==================================
+==================================

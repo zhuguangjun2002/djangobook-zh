@@ -1,0 +1,455 @@
+========================
+Tying Forms to Views
+---------------
+https://djangobook.com/tying-forms-views/
+---------------
+=======================
+Our contact form is not much good to us unless we have some way of displaying it to the user. 
+To do this, we need to first update our `mysite\views.py`:
+我们的`联系表单`对我们来说并不是很好，除非我们有某种方式将其`展示`给用户。
+为此，我们需要先更新我们的`mysite \ views.py`：
+-----------------
+# mysite_project\mysite\mysite\views.py
+
+from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
+import datetime
+from mysite.forms import ContactForm    
+from django.core.mail import send_mail, get_connection
+
+# ...
+
+def contact(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            con = get_connection('django.core.mail.backends.console.EmailBackend')
+            send_mail(
+                cd['subject'],
+                cd['message'],
+                cd.get('email', 'noreply@example.com'),
+                ['siteowner@example.com'],
+                connection=con
+            )
+            return HttpResponseRedirect('/contact/thanks/')
+    else:
+        form = ContactForm()
+
+    return render(request, 'contact_form.html', {'form': form})
+-----------------
+
+We’ve added the `contact` function to our view to handle the form submission. In this new function, we:
+我们添加了'contact'函数来处理`表单提交`。在这个新功能中，我们：
+
+-----------------
+++ Check to see if the `request` have been submitted with the `POST` method, otherwise we just display the `blank form`.
+++ We then check if the `form` contains valid data by calling the `form`’s `is_valid()` method.
+  If the `form` contains valid data, an `email` is sent and the user is `redirected` to a new view `(/contact/thanks/)`.
+  If the `form` doesn’t contain valid data, the `if` block jumps out to the final `render()` and the form is rendered back to the browser.
+
+++检查`request`是否已经用`POST`方法提交，否则我们只显示`blank form`(空的表单)。
+++然后我们通过调用`form`的`is_valid（）`方法来检查`form`是否包含有效的数据。
+ 如果`form`包含`有效数据`，则发送一封`email`，并将用户`重定向`到一个新视图`(/contact/thanks/)`。
+ 如果`form`不包含`有效数据`，则`if`块,会跳转处理，跳到`最终`的`render（）`，并将`渲染`好的`表单`再返回给`浏览器`。
+-----------------
+
+Note that we don’t do any error handling in the view – this is all handled by the `form class`. 
+If the form doesn’t validate, Django will automatically create a `list` of `errors` and append them to the `response`.
+请注意，我们不会在视图中执行任何错误处理 - 这全部由`form class`处理。
+如果表单没有`验证`，Django会自动创建一个`errors`列表并将它们附加到`response`。
+
+A contact form is not much use without some way of sending the contact form information to the site owner. 
+A very common way of doing this is to send an email. 
+Django has the ability to send emails built in to the core. 
+The email functions can be found in the `django.core.mail` module, which I have imported at the top of our modified `views.py`.
+
+如果没有某种方式将`联系表单`信息发送给`网站所有者`，`联系表单`就没有多大用处。
+这样做的一个非常常见的方式是`发送电子邮件`。
+Django能够发送内置的电子邮件到核心(core)。
+电子邮件功能可以在`django.core.mail`模块中找到，我已经在我们修改后的`views.py`的顶部导入了这个模块。
+
+We are using the `send_mail()` function to send the email to a dummy email address. 
+You can find out more on `send_mail()`, and the other email functions and classes in the Django documentation.
+我们使用`send_mail（）`函数将电子邮件发送到一个虚拟电子邮件地址。
+您可以在`send_mail（）`以及Django文档中的其他电子邮件函数和类中找到更多信息。
+
+----------------------------------
+NOTE Sending Emails in Development
+开发环境下，发送电子邮件
+
+You will notice that I am using `django.core.mail.get_connection()` to retrieve a mail connection to a special email backend called 'django.core.mail.backends.console.EmailBackend'. 
+This backend is particularly useful in development as it doesn’t require you to set up an email server while you are developing a Django application. 
+`console.EmailBackend` sends the email output to the `console`. 
+You can check this in your terminal window after you submit your form.
+您会注意到我正在使用`django.core.mail.get_connection（）`来获取一个`邮件连接`到一个特殊的电子邮件后端，名为'django.core.mail.backends.console.EmailBackend'。
+此`后端`在开发中特别有用，因为它不需要您在开发Django应用程序时设置`电子邮件服务器`。
+`console.EmailBackend`会发送`电子邮件`的`输出`到`console`（控制台）。
+在你提交表格后，您可以在你的`终端窗口`中查看此信息。
+
+There are other `email backends` for testing – `filebased`, `locmem` and `dummy`, 
+which send your emails to a file on your local system, save it in an attribute in memory and send to a dummy backend respectively.
+还有其他`电子邮件后端'用于测试 - 'filebased'，'locmem'和'dummy'，
+将您的`电子邮件`发送到一个位于`本地系统`上的`文件`，将其保存在一个位于`内存中`的`属性`，以及发送到一个`虚拟后端`。
+
+You can find more information in the Django documentation, under Email Backends.
+您可以在Django文档中,在`Email Backends`下面,找到更多的信息。
+------------------------------------
+
+To able to display our contact form, we have to create our contact form (save this to `mysite\templates`):
+为了能够显示我们的`联系表单`，我们必须创建我们的`联系表单`（保存到`mysite \ templates`）：
+-------------------------
+# mysite_project\mysite\templates\contact_form.html
+
+<html>
+<head>
+    <title>Contact us</title>
+</head>
+<body>
+    <h1>Contact us</h1>
+
+    {% if form.errors %}
+        <p style="color: red;">
+            Please correct the error{{ form.errors|pluralize }} below.
+        </p>
+    {% endif %}
+
+    <form action="" method="post" novalidate>
+        <table>
+            {{ form.as_table }}
+        </table>
+        {% csrf_token %}
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
+-------------------------
+Since we’re creating a `POST` form (which can have the effect of modifying data), we need to worry about `Cross Site Request Forgeries`. 
+Thankfully, you don’t have to worry too hard, because Django comes with a very easy-to-use system for protecting against it.
+由于我们创建了一个`POST`表单（可能会影响修改数据），因此我们需要担心`跨站点请求伪造`。
+值得庆幸的是，您不必太担心，因为Django带有一个非常易用的系统来保护它。
+
+In short, all `POST` forms that are targeted at internal URLs should use the `{% csrf_token %}` template tag. 
+More details about `{% csrf_token %}` can be found in Chapter 19.
+简而言之，所有以`内部`URL为目标的`POST`表单，都应使用`{％csrf_token％}``模板标记`。
+关于`{％csrf_token％}`的更多细节可以在第19章中找到。
+
+Keen-eyed readers will also notice the `novalidate` attribute in the `<form>` tag. 
+When using `HTML5` in some of the latest browsers (notably `Chrome`), form fields will be automatically validated by the browser. 
+As we want Django to handle form validation, the `novalidate` attribute tells the browser not to validate the form.
+
+敏锐的读者也会注意到`<form>标签`中的`novalidate`属性。
+在某些最新的浏览器（特别是`Chrome`）中使用`HTML5`时，`浏览器`会自动`验证`表单字段。
+因为我们希望`Django`处理表单`验证`，所以`novalidate`属性会告诉`浏览器`不要验证表单。
+
+Finally, we need to change our urls.py to display our contact form at `/contact/`:
+最后，我们需要更改我们的`urls.py`以在`/contact/`上显示我们的`联系表单`：
+----------------
+ # ...
+from mysite.views import hello, current_datetime, hours_ahead, contact
+
+ urlpatterns = [
+     # ...
+     url(r'^contact/$', contact),
+     url(r'^', include('books.urls')),
+]
+----------------
+Try running this locally. 
+Load the form, submit it with none of the fields filled out (Figure 6-5), submit it with an invalid e-mail address (Figure 6-6), then finally submit it with valid data.
+尝试在本地运行。
+加载这个表单，不填写任何一个字段，就提交上去（图6-5），
+提交一个无效的电子邮件地址（图6-6），
+最后提交有效数据。
+
+Note that you will get a “Page not found (404)” error when you submit the completed form.
+This is because I have not created the view or `URLconf` for the redirect to `/contact/thanks/`. 
+I will leave this to you as a learning exercise.
+请注意，当您提交完整的表单时，您将收到“页面未找到（404）”错误。
+这是因为我没有`创建`视图或`URLconf`,以便可以重定向到`/contact/thanks/`。
+我会把这个留给你作为学习练习。
+======================================
+### Changing How Fields Are Rendered
+更改`字段`的`呈现方式`
+
+Probably the first thing you’ll notice when you render this form locally is that the message field is displayed as an `<input type="text">`, and it ought to be a `<textarea>`. 
+We can fix that by setting the field’s `widget`:
+当你在本地`呈现`这个表单时，可能你会注意到的第一件事是,`message`filed(`消息`字段),显示为一个`<input type =“text”>`，它应该是一个`<textarea>`。
+我们可以通过设置该`字段`的`“小部件”`(`widget`)，来解决这个问题：
+---------------------
+from django import forms
+
+class ContactForm(forms.Form):
+    subject = forms.CharField()
+    email = forms.EmailField(required=False)
+    message = forms.CharField(widget=forms.Textarea)
+---------------------
+The forms framework separates out the presentation logic for each field into a set of `widgets`. 
+Each field type has a default `widget`, but you can easily override the default, or provide a custom widget of your own. 
+Think of the `Field classes` as representing validation logic, while `widgets` represent presentation logic.
+`表单框架`将每个`字段`的`表示逻辑`分隔成一组`小部件`(`widgets`)。
+每种`字段类型`都有一个默认的`小部件`(`widget`)，但您可以轻松`覆盖`其`默认值`，或者提供您自己的`自定义`小部件（`widget`）。
+将`Field class`视为`表示``验证逻辑`，而`小部件`(`widget`)表示为`表示逻辑`（`显示逻辑`）。
+
+==========================
+### Setting a Maximum Length
+设置最大长度
+
+One of the most common validation needs is to check that a field is of a certain size. 
+For good measure, we should improve our `ContactForm` to limit the subject to `100` characters. 
+To do that, just supply a `max_length` to the `CharField`, like this:
+最常见的`验证需求`之一,是检查一个`字段`是否具有一个特定的`大小`。
+为了更好的衡量，我们应该改进我们的`ContactForm`，将`主题`（`subject`）限制为`100`个字符。
+为此，只需向`CharField`提供一个`max_length`，如下所示：
+-------------------
+from django import forms
+
+class ContactForm(forms.Form):
+    subject = forms.CharField(max_length=100)
+    email = forms.EmailField(required=False)
+    message = forms.CharField(widget=forms.Textarea)
+-------------------
+An optional `min_length` argument is also available.
+可选的`min_length`参数也可用。
+
+=======================================
+### Setting Initial Values
+设置`初始化值`
+
+As an improvement to this form, let’s add an initial value for the subject field: `I love your site!` (A little power of suggestion can’t hurt.) 
+To do this, we can use the initial argument when we create a `Form` instance:
+作为对这个`form`的一种改进，让我们为`主题`字段,添加一个初始值：`I love your site!`(“我爱你的站点！”)（一点小建议，不应该受到伤害）。为此，我们可以创建一个`Form`实例：
+---------------------
+def contact(request):
+    
+    # ...
+
+    else:
+        form = ContactForm(
+            initial={'subject': 'I love your site!'}
+        )
+        
+    return render(request, 'contact_form.html', {'form':form})
+---------------------
+Now, the `subject` field will be displayed pre-populated with that kind statement. 
+Note that there is a difference between passing `initial` data and passing data that binds the form. 
+The biggest difference is that if you’re just passing `initial` data, then the form will be `unbound`, which means it won’t have any error messages.
+现在，`主题`字段将显示`预先填入`那些种类的`语句`。
+请注意，传递`初始数据`和那些绑定`表单`的`传递数据`之间存在差异。
+最大的区别是，如果你只是传递`初始数据`，那么`表单`将被`解除绑定`（unbound），这意味着它不会有任何`错误消息`。
+
+================================
+================================
+### Custom Validation Rules
+自定义验证规则
+
+Imagine we’ve launched our feedback form, and the `e-mails` have started tumbling in. 
+There’s just one problem: some of the submitted `messages` are just one or two words, which isn’t long enough for us to make sense of. 
+We decide to adopt a new validation policy: four words or more, please.
+
+There are a number of ways to hook custom validation into a Django `form`. 
+If our rule is something we will reuse again and again, we can create a custom field type. 
+Most custom validations are one-off affairs, though, and can be tied directly to the `Form` class. 
+We want additional validation on the `message` field, so we add a `clean_message()` method to our `Form class`:
+
+假设我们已经`发布`了我们的`反馈表单`，`电子邮件`已经开始翻滚。
+现在只有一个问题：一些提交的`message`,只是一两个字，这些字对我们来说还不够长。
+我们决定采用新的验证政策：请说`四个字`或`更多`。
+
+有很多方法可以将`自定义验证`绑定到`Django`的一个`表单`（`form`）中。
+如果我们的规则是一次又一次的重用，我们可以创建一个`自定义`的`字段类型`。
+不过，大多数自定义验证都是`一次性事务`，并且可以直接绑定到`Form类`。
+我们希望对`message`字段,进行额外的验证，因此我们在我们的`Form类`中添加了一个`clean_message()`方法：
+--------------------------
+from django import forms
+
+class ContactForm(forms.Form):
+    subject = forms.CharField(max_length=100)
+    email = forms.EmailField(required=False)
+    message = forms.CharField(widget=forms.Textarea)
+
+    def clean_message(self):
+        message = self.cleaned_data['message']
+        num_words = len(message.split())
+        if num_words < 4:
+            raise forms.ValidationError("Not enough words!")
+        return message
+--------------------------
+Django’s `form` system automatically looks for any method whose name starts with `clean_` and ends with the name of a field. 
+If any such method exists, it’s called during validation. Specifically, the `clean_message()` method will be called after the default validation logic for a given field (in this case, the validation logic for a required `CharField`). 
+Because the field data has already been partially processed, we pull it out of `self.cleaned_data`.
+
+Also, we don’t have to worry about checking that the value exists and is non-empty; 
+that’s done by the default validator. 
+We naively use a combination of `len()` and `split()` to count the number of words. 
+If the user has entered too few words, we raise a `forms.ValidationError`. 
+The string attached to this exception will be displayed to the user as an item in the error `list` (Figure 6-8).
+
+`Django`的`表单系统`,会自动查找名称以`clean_`开头，并以`字段`名称结尾的任何`方法`。
+如果存在任何此类`方法`，则在验证期间调用它。
+具体来说，`clean_message()`方法,将在给定`字段`的默认验证逻辑（在这种情况下，为所需的`CharField`的验证逻辑）之后调用。
+由于`field`（`字段`）数据已经被部分处理，我们将其从`self.cleaned_data`中取出。
+
+另外，我们不必担心检查`值`是否存在 ,以及不是`空`的;
+这是由`默认`的`验证器`完成的。
+我们只需要使用`len（）`和`split（）`的组合来计算`单词`的`数量`。
+如果用户输入的`词`太少，我们引发一个`forms.ValidationError`。
+附加到此`异常`的`字符串`，将作为`错误列表`中的一个`条目`显示给用户（图6-8）。
+
+It’s important that we explicitly return the `cleaned` value for the `field` at the end of the method. 
+This allows us to modify the value (or convert it to a different `Python type`) within our custom validation method. 
+If we forget the `return statement`, then `None` will be returned, and the original value will be lost.
+
+重要的是我们在方法的`结尾处`，显式地返回该`message`字段（'field'）的'clean'值。
+这允许我们在我们的自定义验证方法中修改该`值`（或将其`转换`为不同的`Python类型`）。
+如果我们忘记了`return statement`（`返回`语句），那么`None`将被返回，并且`原始值`将会丢失。
+==============================
+### Specifying labels
+指定标签
+
+By default, the labels on Django’s auto-generated `form HTML` are created by replacing underscores with spaces and capitalizing the first letter – so the label for the `email` field is `Email`.
+ (Sound familiar? It’s the same simple algorithm that Django’s `models` use to calculate default `verbose_name` values for `fields`. We covered this in Chapter 4.) 
+But, as with Django’s `models`, we can customize the `label` for a given `field`. 
+Just use `label`, like so:
+
+默认情况下，Django自动生成的`表单HTML`上的`标签`,是通过用`空格`替换`下划线`并`大写`第一个`字母`来创建的 - 所以`email`字段的`标签`是`Email`。
+（听起来很熟悉吗？这与Django的`models`用来去计算`fields`（`字段`）的默认的`verbose_name`值的简单算是一样的，我们在`第4章`中介绍过）
+但是，和Django的`models`一样，我们可以为给定的`field`（`字段`）定制`label`（`标签`）。
+只需使用`label`(`标签`)，如下所示：
+-------------------------
+class ContactForm(forms.Form):
+    subject = forms.CharField(max_length=100)
+    email = forms.EmailField(required=False, label='Your e-mail address')
+    message = forms.CharField(widget=forms.Textarea)
+-------------------------
+=================================
+### Customizing Form Design
+自定义表单设计
+
+Our `contact_form.html` template uses `{{ form.as_table }}` to display the `form`, but we can display the `form` in other ways to get more granular control over display. 
+The quickest way to customize forms’ presentation is with `CSS`. 
+`Error lists`, in particular, could do with some visual enhancement, and the auto-generated error lists use `<ul class="errorlist">` precisely so that you can target them with CSS. 
+Add the following `CSS` in the `<head></head>` section of `contact_form.html` to really make our errors stand out (Figure 6-9):
+
+我们的`contact_form.html`模板,使用`{{form.as_table}}`来显示`form`，但我们可以通过其他方式显示`form`来获得`更精确`的`显示控制`。
+定制`表单`的`显示`，最快捷方式是使用CSS。
+`Error lists`，特别是可以通过一些`视觉增强`来实现，而自动生成的`错误列表`使用`<ul class =“errorlist”>`，这样你就可以用`CSS`来定位它们。
+在`contact_form.html`的'<head></head>`部分,添加下面的`CSS`，让我们的`错误`更加`突出`（图6-9）：
+-----------------------
+<style type="text/css">
+    ul.errorlist {
+        margin: 0;
+        padding: 0;
+    }
+    .errorlist li {
+        background-color: red;
+        color: white;
+        display: block;
+        font-size: 1.2em;
+        margin: 0 0 3px;
+        padding: 4px 5px;
+    }
+</style>
+-----------------------
+While it’s convenient to have our form’s HTML generated for us, in many cases you’ll want to override the default rendering. 
+`{{ form.as_table }}` and friends are useful shortcuts while you develop your application, but everything about the way a form is displayed can be overridden, mostly within the template itself, and you’ll probably find yourself doing this.
+
+虽然为我们生成表单的`HTML`很方便，但在许多情况下，您会想要`覆盖``默认呈现`。
+`{{form.as_table}}`及其同类别的东西，在开发应用程序时是有用的`捷径方式`，但所有关于一个`表单`如何显示，其内容都可以被`重写覆盖的`，大部分都在`模板`本身内，您可能会发现自己正在执行此操作。
+
+Each field’s `widget` (`<input type="text">`, `<select>`, `<textarea>`, etc.) can be rendered individually by accessing `{{ form.fieldname }}` in the template, 
+and any errors associated with a `field` are available as `{{ form.fieldname.errors }}`. 
+With this in mind, we can construct a custom template for our contact form with the following template code:
+每个字段的`widget`(),都可以在`模板`中，通过访问`{{form.fieldname}}`，而被`单独的`渲染；
+与一个`字段`的`错误`，也可以通过访问`{{form.fieldname.errors}}`，实现渲染。
+-------------
+【译者注】
+例如，在`ContactForm`表单的`模板`文件(`contact_form.html`)中，你可以通过访问`{{ form.fieldname}}`，去独立地渲染其对应的`字段`的`widget`（`小窗体`）。
+同样地，你通过访问`{{ form.fieldname.errors}}`，让`字段`的`错误`，也被`渲染`。
+-------------
+
+考虑到这一点，我们可以使用以下模板代码为我们的`联系表单`构建一个`自定义模板`：
+---------------------
+<html>
+<head>
+    <title>Contact us</title>
+</head>
+<body>
+    <h1>Contact us</h1>
+
+    {% if form.errors %}
+        <p style="color: red;">
+            Please correct the error{{ form.errors|pluralize }} below.
+        </p>
+    {% endif %}
+
+    <form action="" method="post">
+        <div class="field">
+            {{ form.subject.errors }}
+            <label for="id_subject">Subject:</label>
+            {{ form.subject }}
+        </div>
+        <div class="field">
+            {{ form.email.errors }}
+            <label for="id_email">Your e-mail address:</label>
+            {{ form.email }}
+        </div>
+        <div class="field">
+            {{ form.message.errors }}
+            <label for="id_message">Message:</label>
+            {{ form.message }}
+        </div>
+        {% csrf_token %}
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
+---------------------
+译者注：
+注意，我们之前在`ContactForm类`(`mysite/forms.py`)中，汉化的各个`字段`的`label`,都被`模板文件`(`contact_form.html`）给`覆盖`了，就没有体现出来。
+-----------------
+class ContactForm(forms.Form):
+    subject = forms.CharField(max_length=100,label='主题')
+    email = forms.EmailField(required=False, label='你的邮箱地址')
+    message = forms.CharField(widget=forms.Textarea,label='信息')
+-----------------
+
+In the above template code, `{{ form.message.errors }}` displays a `<ul class="errorlist">` if errors are present and a blank string if the field is valid (or the form is unbound). 
+This is the same for the other fields on our contact form.
+在上面的模板代码中，如果错误出现，`{{form.message.errors}}`将显示一个`<ul class =“errorlist”>“，如果该字段`有效`（或者表单未绑定），则显示一个`空字符串`。
+我们的`联系表单`上的其他`字段`也是如此。
+
+We can also treat `form.message.errors` as a `Boolean` or even iterate over it as a `list`. 
+This is useful when there can be multiple errors associated with a `field`. For example:
+我们也可以将`form.message.errors`视为`Boolean`，甚至将它作为一个`list`来进行`迭代`。
+当可能与一个“field”（`字段`）有多个`错误`时，这非常有用。例如：
+----------------
+<div class="field{% if form.message.errors %} errors{% endif %}">
+    {% if form.message.errors %}
+        <ul>
+        {% for error in form.message.errors %}
+            <li><strong>{{ error }}</strong></li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+    <label for="id_message">Message:</label>
+    {{ form.message }}
+</div>
+----------------
+In the case of validation errors, this will add an `“errors”` class to the containing `<div>` and display the list of errors associated with the message field in an unordered list.
+如果验证错误，这将为`div`添加一个`errors`类，与`message`字段相关联的这个`错误列表`,将会显示为一个`无序列表`。
+=======================================
+What’s Next?
+接下来做什么？
+
+This chapter concludes the introductory material in this book – the so-called “core curriculum.” 
+The next section of the book, Chapters 7 to 13, goes into more detail about advanced Django usage, including how to deploy a Django application (Chapter 13). 
+After these first seven chapters, you should know enough to start writing your own Django projects. 
+The rest of the material in this book will help fill in the missing pieces as you need them. 
+We’ll start in Chapter 7, by doubling back and taking a closer look at `views` and `URLconfs` (introduced first in Chapter 2).
+
+本章总结了本书中的`介绍性材料` - 所谓的“核心课程”。
+本书的`第7章`至`第13章`,即`下一部分`，将详细介绍`高级Django`的用法，包括如何`部署`Django应用程序（第13章）。
+在这七个章节之后，您应该有足够的知识，可以开始编写您自己的Django项目。
+本书的其余内容将帮助您填写`缺少的`部分。
+我们将在`第7章`开始，回顾一下并仔细研究`views`和`URLconfs`（在第2章中首先介绍）。
+=======================================

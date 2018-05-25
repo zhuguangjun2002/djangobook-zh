@@ -1,0 +1,276 @@
+================================
+Django Template Tags and Filters
+Django `模板标签`和`过滤器`
+---------------------------------
+https://djangobook.com/basic-template-tags-filters/
+---------------------------------
+================================
+Tags
+标签
+
+===============
+if/else
+
+The `{% if %}` tag evaluates a `variable`, and if that variable is “True” (i.e., it exists, is not empty, and is not a false Boolean value), the system will display everything between `{% if %}` and `{% endif %}`, for example:
+'{％if％}`标签评估一个“变量”，如果该变量为“真”（即它`存在`，不为`空`，并且不是一个`false`的布尔值），系统将显示从“ ％if％}`到`{％endif％}`之间的内容，例如：
+-----------------
+{% if today_is_weekend %}
+    <p>Welcome to the weekend!</p>
+{% endif %}
+-----------------
+
+An {% else %} tag is optional:
+可选：
+-----------------
+{% if today_is_weekend %}
+    <p>Welcome to the weekend!</p>
+{% else %}
+    <p>Get back to work.</p>
+{% endif %}
+-----------------
+
+The `{% if %}` also accepts `in` / `not in` for testing whether a given value is or isn’t in the specified container, and `is` / `is not` for testing if two entities are the same object.
+`{％if％}`也接受`in` /`not in`来测试一个给定的值是否`在`指定的`容器`中，而`is`/`is not`用于测试两个实体是否是同一个对象。
+-----------------
+{% if user not in users %}
+    If users is a list, this will appear if user isn't an element of the list.
+{% endif %}
+
+{% if somevar is not None %}
+    This appears if somevar isn't None.
+{% endif %}
+-----------------
+===============
+for
+
+The `{% for %}` tag allows you to loop over each item in a sequence. 
+As in Python’s `for statement`, the syntax is `for X in Y`, where `Y` is the sequence to loop over and `X` is the name of the variable to use for a particular cycle of the loop. 
+Each time through the loop, the template system will render everything between `{% for %}` and `{% endfor %}`. 
+For example, you could use the following to display a `list` of athletes given a variable `athlete_list`:
+'{％for％}`标签，允许您`循环`一个`顺序`中的每个`条目`。
+正如在Python中的 `for语句`一样，语法为'for Y in X'，其中'Y'是要循环的`序列`，'X'是用于循环的特定循环的`变量`的`名称`。
+每次循环时，`模板系统`都会渲染所有在`{％for％}`和`{％endfor％}`之间`内容`。
+例如，您可以使用以下内容来显示一个`运动员`的'list`，这个变量为`athlete_list`：
+----------------------
+<ul>
+    {% for athlete in athlete_list %}
+    <li>{{ athlete.name }}</li>
+    {% endfor %}
+</ul>
+----------------------
+This can also be useful if you need to access the items in a `dictionary`.
+ For example, if your context contained a dictionary data, the following would display the keys and values of the dictionary:
+如果您需要访问一个“词典”中的`条目`，这也很有用。
+例如，如果您的`上下文`中包含了一个`字典数据`，则以下内容将显示`字典`的`键`和`值`：
+----------------------
+{% for key, value in data.items %}
+    {{ key }}: {{ value }}
+{% endfor %}
+----------------------
+
+A common pattern is to check the size of the list before looping over it, and outputting some special text if the list is empty:
+一个常见的模式是在循环之前检查`列表`的`大小`，如果`列表`为`空`，则输出一些特殊的文本：
+----------------------
+{% if athlete_list %}
+    {% for athlete in athlete_list %}
+        <p>{{ athlete.name }}</p>
+    {% endfor %}
+{% else %}
+    <p>There are no athletes. Only computer programmers.</p>
+{% endif %}
+----------------------
+
+Because this pattern is so common, the for tag supports an optional `{% empty %}` clause that lets you define what to output if the list is empty. 
+This example is equivalent to the previous one:
+由于这种模式非常常见，因此for标签支持一个可选的`{％empty％}`子句，它允许您定义在`列表`为`空`时要`输出`的内容。
+这个例子等同于前一个例子：
+----------------------
+{% for athlete in athlete_list %}
+    <p>{{ athlete.name }}</p>
+{% empty %}
+    <p>There are no athletes. Only computer programmers.</p>
+{% endfor %}
+----------------------
+There is no support for “breaking out” of a loop before the loop is finished. 
+If you want to accomplish this, change the variable you’re looping over so that it includes only the values you want to loop over.
+在`循环`结束之前，不支持“终止退出”循环。
+如果你想完成这个，`改变`你正在循环的`变量`，以便它只包含你想要`循环`的值。
+
+Similarly, there is no support for a “continue” statement that would instruct the loop processor to return immediately to the front of the loop. 
+(See the section “Philosophies and Limitations” later in this chapter for the reasoning behind this design decision.)
+同样，不支持指示`循环`处理器立即返回到循环前面的“continue”语句。
+（关于本设计决定背后的`推理`，请参阅本章后面的“哲学和限制”一节。）
+===============
+Filters
+过滤器
+
+As explained earlier in this chapter, template filters are simple ways of altering the value of variables before they’re displayed. Filters use a pipe character, like this:
+正如本章前面所解释的，`模板过滤器`是在`变量`显示之前，更改变量值的简单方法。过滤器使用`管道`字符，如下所示：
+---------------------------------
+{{ name|lower }}
+---------------------------------
+This displays the value of the {{ name }} variable after being filtered through the lower filter, which converts text to lowercase. 
+Filters can be `chained` – that is, they can be used in tandem such that the output of one filter is applied to the next.
+这将显示`{{name}}`变量在通过`小写``过滤器`过滤后的`值`，该`过滤器`将`文本`转换为`小写`。
+过滤器可以是“链接的” - 也就是说，它们可以`串联`使用，以便将一个`过滤器`的`输出`应用于下一个`过滤器`。
+
+Here’s an example that takes the first element in a list and converts it to uppercase:
+下面是一个例子，它将列表中的`第一个元素`转换为`大写`：
+---------------------------------
+{{ my_list|first|upper }}
+---------------------------------
+
+The following are a few of the most important filters. Appendix E covers the rest.
+以下是一些最重要的过滤器。附录E涵盖了其余部分。
+---------------------------
+++ `addslashes`: Adds a backslash before any backslash, single quote, or double quote. 
+This is useful for escaping strings. For example: `{{ value|addslashes }}`.
+.++`addslashes`：在任何`反斜杠`，`单引号`或`双引号`之前添加`反斜杠`。
+这对于转义字符串很有用。例如：`{{value | addslashes}}`。
+
+++ `date`: Formats a date or datetime object according to a format string given in the parameter. 
+For example:  `{{ pub_date|date:"F j, Y" }}` Format strings are defined in Appendix E.
+++`date`：根据参数中给定的格式字符串，`格式化``日期`或`日期时间`对象。
+例如：`{{pub_date | date：“F j，Y”}}`格式字符串在附录E中定义。
+
+++ `length`: Returns the length of the value. 
+For a list, this returns the number of elements. 
+For a string, this returns the number of characters. 
+If the variable is undefined, length returns 0.
+
+++`length`：返回值的长度。
+对于一个`列表`，这将返回`元素`的`数量`。
+对于`字符串`，这将返回`字符数`。
+如果变量`未定义`，则长度返回`0`。
+---------------------------
+================================
+Philosophies and Limitations
+哲学与局限
+
+Now that you’ve gotten a feel for the Django Template Language (DTL), it’s probably time to explain the basic design philosophy behind the DTL.
+现在您已经了解了Django模板语言（DTL），现在可能是时候解释DTL背后的`基本设计理念`了。
+
+First and foremost, the limitations to the DTL are intentional.
+首先，对DTL的限制是有意的。
+
+Django was developed in the high volume, ever-changing environment of an online newsroom. 
+The original creators of Django had a very definite set of philosophies in creating the DTL.
+Django是在一个`在线新闻编辑室`，那种`高容量`，`不断变化`的`环境下`开发的。
+Django的`原创者`在创建`DTL`时有一套非常明确的`哲学`。
+
+These philosophies remain core to Django today. They are:
+这些哲学今天仍然是Django的核心。他们是：
+----------------------------------
+1.Separate logic from presentation
+2.Discourage redundancy
+3.Be decoupled from HTML
+4.XML is bad
+5.Assume designer competence
+6.Treat whitespace obviously
+7.Don’t invent a programming language
+8.Ensure safety and security
+9.Extensible
+----------------------------------
+翻译如下：
+----------------------------------
+1.从`显示`中分离`逻辑`
+ 2.不鼓励`冗余`
+ 3.从`HTML`中`解耦`
+ 4.XML是不好的
+ 5.假设设计师是有能力的
+ 6.显示地处理`空白`
+7.不要发明一种编程语言
+ 8.确保安全和安全
+ 9.可扩展
+----------------------------------
+
+------------------------------------------------------------------
+1. Separate logic from presentation
+1.从演示中分离逻辑
+
+A template system is a tool that controls presentation and presentation-related logic – and that’s it. The template system shouldn’t support functionality that goes beyond this basic goal.
+一个模板系统，是一个控制`显示`和`展示`相关逻辑的`工具` - 就是这样。`模板系统`不应该支持超出此基本目标的`功能`。
+------------------------------------------------------------------
+2. Discourage redundancy
+ 2.不鼓励`冗余`
+The majority of dynamic web sites use some sort of common site-wide design – a common header, footer, navigation bar, etc. 
+The Django template system should make it easy to store those elements in a single place, eliminating duplicate code. 
+This is the philosophy behind template inheritance.
+大多数动态网站使用某种常见的网站设计 - 常见的`页眉`，`页脚`，`导航栏`等。
+Django模板系统应该很容易将这些元素存储在`一个`地方，`消除`重复的代码。
+这是`模板继承`背后的哲学。
+------------------------------------------------------------------
+3. Be decoupled from HTML
+
+The template system shouldn’t be designed so that it only outputs HTML. 
+It should be equally good at generating other text-based formats, or just plain text.
+模板系统不应设计为仅输出HTML。
+它应该同样适用于生成其他基于文本的格式，或者只是纯文本。
+------------------------------------------------------------------
+4. XML should not be used for template languages
+.4. XML不应该用于模板语言
+
+Using an XML engine to parse templates introduces a whole new world of human error in editing templates – and incurs an unacceptable level of overhead in template processing.
+使用一个XML引擎去解析模板，就进入了一个在编辑模板时产生大量人为错误的世界 - 并且在模板处理中，产生的`开销是`不可接受`。
+------------------------------------------------------------------
+5. Assume designer competence
+5.假设设计师胜任
+
+The template system shouldn’t be designed so that templates necessarily are displayed nicely in WYSIWYG editors such as Dreamweaver. That is too severe of a limitation and wouldn’t allow the syntax to be as nice as it is.
+不应将`模板系统`设计为使模板必须在`所见即所得编辑器`（如Dreamweaver）中很好地`显示`。这是限制太严格了，并且不允许`语法`像它那么好。
+
+Django expects template authors are comfortable editing HTML directly.
+Django希望`模板作者`可以直接编辑HTML。
+------------------------------------------------------------------
+6. Treat whitespace obviously
+
+The template system shouldn’t do magic things with whitespace. 
+If a template includes whitespace, the system should treat the whitespace as it treats text – just display it. 
+Any whitespace that’s not in a template tag should be displayed.
+模板系统不应该用`空白字符`来做任何事情。
+如果一个模板包含`空白字符`，系统应像它处理文本时那样对待`空白字符` - 只`显示`它。
+任何不在`一个模板标签`中的`空白字符`，都应该显示出来。
+------------------------------------------------------------------
+7. Don’t invent a programming language
+
+The template system intentionally doesn’t allow the following:
+该模板系统故意不允许以下内容：
+------------------------------------
+++ Assignment to variables
+++赋值给变量
+
+++ Advanced logic
+++高级逻辑
+------------------------------------
+The goal is not to invent a programming language. 
+The goal is to offer just enough programming-esque functionality, such as branching and looping, that is essential for making presentation-related decisions.
+目标不是发明一种编程语言。
+目标是提供足够的编程风格功能，如分支和循环，这对于制定与`显示`相关的决策`至关重要。
+
+The Django template system recognizes that templates are most often written by designers, not programmers, and therefore should not assume Python knowledge.
+Django模板系统认识到，`模板`通常由`设计人员`编写，而不是`程序员`编写，因此不应承担`Python`的`知识`。
+------------------------------------------------------------------
+8. Safety and security
+
+The template system, out of the box, should forbid the inclusion of malicious code – such as commands that delete database records. 
+`开箱即用`的`模板系统`，应`禁止`包含`恶意代码` - 例如，`删除`数据库记录的命令。
+
+This is another reason why the template system doesn’t allow arbitrary execution of Python code.
+这是模板系统不允许任意`执行`Python代码的另一个原因。
+------------------------------------------------------------------
+9. Extensibility
+
+The template system should recognize that advanced template authors may want to extend its technology. 
+This is the philosophy behind custom template tags and filters.
+模板系统应该认识到高级模板作者可能想要扩展其技术。
+ 这是自定义`模板标签`和`过滤器`背后的原理。
+------------------------------------------------------------------
+
+
+
+
+
+
+
+
+================================

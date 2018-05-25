@@ -1,0 +1,91 @@
+========================================================
+Authentication Forms and Templates
+身份验证表单和模板
+
+============================
+Built-in forms
+If you don’t want to use the built-in views, but want the convenience of not having to write forms for this functionality, the authentication system provides several built-in forms located in django.contrib.auth.forms(Table 11-1).
+
+内置表单
+如果您不想使用`内置视图`，但希望不必为此功能编写`表单`，则`身份验证系统`会提供几个位于`django.contrib.auth.forms`中的`内置表单`（表11- 1）。
+
+The built-in authentication forms make certain assumptions about the user model that they are working with.
+If you’re using a custom User model, it may be necessary to define your own forms for the authentication system.
+
+`内置`的`身份验证表单`对他们正在使用的`用户模型`进行了一定的`假设`。
+如果您使用`自定义``用户模型`，则可能需要为`认证系统`定义自己的`表单`。
+
+Table 11-1: Django’s built-in authentication forms
+-------------------
+Form Name	Description
+AdminPasswordChangeForm	A form used in the admin interface to change a user’s password. Takes the user as the first positional argument.
+AuthenticationForm	A form for logging a user in. Takes request as its first positional argument, which is stored on the form instance for use by sub-classes.
+PasswordChangeForm	A form for allowing a user to change their password.
+PasswordResetForm	A form for generating and emailing a one-time use link to reset a user’s password.
+SetPasswordForm	A form that lets a user change their password without entering the old password.
+UserChangeForm	A form used in the admin interface to change a user’s information and permissions.
+UserCreationForm	A form for creating a new use
+-------------------
+============================
+Authentication Data in Templates
+当前登录的用户权限存储在模板变量{{perms}}中。这是django.contrib.auth.context_processors.PermWrapper的一个实例，它是一个模板友好的权限代理。在{{perms}}对象中，单属性查找是User.has_module_perms的代理。如果登录用户在foo应用程序中拥有任何权限，此示例将显示True：
+The currently logged-in user and their permissions are made available in the template context when you use RequestContext.
+当您使用`RequestContext`时，`当前登录`的`用户`及其`权限`在`模板上下文`中是`可用的`。
+====================
+Users
+When rendering a template `RequestContext`, the currently logged-in user, either a `User` instance or an `AnonymousUser` instance, is stored in the template variable `{{ user }}`:
+在渲染一个模板“RequestContext”时，当前登录的`用户`（一个`User`实例，或一个`AnonymousUser`实例）存储在`模板变量`--`{{ user }}`中：
+-------------------
+{% if user.is_authenticated %}
+    <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
+{% else %}
+    <p>Welcome, new user. Please log in.</p>
+{% endif %}
+-------------------
+This template context variable is not available if a RequestContext is not being used.
+如果一个`RequestContext`没有被使用，则此`模板``上下文变量`是不可用的。
+====================
+Permissions
+权限
+
+The currently logged-in user’s permissions are stored in the template variable {{ perms }}. This is an instance of django.contrib.auth.context_processors.PermWrapper, which is a template-friendly proxy of permissions. In the {{ perms }} object, single-attribute lookup is a proxy to User.has_module_perms. This example would display True if the logged-in user had any permissions in the foo app:
+f％}语句中的权限：
+`当前登录`的`用户`的`权限`存储在`模板变量`--`{{ perms }}`中。
+这是`django.contrib.auth.context_processors.PermWrapper`的一个实例，它是一个`模板友好`的`权限`的`代理`。
+在`{{ perms }}`对象中，`单属性`查找，是一个`User.has_module_perms`的一个`代理`。
+如果`登录用户`在`foo app`中拥有`任何权限`，此`示例`将显示`True`：
+-----------------
+{{ perms.foo }}
+-----------------
+Two-level-attribute lookup is a proxy to User.has_perm. This example would display True if the logged-in user had the permission foo.can_vote:
+`两级-属性`查找,是一个`User.has_perm`的`代理`。如果`登录用户`拥有`foo.can_vote`权限，此`示例`将显示`True`：
+-----------------
+{{ perms.foo.can_vote }}
+-----------------
+Thus, you can check permissions in template {% if %} statements:
+此，您可以在模板中的`{% if %}`语句中，检查`权限`：
+-----------------
+{% if perms.foo %}
+    <p>You have permission to do something in the foo app.</p>
+    {% if perms.foo.can_vote %}
+        <p>You can vote!</p>
+    {% endif %}
+    {% if perms.foo.can_drive %}
+        <p>You can drive!</p>
+    {% endif %}
+{% else %}
+    <p>You don't have permission to do anything in the foo app.</p>
+{% endif %}
+-----------------
+
+It is possible to also look permissions up by `{% if in %}` statements. For example:
+它也可以通过`{％if in ％}`语句来查看`权限`。例如
+
+-----------------
+{% if 'foo' in perms %}
+    {% if 'foo.can_vote' in perms %}
+        <p>In lookup works, too.</p>
+    {% endif %}
+{% endif %}
+-----------------
+============================

@@ -1,0 +1,40 @@
+=========================
+Django Models: Basic Data Access
+------------------------
+https://djangobook.com/django-models-basic-data-access/
+------------------------
+=========================
+
+
+=========================
+-------------------------------------
+### Filtering Data
+ 过滤数据
+
+# `街道办事处`名称为：`毓璜顶街道办`的`对象`列表
+FiberBoxes.objects.all().filter(town='毓璜顶街道办')
+=========================
+
+=========================
+### Updating Multiple Objects in One Statement
+一个语句实现：`更新`多个对象，
+
+# 例如，将街道办事处为：`毓璜顶街道办`，更新为`毓璜顶`
+FiberBoxes.objects.all().filter(town='毓璜顶街道办').update(town='毓璜顶')
+=========================
+
+
+-------------------------------------
+具体执行结果如下：
+--------------------------------------------------------------------------
+type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> from reporter.models import FiberBoxes
+>>> FiberBoxes.objects.all()
+<GeoQuerySet [<FiberBoxes: 海港物业>, <FiberBoxes: 文化中心>, <FiberBoxes: 体育之家>, <FiberBoxes: 碧海大厦>, <FiberBoxes: 烟台市游泳馆>, <FiberBoxes: Subway>, <FiberBoxes: 烟台移动集团客户大楼>, <FiberBoxes: 国贸大厦>, <FiberBoxes: 海阳方圆大酒店>, <FiberBoxes: 中国移动海阳分公司>, <FiberBoxes: 凤城镇政府>, <FiberBoxes: 烟台莱山国际机场>, <FiberBoxes: 环监中心>]>
+>>> FiberBoxes.objects.all().filter(town='毓璜顶街道办')
+<GeoQuerySet [<FiberBoxes: 体育之家>, <FiberBoxes: 碧海大厦>, <FiberBoxes: 烟台市游泳馆>]>
+>>> FiberBoxes.objects.all().filter(town='毓璜顶街道办').update(town='毓璜顶')
+3
+--------------------------------------------------------------------------
+=========================

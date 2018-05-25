@@ -1,0 +1,503 @@
+=======================
+Django Models: Basic Data Access
+---------------------------
+https://djangobook.com/django-models-basic-data-access/
+---------------------------
+=======================
+
+
+=======================
+# 启动Shell命令
+--------------------------------
+python manage.py shell
+--------------------------------
+
+--------------------------------
+>>> from books.models import Publisher
+>>> p1 = Publisher(name='Apress', address='2855 Telegraph Avenue',
+...     city='Berkeley', state_province='CA', country='U.S.A.',
+...     website='http://www.apress.com/')
+>>> p1.save()
+>>> p2 = Publisher(name="O'Reilly", address='10 Fawcett St.',
+...     city='Cambridge', state_province='MA', country='U.S.A.',
+...     website='http://www.oreilly.com/')
+>>> p2.save()
+>>> publisher_list = Publisher.objects.all()
+>>> publisher_list
+<QuerySet [<Publisher: Publisher object>, <Publisher: Publisher object>]>
+--------------------------------
+
+
+If you want to create an object and save it to the database in a single step, use the `objects.create()` method. 
+This example is equivalent to the example above:
+如果您想要通过一步就实现：创建一个对象，并将其保存到数据库中，请使用`objects.create（）`方法。
+这个例子等同于上面的例子：
+--------------------------------
+>>> p1 = Publisher.objects.create(name='Apress',
+...     address='2855 Telegraph Avenue',
+...     city='Berkeley', state_province='CA', country='U.S.A.',
+...     website='http://www.apress.com/')
+>>> p2 = Publisher.objects.create(name="O'Reilly",
+...     address='10 Fawcett St.', city='Cambridge',
+...     state_province='MA', country='U.S.A.',
+...     website='http://www.oreilly.com/')
+>>> publisher_list = Publisher.objects.all()
+>>> publisher_list 
+<QuerySet [<Publisher: Publisher object>, <Publisher: Publisher object>]>
+--------------------------------
+我自己做一个：
+--------------------------------
+p3 = Publisher.objects.create(name="商务印书馆",
+...     address=' 北京王府井大街36号', city='北京',
+...     state_province='北京市', country='中国',
+...     website='http://www.cp.com.cn/')
+--------------------------------
+
+##　Adding Model String Representations
+添加模型字符串表示
+
+We can fix this easily by adding a method called `__str__()` to our Publisher class. 
+A `__str__()` method tells Python how to display a human-readable representation of an object. 
+You can see this in action by adding a `__str__()` method to the three models:
+我们可以通过向我们的`Publisher类`，添加一个名为`__str __（）`的方法来解决这个问题。
+ `__str __（）`方法告诉Python如何显示一个｀对象｀的人类可读的｀表示｀。
+你可以在这三个模型中添加一个`__str __（）`方法来实现：
+------------------------------------------------
+from django.db import models
+
+class Publisher(models.Model):
+    name = models.CharField(max_length=30)
+    address = models.CharField(max_length=50)
+    city = models.CharField(max_length=60)
+    state_province = models.CharField(max_length=30)
+    country = models.CharField(max_length=50)
+    website = models.URLField()
+
+    def __str__(self):
+        return self.name
+
+class Author(models.Model):
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=40)
+    email = models.EmailField()
+
+    def __str__(self):
+        return u'%s %s' % (self.first_name, self.last_name)
+
+class Book(models.Model):
+    title = models.CharField(max_length=100)
+    authors = models.ManyToManyField(Author)
+    publisher = models.ForeignKey(Publisher)
+    publication_date = models.DateField()
+
+    def __str__(self):
+        return self.title
+------------------------------------------------
+
+### Inserting and Updating Data
+插入和更新数据
+
+------------------------------------------------
+>>> p = Publisher(name='GNW Independent Publishing',
+...         address='123 Some Street',
+...         city='Hamilton',
+...         state_province='NSW',
+...         country='AUSTRALIA',
+...         website='http://djangobook.com/')
+------------------------------------------------
+As we noted above, this act of instantiating a model class does not touch the database. 
+The record isn’t saved into the database until you call `save()`, like this:
+正如我们上面提到的，这个实例化`模型类`的`行为`不会`触及``数据库`。
+在调用`save（）`之前，`记录`不会被`保存`到`数据库`中，如下所示：
+------------------------------------------------
+>>> p.save()
+------------------------------------------------
+## 查看其id
+------------------------------------------------
+>>> p.id
+3    # this will differ based on your own data 
+------------------------------------------------
+执行下列语句：
+------------------------------------------------
+>>> p.name = 'GNW Independent Publishing'
+>>> p.save()
+------------------------------------------------
+
+The preceding `save()` statement will result in roughly the following SQL:
+前面的`save（）`语句将导致大致如下的SQL：
+------------------------------------------------
+UPDATE books_publisher SET
+    name = 'GNW Independent Publishing',
+    address='123 Some Street',
+    city='Hamilton',
+    state_province='NSW',
+    country='AUSTRALIA',
+    website='http://djangobook.com/')
+WHERE id = 3;
+------------------------------------------------
+Yes, note that `all` of the fields will be updated, not just the ones that have been changed. 
+Depending on your application, this may cause a race condition. 
+See “Updating Multiple Objects in One Statement” below to find out how to execute this (slightly different) query:
+是的，请注意，`所有的``字段`都将被`更新`，而不仅仅是已被`更改`的`字段`。
+ 根据您的应用程序，这可能会导致一个`条件竞争`。
+请参阅下面的“在一个语句中更新多个对象”以了解如何执行此（略有不同）查询：
+------------------------------------------------
+UPDATE books_publisher SET
+    name = 'GNW Independent Publishing'
+WHERE id=3;
+------------------------------------------------
+===============================
+
+## Selecting Objects
+选择对象
+------------------------------------------------
+>>> Publisher.objects.all()
+------------------------------------------------
+
+This roughly translates to this SQL:
+------------------------------------------------
+SELECT id, name, address, city, state_province, country, website
+FROM books_publisher;
+------------------------------------------------
+
+Let’s take a close look at each part of this Publisher.objects.all() line:
+-------------------------------------------------------------------------
+++ First, we have the model we defined, `Publisher`. 
+No surprise here: when you want to look up data, you use the model for that data.
+++首先，我们有我们定义的`模型--'Publisher'(出版商)。
+这里并不奇怪：当你想查询数据时，你使用该数据的`模型`。
+
+++ Next, we have the `objects` attribute. 
+This is called a `manager`. 
+`Managers` are discussed in detail in Chapter 9. 
+For now, all you need to know is that managers take care of all `table-level` operations on data including, most important, data lookup. 
+All models automatically get an `objects manager`; you’ll use it any time you want to look up model instances.
+++接下来，我们有`objects`属性。
+这叫做一个'manager'（管理器）。
+第9章将详细讨论“manager”-`管理器`。
+ 就目前而言，您只需要知道`manager`负责所有数据的“表级”操作，包括最重要的`数据查询`。
+所有`模型`自动获得`对象管理器';您随时可以使用它来查找`模型``实例`。
+
+++ Finally, we have `all()`. 
+This is a method on the objects manager that returns all the rows in the database in a `QuerySet` – an object that represents a specific set of rows from the database. 
+Appendix C deals with QuerySets in detail.
+++最后，我们有`all（）`。
+这是`对象管理器`上的一种方法，它返回`数据库`中所有行的“QuerySet” - 一个代表数据库中特定行集的`对象`。
+`附录C`，详细讨论QuerySets。
+-------------------------------------------------------------------------
+Any database lookup is going to follow this general pattern – we’ll call methods on the manager attached to the model we want to query against.
+任何数据库查找都将遵循这种通用模式 - 我们将调用连接到我们要查询的`模型`的`管理器`上的`方法`。
+===============================
+
+===============================
+###Filtering Data
+过滤数据
+
+# 使用 `filter()`方法
+ In the Django API, you can filter your data using the `filter()` method:
+----------------------------
+>>> Publisher.objects.filter(name='Apress')
+<QuerySet [<Publisher: Apress>]>
+----------------------------
+
+`filter()` takes keyword arguments that get translated into the appropriate SQL `WHERE` clauses. 
+The preceding example would get translated into something like this:
+`filter（）`接受关键字参数，并将其转换为合适的`SQL WHERE语句`。
+前面的例子会被翻译成这样的东西：
+-------------------------------
+SELECT id, name, address, city, state_province, country, website
+FROM books_publisher
+WHERE name = 'Apress';
+-------------------------------
+You can pass multiple arguments into `filter()` to narrow down things further:
+您可以将多个参数传递给`filter()`来进一步缩小范围：
+-------------------------------
+>>> Publisher.objects.filter(country="U.S.A.",
+state_province="CA")
+<QuerySet [<Publisher: Apress>]>
+-------------------------------
+Those multiple arguments get translated into `SQL AND` clauses. 
+Thus, the example in the code snippet translates into the following:
+这些多个参数被转换成`SQL AND`子句。
+ 因此，代码片段中的示例转化为以下内容：
+-------------------------------
+SELECT id, name, address, city, state_province, country, website
+FROM books_publisher
+WHERE country = 'U.S.A.'
+AND state_province = 'CA';
+-------------------------------
+
+Notice that by default the lookups use the `SQL = operator` to do exact match lookups. 
+Other lookup types are available:
+请注意，默认情况下，查找使用“SQL =运算符”来执行完全匹配查找。
+其他的`查找类型`也是可用的：
+-------------------------------
+>>> Publisher.objects.filter(name__contains="press")
+<QuerySet [<Publisher: Apress>]>
+-------------------------------
+That’s a double underscore there between `name` and `contains`. 
+Like Python itself, Django uses the double underscore to signal that something “magic” is happening – here, the `__contains` part gets translated by Django into a `SQL LIKE` statement:
+这是`name`和`contains`之间的`双下划线`。
+与Python本身一样，`Django`使用`双下划线`表示发生了一些“魔术” - 在这里，由`__contains`部分被Django翻译成`SQL LIKE`语句：
+-------------------------------
+SELECT id, name, address, city, state_province, country, website
+FROM books_publisher
+WHERE name LIKE '%press%';
+-------------------------------
+Many other types of lookups are available, including `icontains` (case-insensitive `LIKE`), `startswith` and `endswith`, and `range (SQL BETWEEN queries). 
+`Appendix C` describes all of these lookup types in detail.
+许多其他类型的查找可用，包括`icontains`（不区分大小写的`LIKE`），`startswith`和`endswith`以及`range（SQL BETWEEN查询）。
+`附录C'详细描述了所有这些查找类型。
+=========================================
+
+=========================================
+### Retrieving Single Objects
+检索单个对象
+
+The `filter()` examples above all returned a `QuerySet`, which you can treat like a list. 
+Sometimes it’s more convenient to fetch only a single object, as opposed to a `QuerySet`. 
+That’s what the `get()` method is for:
+上面的`filter（）`例子都返回了一个`QuerySet`，你可以像`列表`一样处理。
+有时候，只取`一个`对象比`查询集`更方便。
+这就是`get()`方法的用途：
+---------------------------
+>>> Publisher.objects.get(name="Apress")
+<Publisher: Apress>
+---------------------------
+Instead of a QuerySet, only a single object is returned. Because of that, a query resulting in multiple objects will cause an exception:
+只返回一个对象，而不是一个`QuerySet`。因此，导致`多个`对象的`查询`，将导致一个异常：
+---------------------------
+>>> Publisher.objects.get(country="U.S.A.")
+Traceback (most recent call last):
+    ...
+books.models.MultipleObjectsReturned: get() returned more than one Publisher - it returned 2!
+---------------------------
+
+A query that returns no objects also causes an exception:
+没有返回对象的`查询`也会导致一个`异常`：
+---------------------------
+>>> Publisher.objects.get(name="Penguin")
+Traceback (most recent call last):
+    ...
+books.models.DoesNotExist: Publisher matching query does not exist.
+---------------------------
+
+The `DoesNotExist` exception is an attribute of the model’s class – `Publisher.DoesNotExist`. 
+In your applications, you’ll want to trap these exceptions, like this:
+`DoesNotExist`异常是`模型类`的一个`属性` - `Publisher.DoesNotExist`。
+在您的应用程序中，您需要`捕获`这些`异常`，如下所示：
+---------------------------
+try:
+    p = Publisher.objects.get(name='Apress')
+except Publisher.DoesNotExist:
+    print ("Apress isn't in the database yet.")
+else:
+    print ("Apress is in the database.")
+---------------------------
+===============================
+
+===============================
+### Ordering Data
+对数据进行排序
+
+## 使用`order_by()`方法:
+---------------------------
+>>> Publisher.objects.order_by("name")
+<QuerySet [<Publisher: Apress>, <Publisher: GNW Independent Publishing>, <Publisher: O'Reilly>]>
+---------------------------
+You can also specify reverse ordering by prefixing the field name with a “-” (that’s a minus character):
+您还可以通过在字段名称前加一个“ - ”（这是一个负号字符）来指定反向排序：
+---------------------------
+>>> Publisher.objects.order_by("-name")
+<QuerySet [<Publisher: O'Reilly>, <Publisher: GNW Independent Publishing>, <Publisher: Apress>]>
+---------------------------
+
+## `Django`允许您在模型中指定`默认排序`：
+---------------------------
+class Publisher(models.Model):
+    name = models.CharField(max_length=30)
+    address = models.CharField(max_length=50)
+    city = models.CharField(max_length=60)
+    state_province = models.CharField(max_length=30)
+    country = models.CharField(max_length=50)
+    website = models.URLField()
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['name']
+---------------------------
+
+Here, I’ve introduced a new concept: the `class Meta`, which is a class that’s embedded within the `Publisher class` definition (i.e., it’s indented to be within `class Publisher`). 
+You can use this `Meta class` on any model to specify various `model-specific` options. 
+A full reference of `Meta` options is available in `Appendix B`, but for now, we’re concerned with the ordering option. 
+If you specify this, it tells Django that unless an ordering is given explicitly with `order_by()`, all Publisher objects should be ordered by the name field whenever they’re retrieved with the Django database API.
+
+在这里，我介绍了一个新概念：`class Meta`，它是一个嵌入到'Publisher class`定义中的类（即，它在模型类-`class Publisher``里面`）。
+你可以在任何模型上使用这个`Meta class`来指定不同的`model-specific`（模型特定的）选项。
+“附录B”中提供了“Meta”选项的完整参考，但现在我们关注`排序选项`。
+如果指定了这个参数，它会告诉Django，除非使用`order_by()`明确给出`排序`，否则每当使用`Django数据库API``检索`时，所有`Publisher对象`都应该按`名称`字段`排序`。
+===============================
+
+===============================
+### Chaining Lookups
+链式查找
+
+You’ve seen how you can `filter` data, and you’ve seen how you can `order` it. 
+Often, of course, you’ll need to do both. 
+In these cases, you simply “chain” the lookups together:
+你已经看过，你如何`过滤`数据，并且你已经看到你如何“排序”它。
+当然，通常你需要`同时`做这两件事。
+在这些情况下，您只需将查询“链接”(`chain`)在一起即可：
+---------------------------
+>>> Publisher.objects.filter(country="U.S.A.").order_by("-name")
+<QuerySet [<Publisher: O'Reilly>, <Publisher: Apress>]>
+---------------------------
+
+As you might expect, this translates to a SQL query with both a `WHERE` and an `ORDER` BY:
+---------------------------
+SELECT id, name, address, city, state_province, country, website
+FROM books_publisher
+WHERE country = 'U.S.A'
+ORDER BY name DESC;
+---------------------------
+================================
+
+================================
+### Slicing Data
+切片数据
+================================
+
+================================
+### Updating Multiple Objects in One Statement
+在一个语句中更新多个对象
+
+I pointed out in the “Inserting and Updating Data” section that the model `save()` method updates all columns in a row. 
+Depending on your application, you may want to update only a subset of columns. 
+For example, let’s say we want to update the `Apress Publisher` to change the name from 'Apress' to 'Apress Publishing'. 
+Using `save()`, it would look something like this:
+我在“插入和更新数据”一节中指出，模型的`save()`方法,更新`一行`中的`所有列`。
+根据您的应用程序，您可能只想更新`某几列`。
+例如，假设我们想更新'Apress Publisher'以将名称从'Apress'更改为'Apress Publishing'。
+使用`save()`，它看起来像这样：
+-----------------------------------------
+>>> p = Publisher.objects.get(name='Apress')
+>>> p.name = 'Apress Publishing'
+>>> p.save()
+-----------------------------------------
+This roughly translates to the following SQL:
+-----------------------------------------
+SELECT id, name, address, city, state_province, country, website
+FROM books_publisher
+WHERE name = 'Apress';
+
+UPDATE books_publisher SET
+    name = 'Apress Publishing',
+    address = '2855 Telegraph Ave.',
+    city = 'Berkeley',
+    state_province = 'CA',
+    country = 'U.S.A.',
+    website = 'http://www.apress.com'
+WHERE id = 1;
+-----------------------------------------
+
+为此，请在QuerySet对象上使用`update()`方法。这是一个例子：
+-----------------------------------------
+>>> Publisher.objects.filter(id=1).update(name='Apress Publishing')
+-----------------------------------------
+The SQL translation here is much more efficient and has no chance of race conditions:
+-----------------------------------------
+UPDATE books_publisher
+SET name = 'Apress Publishing'
+WHERE id = 1;
+-----------------------------------------
+
+The `update()` method works on any `QuerySet`, which means you can edit multiple records in bulk. 
+Here’s how you might change the country from 'U.S.A.' to USA in each Publisher record:
+`update()`方法适用于任何`QuerySet`，这意味着您可以`批量`编辑`多个记录`。
+以下是你如何从“U.S.A.”改变为`USA`。到每个`出版商`的`记录`中：
+-----------------------------------------
+>>> Publisher.objects.all().update(country='USA')
+3 
+-----------------------------------------
+The update() method has a return value – an integer representing how many records changed. In the above example, we got 3.
+`update()`方法，有一个`返回值` - 一个表示有`多少``记录`被更改的`整数`。在上面的例子中，我们得到了`3`。
+
+
+
+# 例如，将街道办事处为：`毓璜顶街道办`，更新为`毓璜顶`
+FiberBoxes.objects.all().filter(town='毓璜顶街道办').update(town='毓璜顶')
+=========================
+
+
+-------------------------------------
+具体执行结果如下：
+--------------------------------------------------------------------------
+type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> from reporter.models import FiberBoxes
+>>> FiberBoxes.objects.all()
+<GeoQuerySet [<FiberBoxes: 海港物业>, <FiberBoxes: 文化中心>, <FiberBoxes: 体育之家>, <FiberBoxes: 碧海大厦>, <FiberBoxes: 烟台市游泳馆>, <FiberBoxes: Subway>, <FiberBoxes: 烟台移动集团客户大楼>, <FiberBoxes: 国贸大厦>, <FiberBoxes: 海阳方圆大酒店>, <FiberBoxes: 中国移动海阳分公司>, <FiberBoxes: 凤城镇政府>, <FiberBoxes: 烟台莱山国际机场>, <FiberBoxes: 环监中心>]>
+>>> FiberBoxes.objects.all().filter(town='毓璜顶街道办')
+<GeoQuerySet [<FiberBoxes: 体育之家>, <FiberBoxes: 碧海大厦>, <FiberBoxes: 烟台市游泳馆>]>
+>>> FiberBoxes.objects.all().filter(town='毓璜顶街道办').update(town='毓璜顶')
+3
+--------------------------------------------------------------------------
+=========================
+================================
+
+### Deleting Objects
+删除对象
+
+To delete an object from your database, simply call the object’s `delete()` method:
+要从数据库中删除一个对象，只需调用该对象的`delete（）`方法：
+--------------------------------------------------------------------------
+>>> p = Publisher.objects.get(name="O'Reilly")
+>>> p.delete()
+(1, {'books.Publisher': 1})
+>>> Publisher.objects.all()
+<QuerySet [<Publisher: Apress>, <Publisher: GNW Independent Publishing>]>
+--------------------------------------------------------------------------
+
+Note the return value from Django when you delete an object – Django first lists the total number of records that will be affected (in this case one) and a dictionary containing each of the models (tables) affected and how many records were deleted in each table.
+注意: Django在删除对象时的返回值 -  Django首先列出了将受到影响的记录总数（本例中为1）以及一个包含受影响的每个模型（表）的`字典`以及每个`表`中记录被删除的数量。
+
+You can also delete objects in bulk by calling `delete()` on the result of any `QuerySet`. 
+This is similar to the `update()` method we showed in the last section:
+您也可以通过对任何QuerySet的结果上，调用`delete()`来`批量地`删除对象。
+这与我们在上一节中展示的`update()`方法类似：
+--------------------------------------------------------------------------
+>>> Publisher.objects.filter(country='USA').delete()
+(1, {'books.Publisher': 1})
+>>> Publisher.objects.all().delete()
+(1, {'books.Publisher': 1})
+>>> Publisher.objects.all()
+<QuerySet []>
+--------------------------------------------------------------------------
+Be careful deleting your data! 
+As a precaution against deleting all of the data in a particular table, Django requires you to explicitly use `all()` if you want to delete everything in your table. 
+For example, this won’t work:
+小心删除您的数据！
+为防止删除特定表中的`所有数据`，Django要求您明确使用`all()`，如果您想`删除`表中的`所有内容`。
+例如，这不起作用：
+--------------------------------------------------------------------------
+>>> Publisher.objects.delete()
+Traceback (most recent call last):
+  File "", line 1, in 
+AttributeError: 'Manager' object has no attribute 'delete'
+--------------------------------------------------------------------------
+But it’ll work if you add the all() method:
+必须使用`all()`方法：
+--------------------------------------------------------------------------
+>>> Publisher.objects.all().delete()
+--------------------------------------------------------------------------
+Note, If you’re just deleting a subset of your data, you don’t need to include `all()`. 
+To repeat a previous example:
+请注意，如果您只是删除了一部分数据，则不需要包含`all()`。
+重复一个前面的例子：
+--------------------------------------------------------------------------
+>>> Publisher.objects.filter(country='USA').delete()
+--------------------------------------------------------------------------
+
+================================

@@ -1,0 +1,204 @@
+Managing Users in the Admin
+--------------------
+https://djangobook.com/managing-users-admin/
+--------------------
+
+When you have both django.contrib.admin and django.contrib.auth installed, the admin provides a convenient way to view and manage users, groups, and permissions.
+Users can be created and deleted like any Django model.
+Groups can be created, and permissions can be assigned to users or groups.
+A log of user edits to models made within the admin is also stored and displayed.
+
+当您同时安装了`django.contrib.admin`和`django.contrib.auth`时，`管理员`可以方便地查看和管理`用户`，`组`和`权限`。
+`用户`可以像任何Django`模型`一样被`创建`和`删除`。
+可以创建`组`，并且可以将`权限`分配给`用户`或`组`。
+还将`存储`并`显示`用户在`管理后台`中`编辑`模型的`日志`。
+
+===================
+Creating Users
+
+==================
+Password Management in Django
+Django中的`密码管理`
+
+Password management is something that should generally not be reinvented unnecessarily, and Django endeavors to provide a secure and flexible set of tools for managing user passwords. This document describes how Django stores passwords, how the storage hashing can be configured, and some utilities to work with hashed passwords.
+
+`密码管理`通常不会被不必要地`重新发明`，Django努力提供一套安全灵活的`工具`来管理用户`密码`。
+本文档描述了Django如何`存储密码`，如何配置`存储散列`，以及某些`实用程序`使用`散列密码`。
+
+===================
+How Django Stores Passwords
+Django如何存储密码
+
+Django provides a flexible password storage system and uses PBKDF2 by default. The password attribute of a User object is a string in this format:
+Django提供了`一个`灵活的`密码存储系统`，默认情况下使用`PBKDF2`。用户对象的`密码属性`是如下`格式`的一个`字符串`：
+-------------------------
+<algorithm>$<iterations>$<salt>$<hash>
+-------------------------
+Those are the components used for storing a User’s password, separated by the dollar-sign character and consist of: the hashing algorithm, the number of algorithm iterations (work factor), the random salt, and the resulting password hash.
+这些`组件`是用于`存储`一个`用户`的`密码`的`组件`，由`美元符号`字符分隔，并由以下组成：`哈希算法`，`算法迭代次数`（工作因子），`随机盐`和生成的`密码哈希`。
+
+The algorithm is one of a number of one-way hashing or password storage algorithms Django can use (see below). Iterations describe the number of times the algorithm is run over the hash. Salt is the random seed used and the hash is the result of the one-way function. By default, Django uses the PBKDF2 algorithm with a SHA256 hash, a password stretching mechanism recommended by NIST. This should be sufficient for most users: it’s quite secure, requiring massive amounts of computing time to break. However, depending on your requirements, you may choose a different algorithm, or even use a custom algorithm to match your specific security situation. Again, most users shouldn’t need to do this – if you’re not sure, you probably don’t.
+该算法是Django可以使用的许多`单向``哈希`或`密码存储算法`之一（见下文）。
+`迭代`描述算法在`散列`上运行的`次数`。 
+`Salt`是`随机种子`，`散列`是`单向函数`的结果。
+默认情况下，Django使用`PBKDF2`算法和一个`SHA256哈希`，`NIST`建议使用一种`密码扩展机制`。
+对于大多数用户来说，这应该足够了：它非常安全，需要大量计算时间才能打破。
+但是，根据您的要求，您可以选择不同的算法，甚至可以使用`自定义算法`来匹配特定的安全情况。
+同样，`大多数`用户不需要这样做 - 如果你不确定，你可能不需要。
+
+If you do, please read on: Django chooses the algorithm to use by consulting the PASSWORD_HASHERS setting. This is a list of hashing algorithm classes that this Django installation supports. The first entry in this list (that is, settings.PASSWORD_HASHERS[0]) will be used to store passwords, and all the other entries are valid hashers that can be used to check existing passwords.
+如果你需要，请继续阅读：`Django通过查询`PASSWORD_HASHERS`设置，来选择要使用的`算法`。
+这是Django安装支持的一个`哈希算法类`的`列表`。
+此列表中的第一个条目（即`settings.PASSWORD_HASHERS[0]`）将被用于`存储密码`，并且所有`其他条目`都是有效的`哈希器`，可用于`检查`现有`密码`。
+
+This means that if you want to use a different algorithm, you’ll need to modify PASSWORD_HASHERS to list your preferred algorithm first in the list. The default for PASSWORD_HASHERS is:
+这意味着如果你想使用一个不同的算法，你需要修改`PASSWORD_HASHERS`来首先在列表中列出你的`首选算法`。 `PASSWORD_HASHERS的`默认值是：
+-------------
+PASSWORD_HASHERS = [       
+'django.contrib.auth.hashers.PBKDF2PasswordHasher',       
+'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',       
+'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',       
+'django.contrib.auth.hashers.BCryptPasswordHasher',       
+'django.contrib.auth.hashers.SHA1PasswordHasher',       
+'django.contrib.auth.hashers.MD5PasswordHasher',       
+'django.contrib.auth.hashers.CryptPasswordHasher',
+]
+-------------
+This means that Django will use `PBKDF2` to store all passwords, but will support checking passwords stored with PBKDF2SHA1, bcrypt, SHA1 etc. 
+The next few sections describe a couple of common ways advanced users may want to modify this setting.
+
+这意味着Django将使用`PBKDF2`来存储所有密码，但将支持检查存储在`PBKDF2SHA1`，`bcrypt`，`SHA1`等中的`密码`。
+接下来的几节将介绍`高级用户`可能想要修改此设置的几种常见方式。
+======================================================
+Using Bcrypt with Django
+
+Bcrypt is a popular password storage algorithm that’s specifically designed for long-term password storage. It’s not the default used by Django since it requires the use of third-party libraries, but since many people may want to use it, Django supports bcrypt with minimal effort.
+Bcrypt是一种流行的`密码存储算法`，专门用于`长期密码存储`。
+这不是Django使用的`默认设置`，因为它需要使用`第三方库`，但由于许多人可能想要使用它，Django只需`很少的`努力即可支持`bcrypt`。
+
+
+To use Bcrypt as your default storage algorithm, do the following:
+要将`Bcrypt`用作你的`默认的``存储算法`，请执行以下操作：
+
+1. Install the bcrypt library. This can be done by running pip install django[bcrypt], or by downloading the library and installing it with python setup.py install.
+1. 安装`bcrypt`库。这可以通过运行`pip install django [bcrypt]`来完成，或者通过下载库并使用`python setup.py install`进行安装。
+
+2. Modify PASSWORD_HASHERS to list BCryptSHA256PasswordHasher first. That is, in your settings file, you’d put:
+2. 修改 `PASSWORD_HASHERS` 以首先列出`BCryptSHA256PasswordHasher`。也就是说，在你的`设置文件`中，你会发现：
+----------------------
+ PASSWORD_HASHERS = [       
+ 'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',       
+ 'django.contrib.auth.hashers.BCryptPasswordHasher',       
+ 'django.contrib.auth.hashers.PBKDF2PasswordHasher',       
+ 'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',       
+ 'django.contrib.auth.hashers.SHA1PasswordHasher',       
+ 'django.contrib.auth.hashers.MD5PasswordHasher',       
+ 'django.contrib.auth.hashers.CryptPasswordHasher',
+ ]
+----------------------
+(You need to keep the other entries in this list, or else Django won’t be able to upgrade passwords; see below).
+（您需要将其他条目保留在此列表中，否则Django将无法升级密码;请参阅下文）。
+
+That’s it – now your Django install will use bcrypt as the default storage algorithm.
+就是这样 - 现在你的`Django`安装将使用`bcrypt`作为`默认`的`存储算法`。
+===========================
+Password truncation with BCryptPasswordHasher
+用BCryptPasswordHasher`截断`密码
+
+The designers of bcrypt truncate all passwords at 72 characters which means that bcrypt(password_with_100_chars) == bcrypt(password_with_100_chars[:72]). The original BCryptPasswordHasher does not have any special handling and thus is also subject to this hidden password length limit.
+`bcrypt`的`设计者`将所有`密码``截断`为`72个`字符，这意味着`bcrypt（password_with_100_chars）== bcrypt（password_with_100_chars [：72]）。
+原始的`BCryptPasswordHasher`没有任何特殊处理，因此也受到此`隐藏`的`密码长度``限制`。
+
+BCryptSHA256PasswordHasher fixes this by first hashing the password using sha256. This prevents the password truncation and so should be preferred over the BCryptPasswordHasher. The practical ramification of this truncation is pretty marginal as the average user does not have a password greater than 72 characters in length and even being truncated at 72, the compute powered required to brute force bcrypt in any useful amount of time is still astronomical. Nonetheless, we recommend you use BCryptSHA256PasswordHasher anyway on the principle of “better safe than sorry”.
+
+`BCryptSHA256PasswordHasher`通过首先使用`sha256`对`密码`进行`散列`来解决此问题。
+这样可以防止`密码截断`，因此应优先于`BCryptPasswordHasher`。由于`普通用户`的`密码`长度不超过`72个字符`，甚至被截断为`72`，所以在任何有用的时间内`暴力破解`所需的`计算能力`仍然是`天文数字`，因此这种截断的实际分支相当微不足道。
+尽管如此，我们仍建议您使用`BCryptSHA256PasswordHasher`，原则上“Safe比Sorry更好”。
+===========================
+Other bcrypt implementations
+其他bcrypt实现
+
+There are several other implementations that allow bcrypt to be used with Django. Django’s bcrypt support is NOT directly compatible with these. To upgrade, you will need to modify the hashes in your database to be in the form bcrypt$(raw bcrypt output).
+还有`其他`几个实现允许`bcrypt`与`Django`一起使用。 
+Django的`bcrypt`支持与这些`不`直接兼容。
+要进行升级，您需要修改数据库中的`哈希`以`bcrypt $（原始bcrypt输出）`的格式。
+===========================
+Increasing the work factor
+
+The PBKDF2 and bcrypt algorithms use a number of iterations or rounds of hashing. This deliberately slows down attackers, making attacks against hashed passwords harder. However, as computing power increases, the number of iterations needs to be increased.
+`PBKDF2`和`bcrypt`算法,使用`多次`迭代或`轮次`散列。
+这有意地`减缓`了攻击者的`攻击速度`，使对`哈希密码`的攻击更加`困难`。
+但是，随着计算能力的增加，`迭代``次数`需要增加。
+
+The Django development team have chosen a reasonable default (and will increase it with each release of Django), but you may wish to tune it up or down, depending on your security needs and available processing power. To do so, you’ll subclass the appropriate algorithm and override the iterations parameters.
+Django开发团队已经选择了一个合理的`默认值`（并且在每个`Django`版本中都会`增加`它），
+但是您可能希望根据您的`安全需求`和可用的`处理能力`来调整它。
+为此，您将继承适当的算法并`覆盖``迭代`参数。
+
+For example, to increase the number of iterations used by the default PBKDF2 algorithm:
+例如，要增加默认`PBKDF2`算法使用的`迭代次数`，请执行以下操作：
+------------------
+1. Create a subclass of django.contrib.auth.hashers.PBKDF2PasswordHasher:
+1. 创建d一个`jango.contrib.auth.hashers.PBKDF2PasswordHasher`的`子类`：
+------------------------
+ from django.contrib.auth.hashers import PBKDF2PasswordHasher
+
+ class MyPBKDF2PasswordHasher(PBKDF2PasswordHasher): 
+     iterations = PBKDF2PasswordHasher.iterations * 100
+------------------------
+2. Save this somewhere in your project. For example, you might put this in a file like myproject/hashers.py.
+2. 把它保存在你项目的某个地方。例如，你可以把它放在像`myproject/hashers.py`这样的文件中。
+
+3. Add your new hasher as the first entry in PASSWORD_HASHERS:
+3. 将新的`散列器`添加为`PASSWORD_HASHERS`中的`第一个``条目`：
+------------------------
+ PASSWORD_HASHERS = [
+   'myproject.hashers.MyPBKDF2PasswordHasher',
+   'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+   # ... #
+   ]
+------------------------
+That’s it – now your Django install will use more iterations when it stores passwords using PBKDF2.
+就是这样 - 现在，当您使用`PBKDF2`存储密码时，您的Django安装将使用`更多``迭代`。
+------------------
+===========================
+
+======================================================
+Password Upgrading
+密码升级
+
+When users log in, if their passwords are stored with anything other than the preferred algorithm, Django will automatically upgrade the algorithm to the preferred one. This means that old installs of Django will get automatically more secure as users log in, and it also means that you can switch to new (and better) storage algorithms as they get invented.
+
+当`用户``登录`时，如果他们的`密码`与`首选算法`以外的任何`其他密码`一起存储，Django会`自动`将`算法``升级`到`首选算法`。
+这意味着当`用户``登录`时，`旧的`Django安装会`自动`变得`更加安全`，这也意味着您可以在`创建`新的（更好的）`存储算法`时`切换`。
+
+However, Django can only upgrade passwords that use algorithms mentioned in PASSWORD_HASHERS, so as you upgrade to new systems you should make sure never to remove entries from this list. If you do, users using unmentioned algorithms won’t be able to upgrade. Passwords will be upgraded when changing the PBKDF2 iteration count.
+但是，Django只能升级使用`PASSWORD_HASHERS`中提及的`算法`的`密码`，因此在`升级`到新系统时，应确保`永不删除`此列表中的`条目`。
+如果这样做，使用`未提及算法`的`用户`将`无法升级`。更改`PBKDF2``迭代次数`时，`密码`将被`升级`。
+======================================================
+Manually Managing a User’s Password
+手动管理用户的密码
+
+The django.contrib.auth.hashers module provides a set of functions to create and validate hashed password. You can use them independently from the User model.
+`django.contrib.auth.hashers`模块，提供了一组`函数`来`创建`和`验证``散列密码`。您可以独立于`用户模型`使用它们。
+
+If you’d like to manually authenticate a user by comparing a plain-text password to the hashed password in the database, use the function check_password(). It takes two arguments: the plain-text password to check, and the full value of a user’s password field in the database to check against, and returns True if they match, False
+otherwise.
+如果您想通过将`纯文本密码`与`数据库`中的`散列密码`进行`比较`来`手动``验证用户`，请使用函数`check_password（）`。
+它有两个`参数`：要检查的`纯文本密码`以及`数据库`中要检查的`用户``密码字段`的`完整值`，如果`匹配`,则返回`True`，否则，返回`False`。
+
+
+make_password() creates a hashed password in the format used by this application. It takes one mandatory argument: the password in plain-text.
+`make_password（）`以该应用程序使用的`格式`创建`散列密码`。它需要一个`强制``参数`：以`纯文本`的`密码`。
+
+Optionally, you can provide a salt and a hashing algorithm to use, if you don’t want to use the defaults (first entry of PASSWORD_HASHERS setting). Currently supported algorithms are: 'pbkdf2_sha256', 'pbkdf2_sha1', 'bcrypt_sha256', 'bcrypt', 'sha1', 'md5', 'unsalted_md5' (only for backward compatibility) and 'crypt' if you have the crypt library installed.
+或者，如果您不想使用`默认值`（`PASSWORD_HASHERS`设置的`第一项`），则可以提供一个`salt`和一个`散列算法`来使用。
+目前，支持的算法是：'pbkdf2_sha256'，'pbkdf2_sha1'，'bcrypt_sha256'，'bcrypt'，'sha1'，'md5'，'unsalted_md5'（仅用于`向后兼容`）和'crypt'（如果安装了`crypt`库）。
+
+If the password argument is None, an unusable password is returned (one that will be never accepted by check_password()).
+如果`密码参数`是`None`，则一个`不可用`的`密码`会被`返回`（一个将不会被`check_password（）`所接受）。
+
+is_password_usable() checks if the given string is a hashed password that has a chance of being verified against check_password().
+`is_password_usable（）`检查给定的`字符串`是否是一个散列密码，有可能通过`check_password（）`的验证。
+
+======================================================
