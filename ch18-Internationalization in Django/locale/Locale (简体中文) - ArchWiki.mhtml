@@ -1,0 +1,2656 @@
+From: <Saved by Blink>
+Snapshot-Content-Location: https://wiki.archlinux.org/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)
+Subject: =?utf-8?Q?Locale=20(=E7=AE=80=E4=BD=93=E4=B8=AD=E6=96=87)=20-=20ArchWiki?=
+Date: Mon, 27 May 2018 01:08:25 -0000
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="text/html";
+	boundary="----MultipartBoundary--8Q8KkWDH0jU2natWIrEITv9XCblqb2Zw3lJLUuxIEV----"
+
+
+------MultipartBoundary--8Q8KkWDH0jU2natWIrEITv9XCblqb2Zw3lJLUuxIEV----
+Content-Type: text/html
+Content-ID: <frame-20-3adb5fb2-f8ee-4da2-a30e-08537457062b@mhtml.blink>
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://wiki.archlinux.org/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)
+
+<!DOCTYPE html><html class=3D"client-js" lang=3D"en" dir=3D"ltr"><head><met=
+a http-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF-8">
+
+<title>Locale (=E7=AE=80=E4=BD=93=E4=B8=AD=E6=96=87) - ArchWiki</title>
+
+
+<link rel=3D"stylesheet" href=3D"https://wiki.archlinux.org/load.php?debug=
+=3Dfalse&amp;lang=3Den&amp;modules=3Dmediawiki.legacy.commonPrint%2Cshared%=
+7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.sty=
+les%7Cskins.vector.styles.responsive%7Czzz.ext.archLinux.styles&amp;only=3D=
+styles&amp;skin=3Dvector">
+
+<style>
+@media screen {
+	.tochidden,.toctoggle{-moz-user-select:none;-webkit-user-select:none;-ms-u=
+ser-select:none;user-select:none}.toctoggle{font-size:94%}}
+@media print {
+	#toc.tochidden,.toc.tochidden,.toctoggle{display:none}}
+.suggestions{overflow:hidden;position:absolute;top:0;left:0;width:0;border:=
+0;z-index:1099;padding:0;margin:-1px 0 0 0}.suggestions-special{position:re=
+lative;background-color:#fff;cursor:pointer;border:solid 1px #aaa;margin:0;=
+margin-top:-2px;display:none;padding:0.25em 0.25em;line-height:1.25em}.sugg=
+estions-results{background-color:#fff;cursor:pointer;border:solid 1px #aaa;=
+padding:0;margin:0}.suggestions-result{color:#000;margin:0;line-height:1.5e=
+m;padding:0.01em 0.25em;text-align:left; overflow:hidden;-o-text-overflow:e=
+llipsis; text-overflow:ellipsis;white-space:nowrap}.suggestions-result-curr=
+ent{background-color:#4c59a6;color:#fff}.suggestions-special .special-label=
+{color:#808080;text-align:left}.suggestions-special .special-query{color:#0=
+00;font-style:italic;text-align:left}.suggestions-special .special-hover{ba=
+ckground-color:#c0c0c0}.suggestions-result-current .special-label,.suggesti=
+ons-result-current .special-query{color:#fff}.highlight{font-weight:bold}</=
+style><style>
+.suggestions a.mw-searchSuggest-link,.suggestions a.mw-searchSuggest-link:h=
+over,.suggestions a.mw-searchSuggest-link:active,.suggestions a.mw-searchSu=
+ggest-link:focus{color:#000;text-decoration:none}.suggestions-result-curren=
+t a.mw-searchSuggest-link,.suggestions-result-current a.mw-searchSuggest-li=
+nk:hover,.suggestions-result-current a.mw-searchSuggest-link:active,.sugges=
+tions-result-current a.mw-searchSuggest-link:focus{color:#fff}.suggestions =
+a.mw-searchSuggest-link .special-query{ overflow:hidden;-o-text-overflow:el=
+lipsis; text-overflow:ellipsis;white-space:nowrap}</style><meta name=3D"Res=
+ourceLoaderDynamicStyles" content=3D"">
+<link rel=3D"stylesheet" href=3D"https://wiki.archlinux.org/load.php?debug=
+=3Dfalse&amp;lang=3Den&amp;modules=3Dsite.styles&amp;only=3Dstyles&amp;skin=
+=3Dvector">
+<meta name=3D"generator" content=3D"MediaWiki 1.30.0">
+<meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=3D1"=
+>
+<link rel=3D"shortcut icon" href=3D"https://wiki.archlinux.org/favicon.ico"=
+>
+<link rel=3D"search" type=3D"application/opensearchdescription+xml" href=3D=
+"https://wiki.archlinux.org/opensearch_desc.php" title=3D"ArchWiki (en)">
+<link rel=3D"EditURI" type=3D"application/rsd+xml" href=3D"https://wiki.arc=
+hlinux.org/api.php?action=3Drsd">
+<link rel=3D"license" href=3D"http://www.gnu.org/copyleft/fdl.html">
+<link rel=3D"alternate" type=3D"application/atom+xml" title=3D"ArchWiki Ato=
+m feed" href=3D"https://wiki.archlinux.org/index.php?title=3DSpecial:Recent=
+Changes&amp;feed=3Datom">
+<!--[if lt IE 9]><script src=3D"/resources/lib/html5shiv/html5shiv.min.js?4=
+0bd4"></script><![endif]-->
+<style>#cVim-command-bar, #cVim-command-bar-mode, #cVim-command-bar-input, =
+#cVim-command-bar-search-results,
+.cVim-completion-item, .cVim-completion-item .cVim-full, .cVim-completion-i=
+tem .cVim-left,
+.cVim-completion-item .cVim-right {
+  font-family: Helvetica, Helvetica Neue, Neue, sans-serif, monospace, Aria=
+l;
+  font-size: 10pt !important;
+  -webkit-font-smoothing: antialiased !important;
+}
+
+#cVim-command-bar {
+  position: fixed;
+  z-index: 2147483646;
+  background-color: #1b1d1e;
+  color: #bbb;
+  display: none;
+  box-sizing: content-box;
+  box-shadow: 0 3px 3px rgba(0,0,0,0.4);
+  left: 0;
+  width: 100%;
+  height: 20px;
+}
+
+#cVim-command-bar-mode {
+  display: inline-block;
+  vertical-align: middle;
+  box-sizing: border-box;
+  padding-left: 2px;
+  height: 100%;
+  width: 10px;
+  padding-top: 2px;
+  color: #888;
+}
+
+#cVim-command-bar-input {
+  background-color: #1b1d1e;
+  color: #bbb;
+  height: 100%;
+  right: 0;
+  top: 0;
+  width: calc(100% - 10px);
+  position: absolute;
+}
+
+#cVim-command-bar-search-results {
+  position: fixed;
+  width: 100%;
+  overflow: hidden;
+  z-index: 2147483647;
+  left: 0;
+  box-shadow: 0 3px 3px rgba(0,0,0,0.4);
+  background-color: #1c1c1c;
+}
+
+.cVim-completion-item, .cVim-completion-item .cVim-full, .cVim-completion-i=
+tem .cVim-left, .cVim-completion-item .cVim-right {
+  text-overflow: ellipsis;
+  padding: 1px;
+  display: inline-block;
+  box-sizing: border-box;
+  vertical-align: middle;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.cVim-completion-item:nth-child(even) {
+  background-color: #1f1f1f;
+}
+
+.cVim-completion-item {
+  width: 100%; left: 0;
+  color: #bcbcbc;
+}
+
+.cVim-completion-item[active] {
+  width: 100%; left: 0;
+  color: #1b1d1e;
+  background-color: #f1f1f1;
+}
+
+.cVim-completion-item[active] span {
+  color: #1b1d1e;
+}
+
+.cVim-completion-item .cVim-left {
+  color: #fff;
+  width: 37%;
+}
+
+.cVim-completion-item .cVim-right {
+  font-style: italic;
+  color: #888;
+  width: 57%;
+}
+
+
+#cVim-link-container, .cVim-link-hint,
+#cVim-hud, #cVim-status-bar {
+  font-family: Helvetica, Helvetica Neue, Neue, sans-serif, monospace, Aria=
+l;
+  font-size: 10pt !important;
+  -webkit-font-smoothing: antialiased !important;
+}
+
+#cVim-link-container {
+  position: absolute;
+  pointer-events: none;
+  width: 100%; left: 0;
+  height: 100%; top: 0;
+  z-index: 2147483647;
+}
+
+.cVim-link-hint {
+  position: absolute;
+  color: #302505 !important;
+  background-color: #ffd76e !important;
+  border-radius: 2px !important;
+  padding: 2px !important;
+  font-size: 8pt !important;
+  font-weight: 500 !important;
+  text-transform: uppercase !important;
+  border: 1px solid #ad810c;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  text-align: center !important;
+  box-shadow: 2px 2px 1px rgba(0,0,0,0.25) !important;
+}
+
+.cVim-link-hint_match {
+  color: #777;
+  text-transform: uppercase !important;
+}
+
+
+#cVim-hud {
+  background-color: rgba(28,28,28,0.9);
+  position: fixed !important;
+  transition: right 0.2s ease-out;
+  z-index: 24724289;
+}
+
+#cVim-hud span {
+  padding: 2px;
+  padding-left: 4px;
+  padding-right: 4px;
+  color: #8f8f8f;
+  font-size: 10pt;
+}
+
+#cVim-frames-outline {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 9999999999;
+  box-sizing: border-box;
+  border: 3px solid yellow;
+}
+</style></head>
+<body class=3D"mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject =
+page-Locale_=E7=AE=80=E4=BD=93=E4=B8=AD=E6=96=87 rootpage-Locale_=E7=AE=80=
+=E4=BD=93=E4=B8=AD=E6=96=87 skin-vector action-view"><div id=3D"archnavbar"=
+ class=3D"noprint">
+    <div id=3D"archnavbarlogo">
+        <p><a id=3D"logo" href=3D"https://www.archlinux.org/"></a></p>
+    </div>
+    <div id=3D"archnavbarmenu">
+        <ul id=3D"archnavbarlist">
+                        <li id=3D"anb-home"><a href=3D"https://www.archlinu=
+x.org/">Home</a></li>            <li id=3D"anb-packages"><a href=3D"https:/=
+/www.archlinux.org/packages/">Packages</a></li>            <li id=3D"anb-fo=
+rums"><a href=3D"https://bbs.archlinux.org/">Forums</a></li>            <li=
+ id=3D"anb-wiki" class=3D"anb-selected"><a href=3D"https://wiki.archlinux.o=
+rg/">Wiki</a></li>            <li id=3D"anb-bugs"><a href=3D"https://bugs.a=
+rchlinux.org/">Bugs</a></li>            <li id=3D"anb-security"><a href=3D"=
+https://security.archlinux.org/">Security</a></li>            <li id=3D"anb=
+-aur"><a href=3D"https://aur.archlinux.org/">AUR</a></li>            <li id=
+=3D"anb-download"><a href=3D"https://www.archlinux.org/download/">Download<=
+/a></li>        </ul>
+    </div>
+</div>
+		<div id=3D"mw-page-base" class=3D"noprint"></div>
+		<div id=3D"mw-head-base" class=3D"noprint"></div>
+		<div id=3D"content" class=3D"mw-body" role=3D"main">
+			<a id=3D"top"></a>
+
+						<div class=3D"mw-indicators mw-body-content">
+</div>
+			<h1 id=3D"firstHeading" class=3D"firstHeading" lang=3D"en">Locale (=E7=
+=AE=80=E4=BD=93=E4=B8=AD=E6=96=87)</h1>
+									<div id=3D"bodyContent" class=3D"mw-body-content">
+									<div id=3D"siteSub" class=3D"noprint">From ArchWiki</div>
+								<div id=3D"contentSub"></div>
+												<div id=3D"jump-to-nav" class=3D"mw-jump">
+					Jump to:					<a href=3D"https://wiki.archlinux.org/index.php/Locale_(%=
+E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#mw-head">navigation</a>, 					<a href=
+=3D"https://wiki.archlinux.org/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%A=
+D%E6%96%87)#p-search">search</a>
+				</div>
+				<div id=3D"mw-content-text" lang=3D"en" dir=3D"ltr" class=3D"mw-content=
+-ltr"><div class=3D"mw-parser-output"><div style=3D"padding: 5px; margin: 0=
+.50em 0; background-color: #DDDDFF; border: thin solid #BBBBDD; overflow: h=
+idden;"><strong> =E7=BF=BB=E8=AF=91=E7=8A=B6=E6=80=81=EF=BC=9A </strong>=E6=
+=9C=AC=E6=96=87=E6=98=AF=E8=8B=B1=E6=96=87=E9=A1=B5=E9=9D=A2 <a href=3D"htt=
+ps://wiki.archlinux.org/index.php/Locale" title=3D"Locale">Locale</a> =E7=
+=9A=84<a href=3D"https://wiki.archlinux.org/index.php/ArchWiki_Translation_=
+Team_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)" title=3D"ArchWiki Translation =
+Team (=E7=AE=80=E4=BD=93=E4=B8=AD=E6=96=87)">=E7=BF=BB=E8=AF=91</a>=EF=BC=
+=8C=E6=9C=80=E5=90=8E=E7=BF=BB=E8=AF=91=E6=97=B6=E9=97=B4=EF=BC=9A2016-02-0=
+5=EF=BC=8C=E7=82=B9=E5=87=BB<a rel=3D"nofollow" class=3D"external text" hre=
+f=3D"https://wiki.archlinux.org/index.php?title=3DLocale&amp;diff=3D0&amp;o=
+ldid=3D409611">=E8=BF=99=E9=87=8C</a>=E5=8F=AF=E4=BB=A5=E6=9F=A5=E7=9C=8B=
+=E7=BF=BB=E8=AF=91=E5=90=8E=E8=8B=B1=E6=96=87=E9=A1=B5=E9=9D=A2=E7=9A=84=E6=
+=94=B9=E5=8A=A8=E3=80=82</div>
+<p>Locales =E8=A2=AB <span class=3D"plainlinks archwiki-template-pkg"><a re=
+l=3D"nofollow" class=3D"external text" href=3D"https://www.archlinux.org/pa=
+ckages/?name=3Dglibc">glibc</a></span> =E5=92=8C=E5=85=B6=E5=AE=83=E9=9C=80=
+=E8=A6=81=E6=9C=AC=E5=9C=B0=E5=8C=96=E7=9A=84=E5=BA=94=E7=94=A8=E7=A8=8B=E5=
+=BA=8F=E5=92=8C=E5=BA=93=E7=94=A8=E6=9D=A5=E8=A7=A3=E6=9E=90=E6=96=87=E6=9C=
+=AC(=E6=88=96=E6=AD=A3=E7=A1=AE=E7=9A=84=E6=98=BE=E7=A4=BA=E5=BD=93=E5=89=
+=8D=E5=8C=BA=E5=9F=9F=E7=9A=84=E6=9F=90=E4=BA=9B=E6=96=87=E5=AD=97=E6=A0=B7=
+=E5=BC=8F,=E5=A6=82=E8=B4=A7=E5=B8=81,=E6=97=B6=E9=97=B4,=E6=97=A5=E6=9C=9F=
+,=E7=89=B9=E6=AE=8A=E5=AD=97=E7=AC=A6=E5=92=8C=E5=85=B6=E4=BB=96=E7=9A=84=
+=E5=8C=BA=E5=9F=9F=E6=A0=BC=E5=BC=8F).
+</p>
+<div id=3D"toc" class=3D"toc"><div class=3D"toctitle"><h2>Contents</h2><spa=
+n class=3D"toctoggle">&nbsp;[<a role=3D"button" tabindex=3D"0" class=3D"tog=
+glelink">hide</a>]&nbsp;</span></div>
+<ul>
+<li class=3D"toclevel-1 tocsection-1"><a href=3D"https://wiki.archlinux.org=
+/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#.E7.94.9F.E6.88.90=
+_locale"><span class=3D"tocnumber">1</span> <span class=3D"toctext">=E7=94=
+=9F=E6=88=90 locale</span></a></li>
+<li class=3D"toclevel-1 tocsection-2"><a href=3D"https://wiki.archlinux.org=
+/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#.E8.AE.BE.E7.BD.AE=
+_locale"><span class=3D"tocnumber">2</span> <span class=3D"toctext">=E8=AE=
+=BE=E7=BD=AE locale</span></a>
+<ul>
+<li class=3D"toclevel-2 tocsection-3"><a href=3D"https://wiki.archlinux.org=
+/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#.E5.85.B6.E5.AE.83=
+.E7.94.A8.E4.BE.8B"><span class=3D"tocnumber">2.1</span> <span class=3D"toc=
+text">=E5=85=B6=E5=AE=83=E7=94=A8=E4=BE=8B</span></a></li>
+</ul>
+</li>
+<li class=3D"toclevel-1 tocsection-4"><a href=3D"https://wiki.archlinux.org=
+/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#.E6.94.AF.E6.8C.81=
+.E7.9A.84.E5.8F.98.E9.87.8F"><span class=3D"tocnumber">3</span> <span class=
+=3D"toctext">=E6=94=AF=E6=8C=81=E7=9A=84=E5=8F=98=E9=87=8F</span></a>
+<ul>
+<li class=3D"toclevel-2 tocsection-5"><a href=3D"https://wiki.archlinux.org=
+/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#LANG:_.E9.BB.98.E8=
+.AE.A4.E7.9A.84_Locale"><span class=3D"tocnumber">3.1</span> <span class=3D=
+"toctext">LANG: =E9=BB=98=E8=AE=A4=E7=9A=84 Locale</span></a></li>
+<li class=3D"toclevel-2 tocsection-6"><a href=3D"https://wiki.archlinux.org=
+/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#LANGUAGE:_.E5.90.8=
+E.E5.A4.87_Locale"><span class=3D"tocnumber">3.2</span> <span class=3D"toct=
+ext">LANGUAGE: =E5=90=8E=E5=A4=87 Locale</span></a></li>
+<li class=3D"toclevel-2 tocsection-7"><a href=3D"https://wiki.archlinux.org=
+/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#LC_TIME:_.E6.97.B6=
+.E9.97.B4.E5.92.8C.E6.97.A5.E6.9C.9F.E6.A0.BC.E5.BC.8F"><span class=3D"tocn=
+umber">3.3</span> <span class=3D"toctext">LC_TIME: =E6=97=B6=E9=97=B4=E5=92=
+=8C=E6=97=A5=E6=9C=9F=E6=A0=BC=E5=BC=8F</span></a></li>
+<li class=3D"toclevel-2 tocsection-8"><a href=3D"https://wiki.archlinux.org=
+/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#LC_COLLATE:_.E6.8E=
+.92.E5.BA.8F.E6.A0.BC.E5.BC.8F"><span class=3D"tocnumber">3.4</span> <span =
+class=3D"toctext">LC_COLLATE: =E6=8E=92=E5=BA=8F=E6=A0=BC=E5=BC=8F</span></=
+a></li>
+</ul>
+</li>
+<li class=3D"toclevel-1 tocsection-9"><a href=3D"https://wiki.archlinux.org=
+/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#LC_ALL"><span clas=
+s=3D"tocnumber">4</span> <span class=3D"toctext">LC_ALL</span></a></li>
+<li class=3D"toclevel-1 tocsection-10"><a href=3D"https://wiki.archlinux.or=
+g/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#.E8.87.AA.E5.AE.9=
+A.E4.B9.89_Locale"><span class=3D"tocnumber">5</span> <span class=3D"toctex=
+t">=E8=87=AA=E5=AE=9A=E4=B9=89 Locale</span></a>
+<ul>
+<li class=3D"toclevel-2 tocsection-11"><a href=3D"https://wiki.archlinux.or=
+g/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#.E8.AE.BE.E7.BD.A=
+E.E6.AF.8F.E5.91.A8.E7.9A.84.E7.AC.AC.E4.B8.80.E5.A4.A9"><span class=3D"toc=
+number">5.1</span> <span class=3D"toctext">=E8=AE=BE=E7=BD=AE=E6=AF=8F=E5=
+=91=A8=E7=9A=84=E7=AC=AC=E4=B8=80=E5=A4=A9</span></a></li>
+</ul>
+</li>
+<li class=3D"toclevel-1 tocsection-12"><a href=3D"https://wiki.archlinux.or=
+g/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#.E6.8F.90.E7.A4.B=
+A.E5.92.8C.E6.8A.80.E5.B7.A7"><span class=3D"tocnumber">6</span> <span clas=
+s=3D"toctext">=E6=8F=90=E7=A4=BA=E5=92=8C=E6=8A=80=E5=B7=A7</span></a>
+<ul>
+<li class=3D"toclevel-2 tocsection-13"><a href=3D"https://wiki.archlinux.or=
+g/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#.E4.BB.8E.E7.BB.8=
+8.E7.AB.AF.E4.B8.AD.E4.BB.A5.E5.8F.A6.E4.B8.80_Locale_.E8.BF.90.E8.A1.8C.E7=
+.A8.8B.E5.BA.8F"><span class=3D"tocnumber">6.1</span> <span class=3D"toctex=
+t">=E4=BB=8E=E7=BB=88=E7=AB=AF=E4=B8=AD=E4=BB=A5=E5=8F=A6=E4=B8=80 Locale =
+=E8=BF=90=E8=A1=8C=E7=A8=8B=E5=BA=8F</span></a></li>
+<li class=3D"toclevel-2 tocsection-14"><a href=3D"https://wiki.archlinux.or=
+g/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#.E4.BB.8E.E6.A1.8=
+C.E9.9D.A2.E4.BB.A5.E5.8F.A6.E4.B8.80_Locale_.E8.BF.90.E8.A1.8C.E7.A8.8B.E5=
+.BA.8F"><span class=3D"tocnumber">6.2</span> <span class=3D"toctext">=E4=BB=
+=8E=E6=A1=8C=E9=9D=A2=E4=BB=A5=E5=8F=A6=E4=B8=80 Locale =E8=BF=90=E8=A1=8C=
+=E7=A8=8B=E5=BA=8F</span></a></li>
+<li class=3D"toclevel-2 tocsection-15"><a href=3D"https://wiki.archlinux.or=
+g/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#Python.2C_ViM_.E5=
+.92.8C_UTF-8"><span class=3D"tocnumber">6.3</span> <span class=3D"toctext">=
+Python, ViM =E5=92=8C UTF-8</span></a></li>
+</ul>
+</li>
+<li class=3D"toclevel-1 tocsection-16"><a href=3D"https://wiki.archlinux.or=
+g/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#.E6.8E.92.E9.99.A=
+4.E9.97.AE.E9.A2.98"><span class=3D"tocnumber">7</span> <span class=3D"toct=
+ext">=E6=8E=92=E9=99=A4=E9=97=AE=E9=A2=98</span></a>
+<ul>
+<li class=3D"toclevel-2 tocsection-17"><a href=3D"https://wiki.archlinux.or=
+g/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#.E6.88.91.E7.9A.8=
+4.E7.BB.88.E7.AB.AF.E4.B8.8D.E6.94.AF.E6.8C.81_UTF-8"><span class=3D"tocnum=
+ber">7.1</span> <span class=3D"toctext">=E6=88=91=E7=9A=84=E7=BB=88=E7=AB=
+=AF=E4=B8=8D=E6=94=AF=E6=8C=81 UTF-8</span></a>
+<ul>
+<li class=3D"toclevel-3 tocsection-18"><a href=3D"https://wiki.archlinux.or=
+g/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#Gnome-terminal_.2=
+F_rxvt-unicode_.E4.B8.8D.E6.94.AF.E6.8C.81_UTF-8"><span class=3D"tocnumber"=
+>7.1.1</span> <span class=3D"toctext">Gnome-terminal / rxvt-unicode =E4=B8=
+=8D=E6=94=AF=E6=8C=81 UTF-8</span></a></li>
+</ul>
+</li>
+<li class=3D"toclevel-2 tocsection-19"><a href=3D"https://wiki.archlinux.or=
+g/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#.E6.88.91.E7.9A.8=
+4.E7.B3.BB.E7.BB.9F.E7.9A.84.E8.AF.AD.E8.A8.80.E8.BF.98.E6.98.AF.E4.B8.8D.E=
+5.AF.B9"><span class=3D"tocnumber">7.2</span> <span class=3D"toctext">=E6=
+=88=91=E7=9A=84=E7=B3=BB=E7=BB=9F=E7=9A=84=E8=AF=AD=E8=A8=80=E8=BF=98=E6=98=
+=AF=E4=B8=8D=E5=AF=B9</span></a></li>
+</ul>
+</li>
+<li class=3D"toclevel-1 tocsection-20"><a href=3D"https://wiki.archlinux.or=
+g/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#.E5.8F.A6.E8.A7.8=
+1"><span class=3D"tocnumber">8</span> <span class=3D"toctext">=E5=8F=A6=E8=
+=A7=81</span></a></li>
+</ul>
+</div>
+
+<h2><span class=3D"mw-headline" id=3D".E7.94.9F.E6.88.90_locale">=E7=94=9F=
+=E6=88=90 locale</span></h2>
+<p>=E8=AE=BE=E7=BD=AE locale =E5=89=8D=EF=BC=8C=E9=9C=80=E8=A6=81=E5=85=88=
+=E5=87=86=E5=A4=87=E9=9C=80=E8=A6=81=E7=9A=84 locale=E3=80=82=E8=A6=81=E5=
+=88=97=E5=87=BA=E6=89=80=E6=9C=89=E5=90=AF=E7=94=A8=E7=9A=84locale=EF=BC=8C=
+=E4=BD=BF=E7=94=A8=EF=BC=9A
+</p>
+<pre>$ locale -a
+</pre>
+<p>=E5=8F=AF=E7=94=9F=E6=88=90=E7=9A=84 Locale =E4=BF=9D=E5=AD=98=E5=9C=A8 =
+<code>/etc/locale.gen</code> =E4=B8=AD,=E7=94=A8=E4=BB=A5=E4=B8=8B=E7=9A=84=
+=E6=A0=BC=E5=BC=8F=E6=9D=A5=E5=AE=9A=E4=B9=89=EF=BC=9A<code>[language][_TER=
+RITORY][.CODESET][@modifier]</code>.=E8=A6=81=E5=BC=80=E5=90=AF=E6=9F=90=E4=
+=B8=AALocale,=E5=8F=8D=E6=B3=A8=E9=87=8A=E5=AF=B9=E5=BA=94=E7=9A=84=E8=A1=
+=8C=E5=8D=B3=E5=8F=AF.
+</p><p>=E5=B0=BD=E7=AE=A1=E5=9C=A8=E4=BD=A0=E7=9A=84=E7=94=B5=E8=84=91=E4=
+=B8=8A=E4=BD=A0=E5=BE=88=E5=8F=AF=E8=83=BD=E5=8F=AA=E4=BD=BF=E7=94=A8=E4=B8=
+=80=E7=A7=8D=E8=AF=AD=E8=A8=80,=E4=BD=86=E5=90=8C=E6=97=B6=E5=BC=80=E5=90=
+=AF=E5=85=B6=E5=AE=83=E7=9A=84 Locale =E6=9C=89=E6=97=B6=E4=BC=9A=E6=9C=89=
+=E5=B8=AE=E5=8A=A9=E3=80=81=E7=94=9A=E8=87=B3=E6=98=AF=E5=BF=85=E8=A6=81=E7=
+=9A=84.=E6=AF=94=E5=A6=82=E4=BD=A0=E6=AD=A3=E8=BF=90=E8=A1=8C=E7=9D=80=E4=
+=B8=80=E4=B8=AA=E5=A4=9A=E7=94=A8=E6=88=B7=E7=9A=84=E7=B3=BB=E7=BB=9F=EF=BC=
+=8C=E8=80=8C=E6=9C=89=E7=9A=84=E7=94=A8=E6=88=B7=E5=B9=B6=E4=B8=8D=E6=87=82=
+en_US=EF=BC=8C=E9=82=A3=E4=B9=88=E4=BD=A0=E7=9A=84=E7=B3=BB=E7=BB=9F=E9=9C=
+=80=E8=A6=81=E6=94=AF=E6=8C=81=E4=BB=96=E4=BB=AC=E9=9C=80=E8=A6=81=E7=9A=84=
+ locale.
+</p><p>=E4=BE=8B=E5=A6=82=E5=AF=B9=E4=BA=8E=E4=BD=BF=E7=94=A8=E7=BE=8E=E5=
+=BC=8F=E8=8B=B1=E8=AF=AD=E7=9A=84=E7=94=A8=E6=88=B7,=E5=8F=8D=E6=B3=A8=E9=
+=87=8A <code>en_US.UTF-8 UTF-8</code> =E4=B8=80=E8=A1=8C.
+</p>
+<pre style=3D"margin-bottom: 0; border-bottom:none; padding-bottom:0.8em;">=
+/etc/locale.gen</pre>
+<pre style=3D"margin-top: 0; border-top-style:dashed; padding-top: 0.8em;">=
+...
+#en_SG ISO-8859-1
+en_US.UTF-8 UTF-8
+#en_US ISO-8859-1
+...
+</pre>
+<p>=E7=BC=96=E8=BE=91=E5=AE=8C=E6=88=90=E4=BB=A5=E5=90=8E,=E9=80=9A=E8=BF=
+=87=E4=B8=8B=E9=9D=A2=E7=9A=84=E5=91=BD=E4=BB=A4=E7=94=9F=E6=88=90 Locale&n=
+bsp;:
+</p>
+<pre># locale-gen
+</pre>
+<div class=3D"archwiki-template-box archwiki-template-box-note"><strong>Not=
+e:</strong>=20
+<ul><li> =E6=AF=8F=E6=AC=A1=E6=9B=B4=E6=96=B0 <span class=3D"plainlinks arc=
+hwiki-template-pkg"><a rel=3D"nofollow" class=3D"external text" href=3D"htt=
+ps://www.archlinux.org/packages/?name=3Dglibc">glibc</a></span> =E6=97=B6 <=
+code>locale-gen</code> =E4=BC=9A=E8=87=AA=E5=8A=A8=E8=BF=90=E8=A1=8C.</li>
+<li> =E5=BB=BA=E8=AE=AE=E5=BC=80=E5=90=AF <code>UTF-8</code> Locales. <a re=
+l=3D"nofollow" class=3D"external autonumber" href=3D"http://utf8everywhere.=
+org/">[1]</a></li></ul></div>
+<h2><span class=3D"mw-headline" id=3D".E8.AE.BE.E7.BD.AE_locale">=E8=AE=BE=
+=E7=BD=AE locale</span></h2>
+<p>=E6=83=B3=E8=A6=81=E6=98=BE=E7=A4=BA=E6=AD=A3=E5=9C=A8=E4=BD=BF=E7=94=A8=
+=E7=9A=84 Locale =E5=92=8C=E7=9B=B8=E5=85=B3=E7=9A=84=E7=8E=AF=E5=A2=83=E5=
+=8F=98=E9=87=8F=EF=BC=8C=E8=BF=90=E8=A1=8C:
+</p>
+<pre>$ locale
+</pre>
+<p><code>locale.conf</code> =E6=96=87=E4=BB=B6=E5=AD=98=E6=94=BE=E5=A6=82=
+=E4=BD=95=E4=BD=BF=E7=94=A8=E5=92=8C=E9=80=89=E6=8B=A9=E4=B8=8D=E5=90=8C=E7=
+=9A=84 Locale =E7=9B=B8=E5=85=B3=E7=9A=84=E7=8E=AF=E5=A2=83=E5=8F=98=E9=87=
+=8F.=E4=B8=80=E8=A1=8C=E4=B8=80=E4=B8=AA,=E4=BE=8B=E5=A6=82:
+</p>
+<pre style=3D"margin-bottom: 0; border-bottom:none; padding-bottom:0.8em;">=
+locale.conf</pre>
+<pre style=3D"margin-top: 0; border-top-style:dashed; padding-top: 0.8em;">=
+LANG=3Den_AU.UTF-8
+LC_COLLATE=3DC
+LC_TIME=3Den_DK.UTF-8</pre>
+<ul><li> <b>=E6=95=B4=E4=B8=AA=E7=B3=BB=E7=BB=9F</b> =E4=BD=BF=E7=94=A8=E7=
+=9A=84 Locale =E5=8F=AF=E4=BB=A5=E9=80=9A=E8=BF=87=E5=88=9B=E5=BB=BA=E6=88=
+=96=E7=BC=96=E8=BE=91 <code>/etc/locale.conf</code> =E6=9D=A5=E8=AE=BE=E7=
+=BD=AE,=E6=88=96=E8=80=85=E9=80=9A=E8=BF=87 <i>localectl</i> =E8=AE=BE=E7=
+=BD=AE:</li></ul>
+<dl><dd><pre># localectl set-locale LANG=3Den_US.UTF-8</pre></dd></dl>
+<dl><dd>=E5=8F=82=E9=98=85 <span class=3D"plainlinks archwiki-template-man"=
+ title=3D"$ man 1 localectl"><a rel=3D"nofollow" class=3D"external text" hr=
+ef=3D"https://jlk.fjfi.cvut.cz/arch/manpages/man/localectl.1">localectl(1)<=
+/a></span> =E8=8E=B7=E5=BE=97=E6=9B=B4=E5=A4=9A=E7=BB=86=E8=8A=82.</dd></dl=
+>
+<div class=3D"archwiki-template-box archwiki-template-box-tip"><strong>Tip:=
+</strong> =E5=A6=82=E6=9E=9C=E5=AE=89=E8=A3=85=E6=98=AF=E4=BD=BF=E7=94=A8=
+=E7=9A=84 <code>locale</code> =E6=AD=A3=E6=98=AF=E4=BD=A0=E9=9C=80=E8=A6=81=
+=E7=9A=84=EF=BC=8C=E5=8F=AF=E4=BB=A5=E5=9C=A8 chroot =E5=90=8E=E9=80=9A=E8=
+=BF=87<code> # locale &gt; /etc/locale.conf</code>=E8=BF=9B=E8=A1=8C=E8=AE=
+=BE=E7=BD=AE=E3=80=82</div>
+<ul><li> <b>=E6=95=B4=E4=B8=AA=E7=B3=BB=E7=BB=9F</b> =E4=BD=BF=E7=94=A8=E7=
+=9A=84 Locale =E5=8F=AF=E4=BB=A5=E7=94=B1=E7=94=A8=E6=88=B7=E9=80=9A=E8=BF=
+=87=E7=BC=96=E8=BE=91=E7=94=A8=E6=88=B7=E8=87=AA=E5=B7=B1=E7=9A=84 <code>~/=
+.config/locale.conf</code> (=E6=88=96=E8=80=85 {ic|$XDG_CONFIG_HOME/locale.=
+conf}} =E6=88=96 <code>$HOME/.config/locale.conf</code>) =E6=9D=A5=E8=A6=86=
+=E7=9B=96.</li></ul>
+<dl><dd><div class=3D"archwiki-template-box archwiki-template-box-tip"><str=
+ong>Tip:</strong>=20
+<ul><li> =E8=AE=BE=E7=BD=AE=E7=94=A8=E6=88=B7=E7=BA=A7 Locale =EF=BC=8C=E5=
+=B0=B1=E8=83=BD=E8=AE=A9=E6=97=A5=E5=BF=97(=E4=BE=8B=E5=A6=82 <code>/var/lo=
+g</code> )=E4=B8=AD=E7=9A=84=E6=96=87=E4=BB=B6=E4=BB=A5=E8=8B=B1=E8=AF=AD=
+=E8=BE=93=E5=87=BA.</li>
+<li> =E5=BB=BA=E7=AB=8B <code>/etc/skel/.config/locale.conf</code> =E6=96=
+=87=E4=BB=B6,=E5=8F=AF=E4=BB=A5=E8=AE=A9=E6=96=B0=E7=94=A8=E6=88=B7=E5=BB=
+=BA=E7=AB=8B=E4=B8=94=E5=90=8C=E6=97=B6=E5=88=9B=E5=BB=BA=E4=B8=BB=E7=9B=AE=
+=E5=BD=95=E6=97=B6(<i> useradd -m </i>)=E8=87=AA=E5=8A=A8=E5=BA=94=E7=94=A8=
+=E5=85=B6=E4=B8=AD=E7=9A=84 Locale (=E4=BC=9A=E5=B0=86=E8=BF=99=E4=B8=AA=E6=
+=96=87=E4=BB=B6=E5=A4=8D=E5=88=B6=E5=88=B0 <code>~/.config/locale.conf</cod=
+e> =E4=B8=AD.)</li></ul></div></dd></dl>
+<p>=E8=BF=99=E4=BA=9B <code>locale.conf</code> =E6=96=87=E4=BB=B6=E7=9A=84=
+=E4=BC=98=E5=85=88=E7=BA=A7=E5=AE=9A=E4=B9=89=E5=9C=A8 <code>/etc/profile.d=
+/locale.sh</code> =E4=B8=AD.
+</p><p>=E5=8F=82=E9=98=85 <a href=3D"https://wiki.archlinux.org/index.php/L=
+ocale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#.E6.94.AF.E6.8C.81.E7.9A.84.E5=
+.8F.98.E9.87.8F">#=E6=94=AF=E6=8C=81=E7=9A=84=E5=8F=98=E9=87=8F</a>, <span =
+class=3D"plainlinks archwiki-template-man" title=3D"$ man 5 locale.conf"><a=
+ rel=3D"nofollow" class=3D"external text" href=3D"https://jlk.fjfi.cvut.cz/=
+arch/manpages/man/locale.conf.5">locale.conf(5)</a></span> =E5=92=8C=E7=9B=
+=B8=E5=85=B3=E8=BF=9E=E7=9A=84=E6=96=87=E7=AB=A0=E8=8E=B7=E5=BE=97=E6=9B=B4=
+=E5=A4=9A=E7=BB=86=E8=8A=82.
+</p><p><code>locale.conf</code> =E7=9A=84=E5=8F=98=E6=9B=B4=E4=BC=9A=E5=9C=
+=A8=E4=B8=8B=E6=AC=A1=E7=99=BB=E5=BD=95=E6=97=B6=E7=94=9F=E6=95=88,=E8=A6=
+=81=E7=AB=8B=E5=88=BB=E5=BA=94=E7=94=A8=E6=96=B0=E7=9A=84=E8=AE=BE=E7=BD=AE=
+=E7=9A=84=E8=AF=9D,=E5=8F=AF=E4=BB=A5=E8=BF=90=E8=A1=8C:
+</p>
+<pre>$ LANG=3D source /etc/profile.d/locale.sh
+</pre>
+<div class=3D"archwiki-template-box archwiki-template-box-note"><strong>Not=
+e:</strong> =E8=BF=99=E5=8F=AA=E6=9C=89=E5=9C=A8 <code>LANG</code> =E5=8F=
+=98=E9=87=8F=E6=B2=A1=E8=AE=BE=E7=BD=AE=E6=97=B6=E6=89=8D=E4=BC=9A=E6=9C=89=
+=E7=94=A8.=E8=80=8C=E4=B8=94=E5=A6=82=E6=9E=9C=E4=BD=A0=E5=9C=A8 <code>loca=
+le.conf</code> =E4=B8=AD=E7=A7=BB=E9=99=A4=E4=BA=86=E6=9F=90=E4=BA=9B=E5=8F=
+=98=E9=87=8F=E5=86=8D=E8=BF=90=E8=A1=8C=E8=BF=99=E4=B8=AA=E5=91=BD=E4=BB=A4=
+,=E7=A7=BB=E9=99=A4=E7=9A=84=E9=82=A3=E4=BA=9B=E5=8F=98=E9=87=8F=E5=9C=A8=
+=E6=B3=A8=E9=94=80=E5=89=8D=E4=BE=9D=E7=84=B6=E5=AD=98=E5=9C=A8.</div>
+<h3><span class=3D"mw-headline" id=3D".E5.85.B6.E5.AE.83.E7.94.A8.E4.BE.8B"=
+>=E5=85=B6=E5=AE=83=E7=94=A8=E4=BE=8B</span></h3>
+<p>=E5=92=8C Locale =E7=9B=B8=E5=85=B3=E7=9A=84=E5=8F=98=E9=87=8F=E4=B9=9F=
+=E8=83=BD=E5=83=8F=E5=85=B6=E4=BB=96=E7=9A=84 <a href=3D"https://wiki.archl=
+inux.org/index.php/Environment_variables" title=3D"Environment variables">=
+=E7=8E=AF=E5=A2=83=E5=8F=98=E9=87=8F</a> =E4=B8=80=E6=A0=B7=E4=BC=A0=E9=80=
+=92=E7=BB=99=E5=85=B6=E5=AE=83=E7=A8=8B=E5=BA=8F.
+</p><p>=E4=BE=8B=E5=A6=82=E5=9C=A8=E5=BC=80=E5=8F=91=E6=97=B6=E8=BF=9B=E8=
+=A1=8C=E6=B5=8B=E8=AF=95=E6=97=B6,=E5=8F=AF=E4=BB=A5=E8=BF=99=E6=A0=B7=E8=
+=BF=90=E8=A1=8C:
+</p>
+<pre>$ LANG=3D"en_AU.UTF-8" ./my_application.sh
+</pre>
+<p>=E7=B1=BB=E4=BC=BC=E7=9A=84,=E4=B9=9F=E5=8F=AF=E4=BB=A5=E9=80=9A=E8=BF=
+=87=E8=AE=BE=E7=BD=AE=E7=8E=AF=E5=A2=83=E5=8F=98=E9=87=8F=E8=AE=A9=E5=BD=93=
+=E5=89=8D shell=E4=B8=AD=E8=BF=90=E8=A1=8C=E7=9A=84=E7=A8=8B=E5=BA=8F=E4=BD=
+=BF=E7=94=A8=E7=89=B9=E5=AE=9A=E7=9A=84 Locale,(=E4=BE=8B=E5=A6=82=E5=AE=89=
+=E8=A3=85=E7=B3=BB=E7=BB=9F=E6=97=B6):
+</p>
+<pre>$ export LANG=3D"en_AU.UTF-8"
+</pre>
+<h2><span class=3D"mw-headline" id=3D".E6.94.AF.E6.8C.81.E7.9A.84.E5.8F.98.=
+E9.87.8F">=E6=94=AF=E6=8C=81=E7=9A=84=E5=8F=98=E9=87=8F</span></h2>
+<p><code>locale.conf</code> files support the following environment variabl=
+es:
+</p>
+<ul><li> <a href=3D"https://wiki.archlinux.org/index.php/Locale_(%E7%AE%80%=
+E4%BD%93%E4%B8%AD%E6%96%87)#LANG:_.E9.BB.98.E8.AE.A4.E7.9A.84_Locale">LANG<=
+/a></li>
+<li> <a href=3D"https://wiki.archlinux.org/index.php/Locale_(%E7%AE%80%E4%B=
+D%93%E4%B8%AD%E6%96%87)#LANGUAGE:_.E5.90.8E.E5.A4.87_Locale">LANGUAGE</a></=
+li>
+<li> <code>LC_CTYPE</code></li>
+<li> <code>LC_NUMERIC</code></li>
+<li> <a href=3D"https://wiki.archlinux.org/index.php/Locale_(%E7%AE%80%E4%B=
+D%93%E4%B8%AD%E6%96%87)#LC_TIME:_.E6.97.B6.E9.97.B4.E5.92.8C.E6.97.A5.E6.9C=
+.9F.E6.A0.BC.E5.BC.8F">LC_TIME</a></li>
+<li> <a href=3D"https://wiki.archlinux.org/index.php/Locale_(%E7%AE%80%E4%B=
+D%93%E4%B8%AD%E6%96%87)#LC_COLLATE:_.E6.8E.92.E5.BA.8F.E6.A0.BC.E5.BC.8F">L=
+C_COLLATE</a></li>
+<li> <code>LC_MONETARY</code></li>
+<li> <code>LC_MESSAGES</code></li>
+<li> <code>LC_PAPER</code></li>
+<li> <code>LC_NAME</code></li>
+<li> <code>LC_ADDRESS</code></li>
+<li> <code>LC_TELEPHONE</code></li>
+<li> <code>LC_MEASUREMENT</code></li>
+<li> <code>LC_IDENTIFICATION</code></li></ul>
+<h3><span class=3D"mw-headline" id=3D"LANG:_.E9.BB.98.E8.AE.A4.E7.9A.84_Loc=
+ale">LANG: =E9=BB=98=E8=AE=A4=E7=9A=84 Locale</span></h3>
+<p>=E8=BF=99=E4=B8=AA=E5=8F=98=E9=87=8F=E7=9A=84=E5=80=BC=E4=BC=9A=E8=A6=86=
+=E7=9B=96=E6=8E=89=E6=89=80=E6=9C=89=E6=9C=AA=E8=AE=BE=E7=BD=AE=E7=9A=84 <c=
+ode>LC_*</code> =E5=8F=98=E9=87=8F=E7=9A=84=E5=80=BC.
+</p>
+<h3><span class=3D"mw-headline" id=3D"LANGUAGE:_.E5.90.8E.E5.A4.87_Locale">=
+LANGUAGE: =E5=90=8E=E5=A4=87 Locale</span></h3>
+<p>=E4=BD=BF=E7=94=A8 gettext =E7=BF=BB=E8=AF=91=E7=9A=84=E8=BD=AF=E4=BB=B6=
+=E4=BC=9A=E6=8C=89=E7=85=A7 <code>LANGUAGE</code> =E9=80=89=E6=8B=A9=E4=BD=
+=BF=E7=94=A8=E7=9A=84=E8=AF=AD=E8=A8=80=E3=80=82=E7=94=A8=E6=88=B7=E9=80=9A=
+=E8=BF=87=E8=BF=99=E4=B8=AA=E5=8F=98=E9=87=8F=E6=8C=87=E5=AE=9A=E4=B8=80=E4=
+=B8=AA<a rel=3D"nofollow" class=3D"external text" href=3D"http://www.gnu.or=
+g/software/gettext/manual/gettext.html#The-LANGUAGE-variable">locale =E5=88=
+=97=E8=A1=A8</a>=EF=BC=8C=E5=A6=82=E6=9E=9C=E5=89=8D=E9=9D=A2=E7=9A=84 loca=
+le =E7=BC=BA=E5=B0=91=E7=BF=BB=E8=AF=91=EF=BC=8C=E4=BC=9A=E8=87=AA=E5=8A=A8=
+=E4=BD=BF=E7=94=A8=E5=90=8E=E9=9D=A2=E7=9A=84 locale =E6=98=BE=E7=A4=BA=E7=
+=95=8C=E9=9D=A2=E3=80=82 =E4=BE=8B=E5=A6=82=E4=B8=8B=E9=9D=A2=E7=9A=84=E4=
+=BE=8B=E5=AD=90=E4=BD=BF=E7=94=A8=E7=AE=80=E4=BD=93=E4=B8=AD=E6=96=87,=E6=
+=B2=A1=E6=9C=89=E7=BF=BB=E8=AF=91=E6=97=B6=E4=BD=BF=E7=94=A8=E8=8B=B1=E6=96=
+=87=EF=BC=9A
+</p>
+<pre style=3D"margin-bottom: 0; border-bottom:none; padding-bottom:0.8em;">=
+locale.conf</pre>
+<pre style=3D"margin-top: 0; border-top-style:dashed; padding-top: 0.8em;">=
+LANG=3D"zh_CN.UTF-8"
+LANGUAGE=3D"zh_CN:en_GB:en"</pre>
+<h3><span class=3D"mw-headline" id=3D"LC_TIME:_.E6.97.B6.E9.97.B4.E5.92.8C.=
+E6.97.A5.E6.9C.9F.E6.A0.BC.E5.BC.8F">LC_TIME: =E6=97=B6=E9=97=B4=E5=92=8C=
+=E6=97=A5=E6=9C=9F=E6=A0=BC=E5=BC=8F</span></h3>
+<p>=E5=A6=82=E6=9E=9C <code>LC_TIME</code> =E8=AE=BE=E7=BD=AE=E6=88=90 <cod=
+e>en_US.UTF-8</code>, =E6=97=A5=E6=9C=9F=E7=9A=84=E6=A0=BC=E5=BC=8F=E4=B8=
+=BA "MM/DD/YYYY".  =E8=A6=81=E4=BD=BF=E7=94=A8 ISO 8601 =E6=A0=87=E5=87=86=
+=E7=9A=84=E6=97=A5=E6=9C=9F=E6=A0=BC=E5=BC=8F( "YYYY-MM-DD" ) ,=E4=BD=BF=E7=
+=94=A8:
+</p>
+<pre style=3D"margin-bottom: 0; border-bottom:none; padding-bottom:0.8em;">=
+locale.conf</pre>
+<pre style=3D"margin-top: 0; border-top-style:dashed; padding-top: 0.8em;">=
+LC_TIME=3Den_DK.UTF-8</pre>
+<h3><span class=3D"mw-headline" id=3D"LC_COLLATE:_.E6.8E.92.E5.BA.8F.E6.A0.=
+BC.E5.BC.8F">LC_COLLATE: =E6=8E=92=E5=BA=8F=E6=A0=BC=E5=BC=8F</span></h3>
+<p>=E8=BF=99=E4=B8=AA=E5=8F=98=E9=87=8F=E7=9A=84=E5=80=BC=E5=86=B3=E5=AE=9A=
+=E6=8E=92=E5=BA=8F=E5=92=8C=E6=AD=A3=E5=88=99=E8=A1=A8=E8=BE=BE=E5=BC=8F=E7=
+=9A=84=E6=A0=BC=E5=BC=8F=E9=A1=BA=E5=BA=8F.
+</p><p>=E4=BE=8B=E5=A6=82=E5=B0=86=E5=AE=83=E8=AE=BE=E7=BD=AE=E4=B8=BA <cod=
+e>C</code> =E5=8F=AF=E4=BB=A5=E8=AE=A9 <i>ls</i> =E5=91=BD=E4=BB=A4=E6=8C=
+=89=E9=A1=BA=E5=BA=8F=E5=88=97=E5=87=BA dotfile,=E5=A4=A7=E5=86=99=E5=AD=97=
+=E6=AF=8D=E5=BC=80=E5=A4=B4=E7=9A=84=E6=96=87=E4=BB=B6=E5=92=8C=E5=B0=8F=E5=
+=86=99=E5=AD=97=E6=AF=8D=E5=BC=80=E5=A4=B4=E7=9A=84=E6=96=87=E4=BB=B6:
+</p>
+<pre style=3D"margin-bottom: 0; border-bottom:none; padding-bottom:0.8em;">=
+locale.conf</pre>
+<pre style=3D"margin-top: 0; border-top-style:dashed; padding-top: 0.8em;">=
+LC_COLLATE=3DC</pre>
+<p>=E5=8F=A6=E8=A7=81 <a rel=3D"nofollow" class=3D"external autonumber" hre=
+f=3D"http://superuser.com/a/448294/175967">[2]</a>.
+</p><p>=E4=B8=BA=E4=BA=86=E9=81=BF=E5=85=8D=E5=8F=AF=E8=83=BD=E7=9A=84=E9=
+=97=AE=E9=A2=98,Arch Linux =E6=9B=BE=E7=BB=8F=E5=9C=A8 <code>/etc/profile</=
+code> =E4=B8=AD=E8=AE=BE=E7=BD=AE <code>LC_COLLATE=3DC</code> ,=E8=BF=99=E4=
+=B8=AA=E6=96=B9=E6=B3=95=E5=B7=B2=E7=BB=8F=E8=BF=87=E6=97=B6=E4=BA=86.w dep=
+recated.
+</p>
+<h2><span class=3D"mw-headline" id=3D"LC_ALL">LC_ALL</span></h2>
+<p>=E8=BF=99=E4=B8=AA=E5=8F=98=E9=87=8F=E7=9A=84=E5=80=BC=E4=BC=9A=E8=A6=86=
+=E7=9B=96=E6=8E=89 <code>LANG</code> =E5=92=8C=E6=89=80=E6=9C=89 <code>LC_*=
+</code> =E5=8F=98=E9=87=8F=E7=9A=84=E5=80=BC,=E6=97=A0=E8=AE=BA=E5=AE=83=E4=
+=BB=AC=E6=98=AF=E5=90=A6=E8=AE=BE=E7=BD=AE.
+</p><p>=E5=8F=AA=E6=9C=89 <code>LC_ALL</code> =E4=B8=8D=E8=83=BD=E5=9C=A8 <=
+code>locale.conf</code> =E6=96=87=E4=BB=B6=E4=B8=AD,=E8=BF=99=E6=84=8F=E5=
+=91=B3=E7=9D=80=E5=AE=83=E5=8F=AA=E6=98=AF=E4=B8=BA=E4=BA=86=E6=B5=8B=E8=AF=
+=95=E5=92=8C=E6=8E=92=E9=99=A4=E9=97=AE=E9=A2=98=E8=80=8C=E8=AE=BE=E7=BD=AE=
+,=E4=BE=8B=E5=A6=82=E5=9C=A8 <code>/etc/profile</code> =E4=B8=AD.
+</p>
+<h2><span class=3D"mw-headline" id=3D".E8.87.AA.E5.AE.9A.E4.B9.89_Locale">=
+=E8=87=AA=E5=AE=9A=E4=B9=89 Locale</span></h2>
+<div class=3D"noprint archwiki-template-message">
+<p><a href=3D"https://wiki.archlinux.org/index.php/File:Tango-inaccurate.pn=
+g" class=3D"image"><img alt=3D"Tango-inaccurate.png" src=3D"https://wiki.ar=
+chlinux.org/images/d/d6/Tango-inaccurate.png" width=3D"48" height=3D"48"></=
+a><b>The factual accuracy of this article or section is disputed.</b><a hre=
+f=3D"https://wiki.archlinux.org/index.php/File:Tango-inaccurate.png" class=
+=3D"image"><img alt=3D"Tango-inaccurate.png" src=3D"https://wiki.archlinux.=
+org/images/d/d6/Tango-inaccurate.png" width=3D"48" height=3D"48"></a></p>
+<div><b>Reason:</b> =E5=9B=A0=E4=B8=BA=E7=9B=B8=E5=85=B3=E7=9A=84=E6=96=87=
+=E4=BB=B6=E4=B8=8D=E5=9C=A8 <a rel=3D"nofollow" class=3D"external text" hre=
+f=3D"https://projects.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUI=
+LD?h=3Dpackages/glibc#n19">=E8=BD=AF=E4=BB=B6=E5=8C=85 glibc =E7=9A=84 PKGB=
+UILD =E6=96=87=E4=BB=B6=E4=B8=AD=E7=9A=84 backup =E5=AD=97=E6=AE=B5</a> =E4=
+=B8=AD,=E6=89=80=E4=BB=A5=E4=BD=A0=E4=BF=AE=E6=94=B9=E7=9A=84 Locale =E4=BC=
+=9A=E5=9C=A8=E4=B8=8B=E6=AC=A1=E5=8D=87=E7=BA=A7 <span class=3D"plainlinks =
+archwiki-template-pkg"><a rel=3D"nofollow" class=3D"external text" href=3D"=
+https://www.archlinux.org/packages/?name=3Dglibc">glibc</a></span> =E6=97=
+=B6=E8=A2=AB=E8=A6=86=E7=9B=96.=E6=89=80=E4=BB=A5=E8=AF=B7<i>=E5=88=9B=E5=
+=BB=BA</i>=E8=87=AA=E5=AE=9A=E4=B9=89 Locale (=E8=80=8C=E4=B8=8D=E6=98=AF=
+=E4=BF=AE=E6=94=B9=E5=B7=B2=E6=9C=89=E7=9A=84 Locale ). (Discuss in <a rel=
+=3D"nofollow" class=3D"external text" href=3D"https://wiki.archlinux.org/in=
+dex.php/Talk:Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">Talk:Locale (=
+=E7=AE=80=E4=BD=93=E4=B8=AD=E6=96=87)#</a>)</div>
+</div>
+<p><code>/usr/share/i18n/locales/</code> =E5=AD=98=E6=94=BE=E7=9D=80=E6=89=
+=80=E6=9C=89=E7=9A=84 Locale,=E5=B9=B6=E4=B8=94=E5=8F=AF=E4=BB=A5=E8=A2=AB=
+=E4=BF=AE=E6=94=B9=E4=BB=A5=E9=80=82=E5=BA=94=E4=B8=8D=E5=90=8C=E7=9A=84=E9=
+=9C=80=E8=A6=81.
+</p><p>=E8=AE=B0=E5=BE=97=E5=9C=A8=E4=BF=AE=E6=94=B9 Locale =E6=96=87=E4=BB=
+=B6=E4=BB=A5=E5=90=8E<a href=3D"https://wiki.archlinux.org/index.php/Locale=
+_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#.E7.94.9F.E6.88.90_locale">=E9=87=
+=8D=E6=96=B0=E7=94=9F=E6=88=90</a> Locale =E5=B9=B6=E9=87=8D=E6=96=B0=E5=90=
+=AF=E5=8A=A8=E4=BB=A5=E8=AE=A9=E6=96=B0=E7=9A=84 Locales =E7=94=9F=E6=95=88=
+.
+</p>
+<h3><span class=3D"mw-headline" id=3D".E8.AE.BE.E7.BD.AE.E6.AF.8F.E5.91.A8.=
+E7.9A.84.E7.AC.AC.E4.B8.80.E5.A4.A9">=E8=AE=BE=E7=BD=AE=E6=AF=8F=E5=91=A8=
+=E7=9A=84=E7=AC=AC=E4=B8=80=E5=A4=A9</span></h3>
+<p>=E5=BE=88=E5=A4=9A=E5=9B=BD=E5=AE=B6=E9=83=BD=E6=8A=8A=E6=98=9F=E6=9C=9F=
+=E4=B8=80=E4=BD=9C=E4=B8=BA=E6=AF=8F=E5=91=A8=E7=9A=84=E7=AC=AC=E4=B8=80=E5=
+=A4=A9,=E5=8F=AF=E4=BB=A5=E5=83=8F=E8=BF=99=E6=A0=B7=E8=BF=9B=E8=A1=8C=E4=
+=BF=AE=E6=94=B9:
+</p>
+<pre style=3D"margin-bottom: 0; border-bottom:none; padding-bottom:0.8em;">=
+/usr/share/i18n/locales/<i>chosen_locale</i></pre>
+<pre style=3D"margin-top: 0; border-top-style:dashed; padding-top: 0.8em;">=
+LC_TIME
+[...]
+week            7;19971130;5
+first_weekday   2
+first_workday   2
+</pre>
+<h2><span class=3D"mw-headline" id=3D".E6.8F.90.E7.A4.BA.E5.92.8C.E6.8A.80.=
+E5.B7.A7">=E6=8F=90=E7=A4=BA=E5=92=8C=E6=8A=80=E5=B7=A7</span></h2>
+<h3><span class=3D"mw-headline" id=3D".E4.BB.8E.E7.BB.88.E7.AB.AF.E4.B8.AD.=
+E4.BB.A5.E5.8F.A6.E4.B8.80_Locale_.E8.BF.90.E8.A1.8C.E7.A8.8B.E5.BA.8F">=E4=
+=BB=8E=E7=BB=88=E7=AB=AF=E4=B8=AD=E4=BB=A5=E5=8F=A6=E4=B8=80 Locale =E8=BF=
+=90=E8=A1=8C=E7=A8=8B=E5=BA=8F</span></h3>
+<p>=E4=BE=8B=E5=A6=82=E7=94=A8 Hebrew Locale =E8=BF=90=E8=A1=8C Abiword&nbs=
+p;:
+</p>
+<pre>$ env LANG=3Dhe_IL.UTF-8 abiword &amp;
+</pre>
+<h3><span class=3D"mw-headline" id=3D".E4.BB.8E.E6.A1.8C.E9.9D.A2.E4.BB.A5.=
+E5.8F.A6.E4.B8.80_Locale_.E8.BF.90.E8.A1.8C.E7.A8.8B.E5.BA.8F">=E4=BB=8E=E6=
+=A1=8C=E9=9D=A2=E4=BB=A5=E5=8F=A6=E4=B8=80 Locale =E8=BF=90=E8=A1=8C=E7=A8=
+=8B=E5=BA=8F</span></h3>
+<p>=E6=8A=8A <i>.desktop</i> =E6=96=87=E4=BB=B6=E5=A4=8D=E5=88=B6=E5=88=B0=
+=E4=BD=A0=E7=9A=84=E7=94=A8=E6=88=B7=E7=9B=AE=E5=BD=95:
+</p><p><br>
+</p>
+<pre>$ cp /usr/share/applications/abiword.desktop ~/.local/share/applicatio=
+ns/
+</pre>
+<p>=E7=BC=96=E8=BE=91 <code>Exec</code> =E9=80=89=E9=A1=B9:
+</p>
+<pre style=3D"margin-bottom: 0; border-bottom:none; padding-bottom:0.8em;">=
+~/.local/share/applications/abiword.desktop</pre>
+<pre style=3D"margin-top: 0; border-top-style:dashed; padding-top: 0.8em;">=
+Exec=3Denv LANG=3Dhe_IL.UTF-8 abiword&nbsp;%U</pre>
+<h3><span class=3D"mw-headline" id=3D"Python.2C_ViM_.E5.92.8C_UTF-8">Python=
+, ViM =E5=92=8C UTF-8</span></h3>
+<p>=E5=9C=A8 ViM =E4=B8=AD=E8=BF=90=E8=A1=8C <code>:!python -c "import sys;=
+ print(sys.stdout.encoding)"</code> =E6=97=B6,=E8=BE=93=E5=87=BA=E5=8F=AF=
+=E8=83=BD=E6=98=AF <code>ANSI_X3.4-1968</code> (=E5=8D=B3=E4=BD=BF=E4=BD=A0=
+=E8=AE=BE=E7=BD=AE=E4=BA=86=E6=AD=A3=E7=A1=AE=E7=9A=84Locale) .
+=E6=8A=8A <code>PYTHONIOENCODING</code> =E5=8F=98=E9=87=8F=E8=AE=BE=E7=BD=
+=AE=E6=88=90 <code>utf-8</code> =E5=8F=AF=E4=BB=A5=E8=A7=84=E9=81=BF=E8=BF=
+=99=E4=B8=AA=E9=97=AE=E9=A2=98.
+</p>
+<h2><span class=3D"mw-headline" id=3D".E6.8E.92.E9.99.A4.E9.97.AE.E9.A2.98"=
+>=E6=8E=92=E9=99=A4=E9=97=AE=E9=A2=98</span></h2>
+<h3><span class=3D"mw-headline" id=3D".E6.88.91.E7.9A.84.E7.BB.88.E7.AB.AF.=
+E4.B8.8D.E6.94.AF.E6.8C.81_UTF-8">=E6=88=91=E7=9A=84=E7=BB=88=E7=AB=AF=E4=
+=B8=8D=E6=94=AF=E6=8C=81 UTF-8</span></h3>
+<p>=E8=BF=99=E4=BA=9B=E7=BB=88=E7=AB=AF(=E4=B8=8D=E6=98=AF=E5=85=A8=E9=83=
+=A8)=E6=94=AF=E6=8C=81 UTF-8:
+</p>
+<ul><li> gnustep-terminal</li>
+<li> konsole</li>
+<li> <a href=3D"https://wiki.archlinux.org/index.php/Mlterm" class=3D"mw-re=
+direct" title=3D"Mlterm">mlterm</a></li>
+<li> <a href=3D"https://wiki.archlinux.org/index.php/Rxvt-unicode" title=3D=
+"Rxvt-unicode">rxvt-unicode</a></li>
+<li> <a href=3D"https://wiki.archlinux.org/index.php/St" title=3D"St">st</a=
+></li>
+<li> <a href=3D"https://wiki.archlinux.org/index.php/Termite" title=3D"Term=
+ite">termite</a></li>
+<li> <a href=3D"https://wiki.archlinux.org/index.php/List_of_applications/U=
+tilities#VTE-based" title=3D"List of applications/Utilities">VTE-based term=
+inals</a></li>
+<li> <a href=3D"https://wiki.archlinux.org/index.php/Xterm" title=3D"Xterm"=
+>xterm</a> - =E5=BF=85=E9=A1=BB=E5=8C=85=E5=90=AB=E5=8F=82=E6=95=B0 <code>-=
+u8</code>. =E6=88=96=E8=80=85 <i>uxterm</i>, =E9=9A=8F <span class=3D"plain=
+links archwiki-template-pkg"><a rel=3D"nofollow" class=3D"external text" hr=
+ef=3D"https://www.archlinux.org/packages/?name=3Dxterm">xterm</a></span> =
+=E6=8F=90=E4=BE=9B.</li></ul>
+<h4><span class=3D"mw-headline" id=3D"Gnome-terminal_.2F_rxvt-unicode_.E4.B=
+8.8D.E6.94.AF.E6.8C.81_UTF-8">Gnome-terminal / rxvt-unicode =E4=B8=8D=E6=94=
+=AF=E6=8C=81 UTF-8</span></h4>
+<p>=E4=BD=A0=E5=BF=85=E9=A1=BB=E5=9C=A8 UTF-8 =E7=9A=84 Locale =E4=B8=8B=E8=
+=BF=90=E8=A1=8C=E5=AE=83=E4=BB=AC=E5=9C=A8=E4=BC=9A=E6=9C=89=E4=BD=9C=E7=94=
+=A8.=E6=8C=89=E7=85=A7=E4=B8=8A=E9=9D=A2=E7=9A=84=E6=96=B9=E6=B3=95=E5=90=
+=AF=E7=94=A8 <code>en_US.UTF-8</code> Locale ,=E5=B0=86=E5=AE=83=E8=AE=BE=
+=E7=BD=AE=E6=88=90=E9=BB=98=E8=AE=A4 Locale =E5=90=8E=E9=87=8D=E6=96=B0=E5=
+=90=AF=E5=8A=A8.
+</p>
+<h3><span class=3D"mw-headline" id=3D".E6.88.91.E7.9A.84.E7.B3.BB.E7.BB.9F.=
+E7.9A.84.E8.AF.AD.E8.A8.80.E8.BF.98.E6.98.AF.E4.B8.8D.E5.AF.B9">=E6=88=91=
+=E7=9A=84=E7=B3=BB=E7=BB=9F=E7=9A=84=E8=AF=AD=E8=A8=80=E8=BF=98=E6=98=AF=E4=
+=B8=8D=E5=AF=B9</span></h3>
+<p>=E5=8F=AF=E8=83=BD=E5=85=B6=E5=AE=83=E6=96=87=E4=BB=B6=E8=AE=BE=E7=BD=AE=
+=E4=BA=86=E6=9C=AC=E8=AF=A5=E7=94=B1 <code>locale.conf</code> =E8=AE=BE=E7=
+=BD=AE=E7=9A=84 Locale (=E4=BE=8B=E5=A6=82 <code>~/.pam_environment</code> =
+),=E8=AF=A6=E8=A7=81 <a href=3D"https://wiki.archlinux.org/index.php/Enviro=
+nment_variables#Defining_variables" title=3D"Environment variables">Environ=
+ment variables#Defining variables</a> .
+</p>
+<h2><span class=3D"mw-headline" id=3D".E5.8F.A6.E8.A7.81">=E5=8F=A6=E8=A7=
+=81</span></h2>
+<ul><li> <a rel=3D"nofollow" class=3D"external text" href=3D"http://www.gen=
+too.org/doc/en/guide-localization.xml">Gentoo Linux =E6=9C=AC=E5=9C=B0=E5=
+=8C=96=E6=8C=87=E5=8D=97</a></li>
+<li> <a rel=3D"nofollow" class=3D"external text" href=3D"http://www.gentoo-=
+wiki.info/Locales">Gentoo Wiki Archives: Locales</a></li>
+<li> <a rel=3D"nofollow" class=3D"external text" href=3D"http://demo.icu-pr=
+oject.org/icu-bin/locexp?_=3Den_US&amp;x=3Dcol">ICU's interactive collation=
+ testing</a></li>
+<li> <a rel=3D"nofollow" class=3D"external text" href=3D"http://www.openi18=
+n.org/">Free Standards Group Open Internationalisation Initiative</a></li>
+<li> <a rel=3D"nofollow" class=3D"external text" href=3D"http://pubs.opengr=
+oup.org/onlinepubs/007908799/xbd/locale.html"><i>The Single UNIX Specificat=
+ion</i> definition of Locale</a> by The Open Group</li>
+<li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://help.ubunt=
+u.com/community/EnvironmentVariables#Locale_setting_variables">Locale envir=
+onment variables</a></li></ul>
+
+<!--=20
+NewPP limit report
+Cached time: 20180525005304
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.027 seconds
+Real time usage: 0.029 seconds
+Preprocessor visited node count: 684/1000000
+Preprocessor generated node count: 2129/1000000
+Post=E2=80=90expand include size: 8211/2097152 bytes
+Template argument size: 3906/2097152 bytes
+Highest expansion depth: 7/40
+Expensive parser function count: 0/100
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   16.090      1 -total
+ 22.29%    3.587     52 Template:Ic
+ 12.85%    2.067      1 Template:TranslationStatus_(=E7=AE=80=E4=BD=93=E4=
+=B8=AD=E6=96=87)
+ 10.88%    1.750      1 Template:Accuracy
+  8.79%    1.414      7 Template:Hc
+  8.24%    1.325      1 Template:META_Box_Blue
+  7.33%    1.180      2 Template:Tip
+  7.24%    1.165      2 Template:Note
+  6.80%    1.094      1 Template:META_Message
+  6.69%    1.077      2 Template:Man
+-->
+</div>
+<!-- Saved in parser cache with key archwiki:pcache:idhash:4623-0!canonical=
+ and timestamp 20180525005304 and revision id 503611
+ -->
+</div>					<div class=3D"printfooter">
+						Retrieved from "<a dir=3D"ltr" href=3D"https://wiki.archlinux.org/ind=
+ex.php?title=3DLocale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)&amp;oldid=3D50=
+3611">https://wiki.archlinux.org/index.php?title=3DLocale_(=E7=AE=80=E4=BD=
+=93=E4=B8=AD=E6=96=87)&amp;oldid=3D503611</a>"					</div>
+				<div id=3D"catlinks" class=3D"catlinks" data-mw=3D"interface"><div id=
+=3D"mw-normal-catlinks" class=3D"mw-normal-catlinks"><a href=3D"https://wik=
+i.archlinux.org/index.php/Special:Categories" title=3D"Special:Categories">=
+Category</a>: <ul><li><a href=3D"https://wiki.archlinux.org/index.php/Categ=
+ory:Internationalization_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)" title=3D"C=
+ategory:Internationalization (=E7=AE=80=E4=BD=93=E4=B8=AD=E6=96=87)">Intern=
+ationalization (=E7=AE=80=E4=BD=93=E4=B8=AD=E6=96=87)</a></li></ul></div><d=
+iv id=3D"mw-hidden-catlinks" class=3D"mw-hidden-catlinks mw-hidden-cats-hid=
+den">Hidden categories: <ul><li><a href=3D"https://wiki.archlinux.org/index=
+.php/Category:Pages_using_duplicate_arguments_in_template_calls" title=3D"C=
+ategory:Pages using duplicate arguments in template calls">Pages using dupl=
+icate arguments in template calls</a></li><li><a href=3D"https://wiki.archl=
+inux.org/index.php/Category:Pages_or_sections_flagged_with_Template:Accurac=
+y" title=3D"Category:Pages or sections flagged with Template:Accuracy">Page=
+s or sections flagged with Template:Accuracy</a></li></ul></div></div>				<=
+div class=3D"visualClear"></div>
+							</div>
+		</div>
+		<div id=3D"mw-navigation">
+			<h2>Navigation menu</h2>
+
+			<div id=3D"mw-head">
+									<div id=3D"p-personal" role=3D"navigation" class=3D"" aria-labelle=
+dby=3D"p-personal-label">
+						<h3 id=3D"p-personal-label">Personal tools</h3>
+						<ul>
+							<li id=3D"pt-createaccount"><a href=3D"https://wiki.archlinux.org/in=
+dex.php?title=3DSpecial:CreateAccount&amp;returnto=3DLocale+%28%E7%AE%80%E4=
+%BD%93%E4%B8%AD%E6%96%87%29" title=3D"You are encouraged to create an accou=
+nt and log in; however, it is not mandatory">Create account</a></li><li id=
+=3D"pt-login"><a href=3D"https://wiki.archlinux.org/index.php?title=3DSpeci=
+al:UserLogin&amp;returnto=3DLocale+%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%=
+29" title=3D"You are encouraged to log in; however, it is not mandatory [al=
+t-shift-o]" accesskey=3D"o">Log in</a></li>						</ul>
+					</div>
+									<div id=3D"left-navigation">
+										<div id=3D"p-namespaces" role=3D"navigation" class=3D"vectorTabs"=
+ aria-labelledby=3D"p-namespaces-label">
+						<h3 id=3D"p-namespaces-label">Namespaces</h3>
+						<ul>
+														<li id=3D"ca-nstab-main" class=3D"selected"><span><a href=3D"=
+https://wiki.archlinux.org/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6=
+%96%87)" title=3D"View the content page [alt-shift-c]" accesskey=3D"c">Page=
+</a></span></li>
+							<li id=3D"ca-talk" class=3D"new"><span><a href=3D"https://wiki.archl=
+inux.org/index.php?title=3DTalk:Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%8=
+7)&amp;action=3Dedit&amp;redlink=3D1" rel=3D"discussion" title=3D"Discussio=
+n about the content page [alt-shift-t]" accesskey=3D"t">Discussion</a></spa=
+n></li>
+						</ul>
+					</div>
+										<div id=3D"p-variants" role=3D"navigation" class=3D"vectorMenu em=
+ptyPortlet" aria-labelledby=3D"p-variants-label">
+												<h3 id=3D"p-variants-label" tabindex=3D"0">
+							<span>Variants</span>
+						</h3>
+
+						<div class=3D"menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id=3D"right-navigation">
+										<div id=3D"p-views" role=3D"navigation" class=3D"vectorTabs" aria=
+-labelledby=3D"p-views-label">
+						<h3 id=3D"p-views-label">Views</h3>
+						<ul>
+														<li id=3D"ca-view" class=3D"selected"><span><a href=3D"https:=
+//wiki.archlinux.org/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87=
+)">Read</a></span></li>
+							<li id=3D"ca-viewsource"><span><a href=3D"https://wiki.archlinux.org=
+/index.php?title=3DLocale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)&amp;action=
+=3Dedit" title=3D"This page is protected.
+You can view its source [alt-shift-e]" accesskey=3D"e">View source</a></spa=
+n></li>
+							<li id=3D"ca-history" class=3D"collapsible"><span><a href=3D"https:/=
+/wiki.archlinux.org/index.php?title=3DLocale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E=
+6%96%87)&amp;action=3Dhistory" title=3D"Past revisions of this page [alt-sh=
+ift-h]" accesskey=3D"h">View history</a></span></li>
+						</ul>
+					</div>
+										<div id=3D"p-cactions" role=3D"navigation" class=3D"vectorMenu em=
+ptyPortlet" aria-labelledby=3D"p-cactions-label" style=3D"">
+						<h3 id=3D"p-cactions-label" tabindex=3D"0"><span>More</span></h3>
+
+						<div class=3D"menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id=3D"p-search" role=3D"search">
+						<h3>
+							<label for=3D"searchInput">Search</label>
+						</h3>
+
+						<form action=3D"https://wiki.archlinux.org/index.php" id=3D"searchfor=
+m">
+							<div id=3D"simpleSearch">
+							<input type=3D"search" name=3D"search" placeholder=3D"Search ArchWik=
+i" title=3D"Search ArchWiki [alt-shift-f]" accesskey=3D"f" id=3D"searchInpu=
+t" tabindex=3D"1" autocomplete=3D"off"><input type=3D"submit" name=3D"go" v=
+alue=3D"Go" title=3D"Go to a page with this exact name if it exists" id=3D"=
+searchButton" class=3D"searchButton">							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id=3D"mw-panel">
+				<div id=3D"p-logo" role=3D"banner"><a class=3D"mw-wiki-logo" href=3D"ht=
+tps://wiki.archlinux.org/index.php/Main_page" title=3D"Visit the main page"=
+></a></div>
+						<div class=3D"portal" role=3D"navigation" id=3D"p-navigation" aria-la=
+belledby=3D"p-navigation-label">
+			<h3 id=3D"p-navigation-label">Navigation</h3>
+
+			<div class=3D"body">
+									<ul>
+						<li id=3D"n-mainpage-description"><a href=3D"https://wiki.archlinux.o=
+rg/index.php/Main_page" title=3D"Visit the main page [alt-shift-z]" accessk=
+ey=3D"z">Main page</a></li><li id=3D"n-categories"><a href=3D"https://wiki.=
+archlinux.org/index.php/Table_of_contents">Categories</a></li><li id=3D"n-p=
+ortal"><a href=3D"https://wiki.archlinux.org/index.php/Getting_involved" ti=
+tle=3D"Various ways Archers can contribute to the community">Getting involv=
+ed</a></li><li id=3D"n-currentevents"><a href=3D"https://wiki.archlinux.org=
+/index.php/ArchWiki:News" title=3D"The latest lowdown on the wiki">Wiki new=
+s</a></li><li id=3D"n-randompage"><a href=3D"https://wiki.archlinux.org/ind=
+ex.php/Special:Random" title=3D"Load a random page [alt-shift-x]" accesskey=
+=3D"x">Random page</a></li>					</ul>
+							</div>
+		</div>
+			<div class=3D"portal" role=3D"navigation" id=3D"p-Interaction" aria-labe=
+lledby=3D"p-Interaction-label">
+			<h3 id=3D"p-Interaction-label">Interaction</h3>
+
+			<div class=3D"body">
+									<ul>
+						<li id=3D"n-help"><a href=3D"https://wiki.archlinux.org/index.php/Cat=
+egory:Help" title=3D"Wiki navigation, reading, and editing help">Help</a></=
+li><li id=3D"n-Contributing"><a href=3D"https://wiki.archlinux.org/index.ph=
+p/ArchWiki:Contributing">Contributing</a></li><li id=3D"n-recentchanges"><a=
+ href=3D"https://wiki.archlinux.org/index.php/Special:RecentChanges" title=
+=3D"A list of recent changes in the wiki [alt-shift-r]" accesskey=3D"r">Rec=
+ent changes</a></li><li id=3D"n-Recent-talks"><a href=3D"https://wiki.archl=
+inux.org/index.php/Special:RecentChanges?namespace=3D0&amp;invert=3D1" rel=
+=3D"nofollow">Recent talks</a></li><li id=3D"n-newpages"><a href=3D"https:/=
+/wiki.archlinux.org/index.php/Special:NewPages">New pages</a></li><li id=3D=
+"n-Statistics"><a href=3D"https://wiki.archlinux.org/index.php/ArchWiki:Sta=
+tistics">Statistics</a></li><li id=3D"n-Requests"><a href=3D"https://wiki.a=
+rchlinux.org/index.php/ArchWiki:Requests">Requests</a></li>					</ul>
+							</div>
+		</div>
+			<div class=3D"portal" role=3D"navigation" id=3D"p-tb" aria-labelledby=3D=
+"p-tb-label">
+			<h3 id=3D"p-tb-label">Tools</h3>
+
+			<div class=3D"body">
+									<ul>
+						<li id=3D"t-whatlinkshere"><a href=3D"https://wiki.archlinux.org/inde=
+x.php/Special:WhatLinksHere/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)" =
+title=3D"A list of all wiki pages that link here [alt-shift-j]" accesskey=
+=3D"j">What links here</a></li><li id=3D"t-recentchangeslinked"><a href=3D"=
+https://wiki.archlinux.org/index.php/Special:RecentChangesLinked/Locale_(%E=
+7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)" rel=3D"nofollow" title=3D"Recent chang=
+es in pages linked from this page [alt-shift-k]" accesskey=3D"k">Related ch=
+anges</a></li><li id=3D"t-specialpages"><a href=3D"https://wiki.archlinux.o=
+rg/index.php/Special:SpecialPages" title=3D"A list of all special pages [al=
+t-shift-q]" accesskey=3D"q">Special pages</a></li><li id=3D"t-print"><a hre=
+f=3D"https://wiki.archlinux.org/index.php?title=3DLocale_(%E7%AE%80%E4%BD%9=
+3%E4%B8%AD%E6%96%87)&amp;printable=3Dyes" rel=3D"alternate" title=3D"Printa=
+ble version of this page [alt-shift-p]" accesskey=3D"p">Printable version</=
+a></li><li id=3D"t-permalink"><a href=3D"https://wiki.archlinux.org/index.p=
+hp?title=3DLocale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)&amp;oldid=3D503611=
+" title=3D"Permanent link to this revision of the page">Permanent link</a><=
+/li><li id=3D"t-info"><a href=3D"https://wiki.archlinux.org/index.php?title=
+=3DLocale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)&amp;action=3Dinfo" title=
+=3D"More information about this page">Page information</a></li>					</ul>
+							</div>
+		</div>
+			<div class=3D"portal" role=3D"navigation" id=3D"p-lang" aria-labelledby=
+=3D"p-lang-label">
+			<h3 id=3D"p-lang-label">In other languages</h3>
+
+			<div class=3D"body">
+									<ul>
+						<li class=3D"interlanguage-link interwiki-ar"><a href=3D"https://wiki=
+.archlinux.org/index.php/Locale_(%D8%A7%D9%84%D8%B9%D8%B1%D8%A8%D9%8A%D8%A9=
+)" title=3D"Locale =E2=80=93 =D8=A7=D9=84=D8=B9=D8=B1=D8=A8=D9=8A=D8=A9" la=
+ng=3D"ar" hreflang=3D"ar" class=3D"interlanguage-link-target">=D8=A7=D9=84=
+=D8=B9=D8=B1=D8=A8=D9=8A=D8=A9</a></li><li class=3D"interlanguage-link inte=
+rwiki-cs"><a href=3D"https://wiki.archlinux.org/index.php/Locale_(%C4%8Cesk=
+y)" title=3D"Locale =E2=80=93 =C4=8De=C5=A1tina" lang=3D"cs" hreflang=3D"cs=
+" class=3D"interlanguage-link-target">=C4=8Ce=C5=A1tina</a></li><li class=
+=3D"interlanguage-link interwiki-de"><a href=3D"https://wiki.archlinux.de/t=
+itle/Locale" title=3D"Locale =E2=80=93 Deutsch" lang=3D"de" hreflang=3D"de"=
+ class=3D"interlanguage-link-target">Deutsch</a></li><li class=3D"interlang=
+uage-link interwiki-en"><a href=3D"https://wiki.archlinux.org/index.php/Loc=
+ale" title=3D"Locale =E2=80=93 English" lang=3D"en" hreflang=3D"en" class=
+=3D"interlanguage-link-target">English</a></li><li class=3D"interlanguage-l=
+ink interwiki-es"><a href=3D"https://wiki.archlinux.org/index.php/Locale_(E=
+spa%C3%B1ol)" title=3D"Locale =E2=80=93 espa=C3=B1ol" lang=3D"es" hreflang=
+=3D"es" class=3D"interlanguage-link-target">Espa=C3=B1ol</a></li><li class=
+=3D"interlanguage-link interwiki-fr"><a href=3D"http://wiki.archlinux.fr/Lo=
+cale" title=3D"Locale =E2=80=93 fran=C3=A7ais" lang=3D"fr" hreflang=3D"fr" =
+class=3D"interlanguage-link-target">Fran=C3=A7ais</a></li><li class=3D"inte=
+rlanguage-link interwiki-it"><a href=3D"https://wiki.archlinux.org/index.ph=
+p/Locale_(Italiano)" title=3D"Locale =E2=80=93 italiano" lang=3D"it" hrefla=
+ng=3D"it" class=3D"interlanguage-link-target">Italiano</a></li><li class=3D=
+"interlanguage-link interwiki-ja"><a href=3D"https://wiki.archlinux.jp/inde=
+x.php/%E3%83%AD%E3%82%B1%E3%83%BC%E3%83%AB" title=3D"=E3=83=AD=E3=82=B1=E3=
+=83=BC=E3=83=AB =E2=80=93 =E6=97=A5=E6=9C=AC=E8=AA=9E" lang=3D"ja" hreflang=
+=3D"ja" class=3D"interlanguage-link-target">=E6=97=A5=E6=9C=AC=E8=AA=9E</a>=
+</li><li class=3D"interlanguage-link interwiki-ko"><a href=3D"https://wiki.=
+archlinux.org/index.php/Locale_(%ED%95%9C%EA%B5%AD%EC%96%B4)" title=3D"Loca=
+le =E2=80=93 =ED=95=9C=EA=B5=AD=EC=96=B4" lang=3D"ko" hreflang=3D"ko" class=
+=3D"interlanguage-link-target">=ED=95=9C=EA=B5=AD=EC=96=B4</a></li><li clas=
+s=3D"interlanguage-link interwiki-nl"><a href=3D"https://wiki.archlinux.org=
+/index.php/Locale_(Nederlands)" title=3D"Locale =E2=80=93 Nederlands" lang=
+=3D"nl" hreflang=3D"nl" class=3D"interlanguage-link-target">Nederlands</a><=
+/li><li class=3D"interlanguage-link interwiki-pt"><a href=3D"https://wiki.a=
+rchlinux.org/index.php/Locale_(Portugu%C3%AAs)" title=3D"Locale =E2=80=93 p=
+ortugu=C3=AAs" lang=3D"pt" hreflang=3D"pt" class=3D"interlanguage-link-targ=
+et">Portugu=C3=AAs</a></li><li class=3D"interlanguage-link interwiki-ru"><a=
+ href=3D"https://wiki.archlinux.org/index.php/Locale_(%D0%A0%D1%83%D1%81%D1=
+%81%D0%BA%D0%B8%D0%B9)" title=3D"Locale =E2=80=93 =D1=80=D1=83=D1=81=D1=81=
+=D0=BA=D0=B8=D0=B9" lang=3D"ru" hreflang=3D"ru" class=3D"interlanguage-link=
+-target">=D0=A0=D1=83=D1=81=D1=81=D0=BA=D0=B8=D0=B9</a></li>					</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+		<div id=3D"footer" role=3D"contentinfo">
+							<ul id=3D"footer-info">
+											<li id=3D"footer-info-lastmod"> This page was last edited on 22 =
+December 2017, at 07:20.</li>
+											<li id=3D"footer-info-copyright">Content is available under <a c=
+lass=3D"external" rel=3D"nofollow" href=3D"http://www.gnu.org/copyleft/fdl.=
+html">GNU Free Documentation License 1.3 or later</a> unless otherwise note=
+d.</li>
+									</ul>
+							<ul id=3D"footer-places">
+											<li id=3D"footer-places-privacy"><a href=3D"https://wiki.archlin=
+ux.org/index.php/ArchWiki:Privacy_policy" class=3D"mw-redirect" title=3D"Ar=
+chWiki:Privacy policy">Privacy policy</a></li>
+											<li id=3D"footer-places-about"><a href=3D"https://wiki.archlinux=
+.org/index.php/ArchWiki:About" title=3D"ArchWiki:About">About ArchWiki</a><=
+/li>
+											<li id=3D"footer-places-disclaimer"><a href=3D"https://wiki.arch=
+linux.org/index.php/ArchWiki:General_disclaimer" title=3D"ArchWiki:General =
+disclaimer">Disclaimers</a></li>
+									</ul>
+										<ul id=3D"footer-icons" class=3D"noprint">
+											<li id=3D"footer-copyrightico">
+													</li>
+									</ul>
+						<div style=3D"clear:both"></div>
+		</div>
+	=09
+=09
+<!-- Cached/compressed 20180525044358 -->
+
+<div class=3D"suggestions" style=3D"display: none; font-size: 13px;"><div c=
+lass=3D"suggestions-results"></div><div class=3D"suggestions-special"></div=
+></div></body><div id=3D"cVim-status-bar" style=3D"top: 0px;"></div><iframe=
+ src=3D"cid:frame-21-9385d7f2-61b4-47a9-aa93-f1adbf138734@mhtml.blink" id=
+=3D"cVim-command-frame"></iframe></html>
+------MultipartBoundary--8Q8KkWDH0jU2natWIrEITv9XCblqb2Zw3lJLUuxIEV----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://wiki.archlinux.org/load.php?debug=false&lang=en&modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles%7Cskins.vector.styles.responsive%7Czzz.ext.archLinux.styles&only=styles&skin=vector
+
+@charset "utf-8";
+
+@media print {
+  .noprint, .catlinks, .magnify, .mw-cite-backlink, .mw-jump, .mw-editsecti=
+on, .mw-editsection-like, .mw-hidden-catlinks, .mw-indicators, .mw-redirect=
+edfrom, .patrollink, .usermessage, #column-one, #footer-places, #jump-to-na=
+v, #mw-navigation, #siteNotice, #f-poweredbyico, #f-copyrightico, li#about,=
+ li#disclaimer, li#mobileview, li#privacy { display: none; }
+  body { background: rgb(255, 255, 255); color: rgb(0, 0, 0); margin: 0px; =
+padding: 0px; }
+  a { background: none !important; padding: 0px !important; }
+  a, a.external, a.new, a.stub { color: inherit !important; text-decoration=
+: inherit !important; }
+  .mw-body-content a.external.text::after, .mw-body-content a.external.auto=
+number::after { content: " (" attr(href) ")"; word-break: break-all; word-w=
+rap: break-word; }
+  .mw-body-content a.external.text[href^=3D"//"]::after, .mw-body-content a=
+.external.autonumber[href^=3D"//"]::after { content: " (https:" attr(href) =
+")"; }
+  dt { font-weight: bold; }
+  h1, h2, h3, h4, h5, h6 { font-weight: bold; break-after: avoid; break-bef=
+ore: avoid; }
+  p { margin: 1em 0px; line-height: 1.2; orphans: 3; widows: 3; }
+  img, figure, .wikitable, .thumb { break-inside: avoid; }
+  img { border: 0px; vertical-align: middle; }
+  pre, .mw-code { background: rgb(255, 255, 255); color: rgb(0, 0, 0); bord=
+er: 1pt dashed rgb(0, 0, 0); padding: 1em 0px; font-size: 8pt; white-space:=
+ pre; word-wrap: break-word; overflow: auto; }
+  sup, sub { line-height: 1; }
+  ul { list-style-type: square; }
+  #globalWrapper { width: 100% !important; min-width: 0px !important; }
+  .mw-body { background: rgb(255, 255, 255); color: rgb(0, 0, 0); direction=
+: ltr; border: 0px !important; padding: 0px !important; margin: 0px !import=
+ant; }
+  #column-content { margin: 0px !important; }
+  #column-content .mw-body { padding: 1em; margin: 0px !important; }
+  #toc, .toc { background-color: rgb(249, 249, 249); border: 1pt solid rgb(=
+170, 170, 170); padding: 5px; display: table; }
+  .tocnumber, .toctext { display: table-cell; }
+  .tocnumber { padding-left: 0px; padding-right: 0.5em; }
+  .mw-content-ltr .tocnumber { padding-left: 0px; padding-right: 0.5em; }
+  .mw-content-rtl .tocnumber { padding-left: 0.5em; padding-right: 0px; }
+  table.floatright, div.floatright, div.tright { float: right; clear: right=
+; position: relative; }
+  table.floatleft, div.floatleft, div.tleft { float: left; clear: left; pos=
+ition: relative; }
+  div.tleft { margin: 0.5em 1.4em 1.3em 0px; }
+  div.tright { margin: 0.5em 0px 1.3em 1.4em; }
+  table.floatright, div.floatright { margin: 0px 0px 0.5em 0.5em; border: 0=
+px; }
+  table.floatleft, div.floatleft { margin: 0px 0.5em 0.5em 0px; border: 0px=
+; }
+  div.floatleft p, div.floatright p { font-style: italic; }
+  .center { text-align: center; }
+  div.thumb { background-color: transparent; width: auto; }
+  div.thumb a { border-bottom: 0px; }
+  div.thumbinner { background-color: rgb(255, 255, 255); border: 0px; borde=
+r-radius: 2px; padding: 5px; font-size: 10pt; color: rgb(102, 102, 102); te=
+xt-align: center; overflow: hidden; min-width: 100px; }
+  html .thumbcaption { text-align: left; line-height: 1.4; padding: 3px; }
+  img.thumbborder { border: 1pt solid rgb(221, 221, 221); }
+  table.wikitable, .mw_metadata { background: rgb(255, 255, 255); margin: 1=
+em 0px; border: 1pt solid rgb(170, 170, 170); border-collapse: collapse; fo=
+nt-size: 10pt; }
+  table.wikitable > caption, .mw_metadata caption { padding: 5px; font-size=
+: 10pt; }
+  table.wikitable > tr > th, table.wikitable > tr > td, table.wikitable > *=
+ > tr > th, table.wikitable > * > tr > td, .mw_metadata th, .mw_metadata td=
+ { border: 1pt solid rgb(170, 170, 170); padding: 0.4em 0.6em; background: =
+rgb(255, 255, 255) !important; color: rgb(0, 0, 0) !important; }
+  table.wikitable > tr > th, table.wikitable > * > tr > th, .mw_metadata th=
+ { text-align: center; }
+  table.listing, table.listing td { border: 1pt solid rgb(0, 0, 0); border-=
+collapse: collapse; }
+  .catlinks ul { display: inline; padding: 0px; list-style: none none; }
+  .catlinks li { display: inline-block; line-height: 1.15; margin: 0.1em 0p=
+x; border-left: 1pt solid rgb(170, 170, 170); padding: 0px 0.4em; }
+  .catlinks li:first-child { border-left: 0px; padding-left: 0.2em; }
+  .printfooter { padding: 1em 0px; }
+  #footer { background: rgb(255, 255, 255); color: rgb(0, 0, 0); margin-top=
+: 1em; border-top: 1pt solid rgb(170, 170, 170); padding-top: 5px; directio=
+n: ltr; }
+}
+
+@media screen {
+  .mw-content-ltr { direction: ltr; }
+  .mw-content-rtl { direction: rtl; }
+  .sitedir-ltr textarea, .sitedir-ltr input { direction: ltr; }
+  .sitedir-rtl textarea, .sitedir-rtl input { direction: rtl; }
+  .mw-userlink { unicode-bidi: embed; }
+  mark { background-color: rgb(255, 255, 0); color: rgb(0, 0, 0); }
+  wbr { display: inline-block; }
+  input[type=3D"submit"], input[type=3D"button"], input[type=3D"reset"], in=
+put[type=3D"file"] { direction: ltr; }
+  textarea[dir=3D"ltr"], input[dir=3D"ltr"] { direction: ltr; }
+  textarea[dir=3D"rtl"], input[dir=3D"rtl"] { direction: rtl; }
+  abbr[title], .explain[title] { border-bottom: 1px dotted; cursor: help; }
+  @supports ( text-decoration:underline dotted ) {
+  abbr[title], .explain[title] { border-bottom: 0px; text-decoration: under=
+line dotted; }
+}
+  span.comment { font-style: italic; unicode-bidi: isolate; }
+  #editform, #toolbar, #wpTextbox1 { clear: both; }
+  #toolbar { height: 22px; }
+  .mw-editfont-default:not(textarea) { font-family: monospace; }
+  .mw-editfont-monospace { font-family: monospace; }
+  .mw-editfont-sans-serif { font-family: sans-serif; }
+  .mw-editfont-serif { font-family: serif; }
+  .mw-underline-always a { text-decoration: underline; }
+  .mw-underline-never a { text-decoration: none; }
+  li span.deleted, span.history-deleted { text-decoration: line-through; co=
+lor: rgb(114, 119, 125); font-style: italic; }
+  .not-patrolled { background-color: rgb(255, 255, 170); }
+  .unpatrolled { font-weight: bold; color: rgb(221, 51, 51); }
+  div.patrollink { font-size: 75%; text-align: right; }
+  td.mw-label { text-align: right; vertical-align: middle; }
+  td.mw-input { text-align: left; }
+  td.mw-submit { text-align: left; white-space: nowrap; }
+  .mw-input-with-label { white-space: nowrap; display: inline-block; }
+  .mw-content-ltr .thumbcaption { text-align: left; }
+  .mw-content-ltr .magnify { float: right; }
+  .mw-content-rtl .thumbcaption { text-align: right; }
+  .mw-content-rtl .magnify { float: left; }
+  #catlinks { text-align: left; }
+  .catlinks ul { display: inline; margin: 0px; padding: 0px; list-style: no=
+ne none; }
+  .catlinks li { display: inline-block; line-height: 1.25em; border-left: 1=
+px solid rgb(162, 169, 177); margin: 0.125em 0px; padding: 0px 0.5em; zoom:=
+ 1; }
+  .catlinks li:first-child { padding-left: 0.25em; border-left: 0px; }
+  .catlinks li a.mw-redirect { font-style: italic; }
+  .mw-hidden-cats-hidden { display: none; }
+  .catlinks-allhidden { display: none; }
+  p.mw-protect-editreasons, p.mw-filedelete-editreasons, p.mw-delete-editre=
+asons { font-size: 90%; text-align: right; }
+  .autocomment { color: rgb(114, 119, 125); }
+  .newpage, .minoredit, .botedit { font-weight: bold; }
+  div.mw-warning-with-logexcerpt { padding: 3px; margin-bottom: 3px; border=
+: 2px solid rgb(42, 75, 141); clear: both; }
+  div.mw-warning-with-logexcerpt ul li { font-size: 90%; }
+  span.mw-revdelundel-link, strong.mw-revdelundel-link { font-size: 90%; }
+  span.mw-revdelundel-hidden, input.mw-revdelundel-hidden { visibility: hid=
+den; }
+  td.mw-revdel-checkbox, th.mw-revdel-checkbox { padding-right: 10px; text-=
+align: center; }
+  a.new { color: rgb(186, 0, 0); }
+  a.mw-selflink { color: inherit; font-weight: bold; text-decoration: inher=
+it; }
+  a.mw-selflink:hover { cursor: inherit; text-decoration: inherit; }
+  a.mw-selflink:active, a.mw-selflink:visited { color: inherit; }
+  .plainlinks a.external { background: none !important; padding: 0px !impor=
+tant; }
+  .rtl a.external.free, .rtl a.external.autonumber { direction: ltr; unicod=
+e-bidi: embed; }
+  table.wikitable { background-color: rgb(248, 249, 250); color: rgb(34, 34=
+, 34); margin: 1em 0px; border: 1px solid rgb(162, 169, 177); border-collap=
+se: collapse; }
+  table.wikitable > tr > th, table.wikitable > tr > td, table.wikitable > *=
+ > tr > th, table.wikitable > * > tr > td { border: 1px solid rgb(162, 169,=
+ 177); padding: 0.2em 0.4em; }
+  table.wikitable > tr > th, table.wikitable > * > tr > th { background-col=
+or: rgb(234, 236, 240); text-align: center; }
+  table.wikitable > caption { font-weight: bold; }
+  .error, .warning, .success { font-size: larger; }
+  .error { color: rgb(221, 51, 51); }
+  .warning { color: rgb(112, 80, 0); }
+  .success { color: rgb(0, 144, 0); }
+  .errorbox, .warningbox, .successbox { border: 1px solid; padding: 0.5em 1=
+em; margin-bottom: 1em; display: inline-block; zoom: 1; }
+  .errorbox h2, .warningbox h2, .successbox h2 { font-size: 1em; color: inh=
+erit; font-weight: bold; display: inline; margin: 0px 0.5em 0px 0px; border=
+: 0px; }
+  .errorbox { color: rgb(221, 51, 51); border-color: rgb(250, 197, 197); ba=
+ckground-color: rgb(250, 227, 227); }
+  .warningbox { color: rgb(112, 80, 0); border-color: rgb(253, 226, 155); b=
+ackground-color: rgb(253, 241, 209); }
+  .successbox { color: rgb(0, 128, 0); border-color: rgb(183, 253, 181); ba=
+ckground-color: rgb(225, 253, 223); }
+  .mw-infobox { border: 2px solid rgb(255, 127, 0); margin: 0.5em; clear: l=
+eft; overflow: hidden; }
+  .mw-infobox-left { margin: 7px; float: left; width: 35px; }
+  .mw-infobox-right { margin: 0.5em 0.5em 0.5em 49px; }
+  .previewnote { color: rgb(221, 51, 51); margin-bottom: 1em; }
+  .previewnote p { text-indent: 3em; margin: 0.8em 0px; }
+  .visualClear { clear: both; }
+  .mw-datatable { border-collapse: collapse; }
+  .mw-datatable, .mw-datatable td, .mw-datatable th { border: 1px solid rgb=
+(162, 169, 177); padding: 0px 0.15em; }
+  .mw-datatable th { background-color: rgb(221, 221, 255); }
+  .mw-datatable td { background-color: rgb(255, 255, 255); }
+  .mw-datatable tr:hover td { background-color: rgb(234, 243, 255); }
+  .mw-content-ltr ul, .mw-content-rtl .mw-content-ltr ul { margin: 0.3em 0p=
+x 0px 1.6em; padding: 0px; }
+  .mw-content-rtl ul, .mw-content-ltr .mw-content-rtl ul { margin: 0.3em 1.=
+6em 0px 0px; padding: 0px; }
+  .mw-content-ltr ol, .mw-content-rtl .mw-content-ltr ol { margin: 0.3em 0p=
+x 0px 3.2em; padding: 0px; }
+  .mw-content-rtl ol, .mw-content-ltr .mw-content-rtl ol { margin: 0.3em 3.=
+2em 0px 0px; padding: 0px; }
+  .mw-content-ltr dd, .mw-content-rtl .mw-content-ltr dd { margin-left: 1.6=
+em; margin-right: 0px; }
+  .mw-content-rtl dd, .mw-content-ltr .mw-content-rtl dd { margin-right: 1.=
+6em; margin-left: 0px; }
+  .mw-ajax-loader { background-image: url("/resources/src/mediawiki.legacy/=
+images/ajax-loader.gif?57f34"); background-position: center center; backgro=
+und-repeat: no-repeat; padding: 16px; position: relative; top: -16px; }
+  .mw-small-spinner { margin-right: 0.6em; background-image: url("/resource=
+s/src/mediawiki.legacy/images/spinner.gif?ca65b"); background-position: cen=
+ter center; background-repeat: no-repeat; padding: 10px !important; }
+  h1:lang(anp), h1:lang(as), h1:lang(bh), h1:lang(bho), h1:lang(bn), h1:lan=
+g(gu), h1:lang(hi), h1:lang(kn), h1:lang(ks), h1:lang(ml), h1:lang(mr), h1:=
+lang(my), h1:lang(mai), h1:lang(ne), h1:lang(new), h1:lang(or), h1:lang(pa)=
+, h1:lang(pi), h1:lang(sa), h1:lang(ta), h1:lang(te) { line-height: 1.6em !=
+important; }
+  h2:lang(anp), h3:lang(anp), h4:lang(anp), h5:lang(anp), h6:lang(anp), h2:=
+lang(as), h3:lang(as), h4:lang(as), h5:lang(as), h6:lang(as), h2:lang(bho),=
+ h3:lang(bho), h4:lang(bho), h5:lang(bho), h6:lang(bho), h2:lang(bh), h3:la=
+ng(bh), h4:lang(bh), h5:lang(bh), h6:lang(bh), h2:lang(bn), h3:lang(bn), h4=
+:lang(bn), h5:lang(bn), h6:lang(bn), h2:lang(gu), h3:lang(gu), h4:lang(gu),=
+ h5:lang(gu), h6:lang(gu), h2:lang(hi), h3:lang(hi), h4:lang(hi), h5:lang(h=
+i), h6:lang(hi), h2:lang(kn), h3:lang(kn), h4:lang(kn), h5:lang(kn), h6:lan=
+g(kn), h2:lang(ks), h3:lang(ks), h4:lang(ks), h5:lang(ks), h6:lang(ks), h2:=
+lang(ml), h3:lang(ml), h4:lang(ml), h5:lang(ml), h6:lang(ml), h2:lang(mr), =
+h3:lang(mr), h4:lang(mr), h5:lang(mr), h6:lang(mr), h2:lang(my), h3:lang(my=
+), h4:lang(my), h5:lang(my), h6:lang(my), h2:lang(mai), h3:lang(mai), h4:la=
+ng(mai), h5:lang(mai), h6:lang(mai), h2:lang(ne), h3:lang(ne), h4:lang(ne),=
+ h5:lang(ne), h6:lang(ne), h2:lang(new), h3:lang(new), h4:lang(new), h5:lan=
+g(new), h6:lang(new), h2:lang(or), h3:lang(or), h4:lang(or), h5:lang(or), h=
+6:lang(or), h2:lang(pa), h3:lang(pa), h4:lang(pa), h5:lang(pa), h6:lang(pa)=
+, h2:lang(pi), h3:lang(pi), h4:lang(pi), h5:lang(pi), h6:lang(pi), h2:lang(=
+sa), h3:lang(sa), h4:lang(sa), h5:lang(sa), h6:lang(sa), h2:lang(ta), h3:la=
+ng(ta), h4:lang(ta), h5:lang(ta), h6:lang(ta), h2:lang(te), h3:lang(te), h4=
+:lang(te), h5:lang(te), h6:lang(te) { line-height: 1.2em; }
+  ol:lang(azb) li, ol:lang(bcc) li, ol:lang(bgn) li, ol:lang(bqi) li, ol:la=
+ng(fa) li, ol:lang(glk) li, ol:lang(kk-arab) li, ol:lang(lrc) li, ol:lang(l=
+uz) li, ol:lang(mzn) li { list-style-type: persian; }
+  ol:lang(ckb) li, ol:lang(sdh) li { list-style-type: arabic-indic; }
+  ol:lang(hi) li, ol:lang(mai) li, ol:lang(mr) li, ol:lang(ne) li { list-st=
+yle-type: devanagari; }
+  ol:lang(as) li, ol:lang(bn) li { list-style-type: bengali; }
+  ol:lang(or) li { list-style-type: oriya; }
+  #toc ul, .toc ul { margin: 0.3em 0px; }
+  .mw-content-ltr .toc ul, .mw-content-ltr #toc ul, .mw-content-rtl .mw-con=
+tent-ltr .toc ul, .mw-content-rtl .mw-content-ltr #toc ul { text-align: lef=
+t; }
+  .mw-content-rtl .toc ul, .mw-content-rtl #toc ul, .mw-content-ltr .mw-con=
+tent-rtl .toc ul, .mw-content-ltr .mw-content-rtl #toc ul { text-align: rig=
+ht; }
+  .mw-content-ltr .toc ul ul, .mw-content-ltr #toc ul ul, .mw-content-rtl .=
+mw-content-ltr .toc ul ul, .mw-content-rtl .mw-content-ltr #toc ul ul { mar=
+gin: 0px 0px 0px 2em; }
+  .mw-content-rtl .toc ul ul, .mw-content-rtl #toc ul ul, .mw-content-ltr .=
+mw-content-rtl .toc ul ul, .mw-content-ltr .mw-content-rtl #toc ul ul { mar=
+gin: 0px 2em 0px 0px; }
+  #toc #toctitle, .toc #toctitle, #toc .toctitle, .toc .toctitle { directio=
+n: ltr; }
+  #mw-clearyourcache, #mw-sitecsspreview, #mw-sitejspreview, #mw-usercsspre=
+view, #mw-userjspreview { direction: ltr; unicode-bidi: embed; }
+  #mw-revision-info, #mw-revision-info-current, #mw-revision-nav { directio=
+n: ltr; }
+  div.tright, div.floatright, table.floatright { clear: right; float: right=
+; }
+  div.tleft, div.floatleft, table.floatleft { float: left; clear: left; }
+  div.floatright, table.floatright, div.floatleft, table.floatleft { positi=
+on: relative; }
+  #mw-credits a { unicode-bidi: embed; }
+  .mw-jump, #jump-to-nav { overflow: hidden; height: 0px; zoom: 1; }
+  .printfooter { display: none; }
+  .xdebug-error { position: absolute; z-index: 99; }
+  .mw-editsection, #jump-to-nav { user-select: none; }
+  .mw-editsection, .mw-editsection-like { font-size: small; font-weight: no=
+rmal; margin-left: 1em; vertical-align: baseline; line-height: 1em; display=
+: inline-block; }
+  .mw-content-ltr .mw-editsection, .mw-content-rtl .mw-content-ltr .mw-edit=
+section { margin-left: 1em; }
+  .mw-content-rtl .mw-editsection, .mw-content-ltr .mw-content-rtl .mw-edit=
+section { margin-right: 1em; }
+  sup, sub { line-height: 1; }
+}
+
+.mw-headline-anchor { display: none; }
+
+@media screen {
+  a { text-decoration: none; color: rgb(6, 69, 173); background: none; }
+  a:not([href]) { cursor: pointer; }
+  a:visited { color: rgb(11, 0, 128); }
+  a:active { color: rgb(250, 167, 0); }
+  a:hover, a:focus { text-decoration: underline; }
+  a:lang(ar), a:lang(kk-arab), a:lang(mzn), a:lang(ps), a:lang(ur) { text-d=
+ecoration: none; }
+  a.stub { color: rgb(119, 34, 51); }
+  a.new, #p-personal a.new { color: rgb(186, 0, 0); }
+  a.new:visited, #p-personal a.new:visited { color: rgb(165, 88, 88); }
+  .mw-body-content a.extiw, .mw-body-content a.extiw:active { color: rgb(51=
+, 102, 187); }
+  .mw-body-content a.extiw:visited { color: rgb(102, 51, 102); }
+  .mw-body-content a.extiw:active { color: rgb(187, 102, 51); }
+  .mw-body-content a.external { color: rgb(51, 102, 187); }
+  .mw-body-content a.external:visited { color: rgb(102, 51, 102); }
+  .mw-body-content a.external:active { color: rgb(187, 102, 51); }
+  .mw-body-content a.external.free { word-wrap: break-word; }
+  img { border: 0px; vertical-align: middle; }
+  hr { height: 1px; color: rgb(162, 169, 177); background-color: rgb(162, 1=
+69, 177); border: 0px; margin: 0.2em 0px; }
+  h1, h2, h3, h4, h5, h6 { color: rgb(0, 0, 0); background: none; font-weig=
+ht: normal; margin: 0px; overflow: hidden; padding-top: 0.5em; padding-bott=
+om: 0.17em; border-bottom: 1px solid rgb(162, 169, 177); }
+  h1 { font-size: 188%; }
+  h2 { font-size: 150%; }
+  h3, h4, h5, h6 { border-bottom: 0px; font-weight: bold; }
+  h3 { font-size: 128%; }
+  h4 { font-size: 116%; }
+  h5 { font-size: 108%; }
+  h6 { font-size: 100%; }
+  h1, h2 { margin-bottom: 0.6em; }
+  h3, h4, h5 { margin-bottom: 0.3em; }
+  p { margin: 0.4em 0px 0.5em; }
+  p img { margin: 0px; }
+  ul { list-style-type: square; margin: 0.3em 0px 0px 1.6em; padding: 0px; =
+}
+  ol { margin: 0.3em 0px 0px 3.2em; padding: 0px; list-style-image: none; }
+  li { margin-bottom: 0.1em; }
+  dt { font-weight: bold; margin-bottom: 0.1em; }
+  dl { margin-top: 0.2em; margin-bottom: 0.5em; }
+  dd { margin-left: 1.6em; margin-bottom: 0.1em; }
+  pre, code, tt, kbd, samp, .mw-code { font-family: monospace, Courier; }
+  code { color: rgb(0, 0, 0); background-color: rgb(248, 249, 250); border:=
+ 1px solid rgb(234, 236, 240); border-radius: 2px; padding: 1px 4px; }
+  pre, .mw-code { color: rgb(0, 0, 0); background-color: rgb(248, 249, 250)=
+; border: 1px solid rgb(234, 236, 240); padding: 1em; white-space: pre-wrap=
+; }
+  table { font-size: 100%; }
+  fieldset { border: 1px solid rgb(42, 75, 141); margin: 1em 0px; padding: =
+0px 1em 1em; }
+  fieldset.nested { margin: 0px 0px 0.5em; padding: 0px 0.5em 0.5em; }
+  legend { padding: 0.5em; font-size: 95%; }
+  form { border: 0px; margin: 0px; }
+  textarea { width: 100%; padding: 0.1em; display: block; box-sizing: borde=
+r-box; }
+  .center { width: 100%; text-align: center; }
+  .center * { margin-left: auto; margin-right: auto; }
+  .small { font-size: 94%; }
+  table.small { font-size: 100%; }
+  #toc, .toc, .mw-warning, .toccolours { border: 1px solid rgb(162, 169, 17=
+7); background-color: rgb(248, 249, 250); padding: 5px; font-size: 95%; }
+  #toc, .toc { display: table; zoom: 1; padding: 7px; }
+  table#toc, table.toc { border-collapse: collapse; }
+  table#toc td, table.toc td { padding: 0px; }
+  #toc h2, .toc h2 { display: inline; border: 0px; padding: 0px; font-size:=
+ 100%; font-weight: bold; }
+  #toc #toctitle, .toc #toctitle, #toc .toctitle, .toc .toctitle { text-ali=
+gn: center; }
+  #toc ul, .toc ul { list-style-type: none; list-style-image: none; margin-=
+left: 0px; padding: 0px; text-align: left; }
+  #toc ul ul, .toc ul ul { margin: 0px 0px 0px 2em; }
+  .tocnumber, .toctext { display: table-cell; text-decoration: inherit; }
+  .tocnumber { padding-left: 0px; padding-right: 0.5em; color: rgb(34, 34, =
+34); }
+  .mw-content-ltr .tocnumber { padding-left: 0px; padding-right: 0.5em; }
+  .mw-content-rtl .tocnumber { padding-left: 0.5em; padding-right: 0px; }
+  .mw-warning { margin-left: 50px; margin-right: 50px; text-align: center; =
+}
+  div.floatright, table.floatright { margin: 0px 0px 0.5em 0.5em; }
+  div.floatright p { font-style: italic; }
+  div.floatleft, table.floatleft { margin: 0px 0.5em 0.5em 0px; }
+  div.floatleft p { font-style: italic; }
+  div.thumb { margin-bottom: 0.5em; width: auto; background-color: transpar=
+ent; }
+  div.thumbinner { border: 1px solid rgb(200, 204, 209); padding: 3px; back=
+ground-color: rgb(248, 249, 250); font-size: 94%; text-align: center; overf=
+low: hidden; }
+  html .thumbimage { background-color: rgb(255, 255, 255); border: 1px soli=
+d rgb(200, 204, 209); }
+  html .thumbcaption { border: 0px; line-height: 1.4em; padding: 3px; font-=
+size: 94%; text-align: left; }
+  div.magnify { float: right; margin-left: 3px; }
+  div.magnify a { display: block; text-indent: 15px; white-space: nowrap; o=
+verflow: hidden; width: 15px; height: 11px; background-image: linear-gradie=
+nt(transparent, transparent), url("data:image/svg+xml,%3C%3Fxml version=3D%=
+221.0%22 encoding=3D%22UTF-8%22 standalone=3D%22no%22%3F%3E%0A%3Csvg xmlns=
+=3D%22http://www.w3.org/2000/svg%22 viewBox=3D%220 0 11 15%22 width=3D%2215=
+%22 height=3D%2211%22%3E%0A %3Cg id=3D%22magnify-clip%22 fill=3D%22%23fff%2=
+2 stroke=3D%22%23000%22%3E%0A %3Cpath id=3D%22bigbox%22 d=3D%22M1.509 1.865=
+h10.99v7.919h-10.99z%22/%3E%0A %3Cpath id=3D%22smallbox%22 d=3D%22M-1.499 6=
+.868h5.943v4.904h-5.943z%22/%3E%0A %3C/g%3E%0A%3C/svg%3E%0A"); user-select:=
+ none; }
+  img.thumbborder { border: 1px solid rgb(234, 236, 240); }
+  .mw-content-ltr .thumbcaption { text-align: left; }
+  .mw-content-ltr .magnify { float: right; margin-left: 3px; margin-right: =
+0px; }
+  .mw-content-ltr div.magnify a { background-image: linear-gradient(transpa=
+rent, transparent), url("data:image/svg+xml,%3C%3Fxml version=3D%221.0%22 e=
+ncoding=3D%22UTF-8%22 standalone=3D%22no%22%3F%3E%0A%3Csvg xmlns=3D%22http:=
+//www.w3.org/2000/svg%22 viewBox=3D%220 0 11 15%22 width=3D%2215%22 height=
+=3D%2211%22%3E%0A %3Cg id=3D%22magnify-clip%22 fill=3D%22%23fff%22 stroke=
+=3D%22%23000%22%3E%0A %3Cpath id=3D%22bigbox%22 d=3D%22M1.509 1.865h10.99v7=
+.919h-10.99z%22/%3E%0A %3Cpath id=3D%22smallbox%22 d=3D%22M-1.499 6.868h5.9=
+43v4.904h-5.943z%22/%3E%0A %3C/g%3E%0A%3C/svg%3E%0A"); }
+  .mw-content-rtl .thumbcaption { text-align: right; }
+  .mw-content-rtl .magnify { float: left; margin-left: 0px; margin-right: 3=
+px; }
+  .mw-content-rtl div.magnify a { background-image: linear-gradient(transpa=
+rent, transparent), url("data:image/svg+xml,%3C%3Fxml version=3D%221.0%22 e=
+ncoding=3D%22UTF-8%22 standalone=3D%22no%22%3F%3E%0A%3Csvg xmlns=3D%22http:=
+//www.w3.org/2000/svg%22 viewBox=3D%220 0 11 15%22 width=3D%2215%22 height=
+=3D%2211%22%3E%0A %3Cg id=3D%22magnify-clip%22 fill=3D%22%23fff%22 stroke=
+=3D%22%23000%22%3E%0A %3Cpath id=3D%22bigbox%22 d=3D%22M9.491 1.865h-10.99v=
+7.919h10.99z%22/%3E%0A %3Cpath id=3D%22smallbox%22 d=3D%22M12.499 6.868h-5.=
+943v4.904h5.943z%22/%3E%0A %3C/g%3E%0A%3C/svg%3E%0A"); }
+  div.tright { margin: 0.5em 0px 1.3em 1.4em; }
+  div.tleft { margin: 0.5em 1.4em 1.3em 0px; }
+  body.mw-hide-empty-elt .mw-empty-elt { display: none; }
+  .catlinks { border: 1px solid rgb(162, 169, 177); background-color: rgb(2=
+48, 249, 250); padding: 5px; margin-top: 1em; clear: both; }
+  textarea { border: 1px solid rgb(162, 169, 177); }
+  .editOptions { background-color: rgb(234, 236, 240); border-width: 0px 1p=
+x 1px; border-right-style: solid; border-bottom-style: solid; border-left-s=
+tyle: solid; border-right-color: rgb(200, 204, 209); border-bottom-color: r=
+gb(200, 204, 209); border-left-color: rgb(200, 204, 209); border-image: ini=
+tial; border-top-style: initial; border-top-color: initial; padding: 1em 1e=
+m 1.5em; margin-bottom: 2em; }
+  .usermessage { background-color: rgb(255, 206, 123); border: 1px solid rg=
+b(255, 165, 0); color: rgb(0, 0, 0); font-weight: bold; margin: 2em 0px 1em=
+; padding: 0.5em 1em; vertical-align: middle; }
+  #siteNotice { position: relative; text-align: center; margin: 0px; }
+  #localNotice { margin-bottom: 0.9em; }
+  .firstHeading { margin-bottom: 0.1em; line-height: 1.2em; padding-bottom:=
+ 0px; }
+  #siteSub { display: none; }
+  #jump-to-nav { margin-top: -1.4em; margin-bottom: 1.4em; }
+  #contentSub, #contentSub2 { font-size: 84%; line-height: 1.2em; margin: 0=
+px 0px 1.4em 1em; color: rgb(84, 89, 93); width: auto; }
+  span.subpages { display: block; }
+}
+
+.mw-wiki-logo { background-image: url("/resources/assets/wiki.png?de8c8"); =
+}
+
+@media screen {
+  html { font-size: 100%; }
+  html, body { height: 100%; margin: 0px; padding: 0px; font-family: sans-s=
+erif; }
+  body { background-color: rgb(246, 246, 246); }
+  .mw-body, .parsoid-body { padding: 1em; background-color: rgb(255, 255, 2=
+55); color: rgb(34, 34, 34); direction: ltr; }
+  .mw-body { margin-left: 10em; border-width: 1px 0px 1px 1px; border-style=
+: solid; border-color: rgb(167, 215, 249); border-image: initial; margin-to=
+p: -1px; }
+  .mw-body h1, .mw-body-content h1, .mw-body-content h2 { font-family: "Lin=
+ux Libertine", Georgia, Times, serif; line-height: 1.3; margin-bottom: 0.25=
+em; padding: 0px; }
+  .mw-body h1:lang(ja), .mw-body-content h1:lang(ja), .mw-body-content h2:l=
+ang(ja), .mw-body h1:lang(he), .mw-body-content h1:lang(he), .mw-body-conte=
+nt h2:lang(he), .mw-body h1:lang(ko), .mw-body-content h1:lang(ko), .mw-bod=
+y-content h2:lang(ko) { font-family: sans-serif; }
+  .mw-body h1, .mw-body-content h1 { font-size: 1.8em; }
+  .mw-body .firstHeading { overflow: visible; }
+  .mw-body .mw-indicators { float: right; line-height: 1.6; font-size: 0.87=
+5em; position: relative; z-index: 1; }
+  .mw-body .mw-indicator { display: inline-block; zoom: 1; }
+  .mw-body-content { position: relative; line-height: 1.6; font-size: 0.875=
+em; z-index: 0; }
+  .mw-body-content p { line-height: inherit; margin: 0.5em 0px; }
+  .mw-body-content h1 { margin-top: 1em; }
+  .mw-body-content h2 { font-size: 1.5em; margin-top: 1em; }
+  .mw-body-content h3, .mw-body-content h4, .mw-body-content h5, .mw-body-c=
+ontent h6 { line-height: 1.6; margin-top: 0.3em; margin-bottom: 0px; paddin=
+g-bottom: 0px; }
+  .mw-body-content h3 { font-size: 1.2em; }
+  .mw-body-content h3, .mw-body-content h4 { font-weight: bold; }
+  .mw-body-content h4, .mw-body-content h5, .mw-body-content h6 { font-size=
+: 100%; }
+  .mw-body-content #toc h2, .mw-body-content .toc h2 { font-size: 100%; fon=
+t-family: sans-serif; }
+  .mw-editsection, .mw-editsection-like { font-family: sans-serif; }
+  div.emptyPortlet { display: none; }
+  ul { list-style-type: disc; list-style-image: url("data:image/svg+xml,%3C=
+%3Fxml version=3D%221.0%22 encoding=3D%22UTF-8%22%3F%3E%0A%3Csvg xmlns=3D%2=
+2http://www.w3.org/2000/svg%22 version=3D%221.1%22 width=3D%225%22 height=
+=3D%2213%22%3E%0A%3Ccircle cx=3D%222.5%22 cy=3D%229.5%22 r=3D%222.5%22 fill=
+=3D%22%2300528c%22/%3E%0A%3C/svg%3E%0A"); }
+  pre, .mw-code { line-height: 1.3em; }
+  #siteNotice { font-size: 0.8em; }
+  #p-personal { position: absolute; top: 0.33em; right: 0.75em; z-index: 10=
+0; }
+  #p-personal h3 { display: none; }
+  #p-personal ul { list-style-type: none; list-style-image: none; margin: 0=
+px; padding-left: 10em; }
+  #p-personal li { line-height: 1.125em; float: left; margin-left: 0.75em; =
+margin-top: 0.5em; font-size: 0.75em; white-space: nowrap; }
+  #pt-userpage, #pt-anonuserpage { background-position: left top; backgroun=
+d-repeat: no-repeat; background-image: linear-gradient(transparent, transpa=
+rent), url("data:image/svg+xml,%3C%3Fxml version=3D%221.0%22 encoding=3D%22=
+utf-8%22%3F%3E%0A%3C%21DOCTYPE svg PUBLIC %22-//W3C//DTD SVG 1.1//EN%22 %22=
+http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd%22%3E%0A%3Csvg version=3D%=
+221.1%22 id=3D%22Layer_1%22 xmlns=3D%22http://www.w3.org/2000/svg%22 xmlns:=
+xlink=3D%22http://www.w3.org/1999/xlink%22 x=3D%220px%22 y=3D%220px%22%0A%0=
+9width=3D%2212px%22 height=3D%2213.836px%22 viewBox=3D%220 0 12 13.836%22 e=
+nable-background=3D%22new 0 0 12 13.836%22 xml:space=3D%22preserve%22%3E%0A=
+%3Cpath fill=3D%22%23777777%22 d=3D%22M1.938%2C6.656c-1.32%2C1.485-1.47%2C3=
+.15-0.97%2C4.25c0.323%2C0.707%2C0.78%2C1.127%2C1.313%2C1.375%0A%09c0.496%2C=
+0.229%2C1.074%2C0.273%2C1.658%2C0.282c0.023%2C0%2C0.04%2C0.03%2C0.062%2C0.0=
+3h4.187c0.61%2C0%2C1.225-0.125%2C1.75-0.405%0A%09c0.527-0.28%2C0.961-0.718%=
+2C1.188-1.376c0.335-0.964%2C0.175-2.529-1.094-4.03C9.094%2C7.954%2C7.68%2C8=
+.719%2C6.065%2C8.719%0A%09c-1.677%2C0-3.182-0.812-4.125-2.063H1.938z%22/%3E=
+%0A%3Cpath fill=3D%22%23777777%22 d=3D%22M6.063%2C0c-1.89%2C0-3.595%2C1.674=
+-3.594%2C3.563C2.467%2C5.45%2C4.173%2C7.155%2C6.06%2C7.155%0A%09c1.89%2C0%2=
+C3.564-1.705%2C3.563-3.593C9.625%2C1.673%2C7.95%2C0%2C6.063%2C0L6.063%2C0z%=
+22/%3E%0A%3C/svg%3E%0A"); padding-left: 15px !important; }
+  #pt-anonuserpage { color: rgb(112, 112, 112); }
+  #p-search { float: left; margin-right: 0.5em; margin-left: 0.5em; }
+  #p-search h3 { display: block; clip: rect(1px, 1px, 1px, 1px); width: 1px=
+; height: 1px; margin: -1px; border: 0px; padding: 0px; overflow: hidden; p=
+osition: absolute !important; }
+  #p-search form, #p-search input { margin: 0.4em 0px 0px; }
+  div#simpleSearch { display: block; width: 20vw; min-width: 5em; max-width=
+: 20em; padding-right: 1.4em; height: 1.4em; margin-top: 0.65em; position: =
+relative; min-height: 1px; border: 1px solid rgb(170, 170, 170); color: rgb=
+(0, 0, 0); background-color: rgb(255, 255, 255); background-image: url("dat=
+a:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAQCAIAAABY/YLgAAAAJUlEQVQI=
+HQXBsQEAAAjDoND/73UWdnerhmHVsDQZJrNWVg3Dqge6bgMe6bejNAAAAABJRU5ErkJggg=3D=
+=3D"); background-position: left top; background-repeat: repeat-x; }
+  div#simpleSearch input { margin: 0px; padding: 0px; border: 0px; backgrou=
+nd-color: transparent; color: rgb(0, 0, 0); }
+  div#simpleSearch #searchInput { width: 100%; padding: 0.2em 0px 0.2em 0.2=
+em; font-size: 13px; direction: ltr; -webkit-appearance: textfield; }
+  div#simpleSearch #searchInput:focus { outline: 0px; }
+  div#simpleSearch #searchInput::-webkit-input-placeholder { color: rgb(114=
+, 119, 125); opacity: 1; }
+  div#simpleSearch #searchInput::placeholder { color: rgb(114, 119, 125); o=
+pacity: 1; }
+  div#simpleSearch #searchInput.placeholder { color: rgb(114, 119, 125); op=
+acity: 1; }
+  div#simpleSearch #searchInput::-webkit-search-decoration, div#simpleSearc=
+h #searchInput::-webkit-search-cancel-button, div#simpleSearch #searchInput=
+::-webkit-search-results-button, div#simpleSearch #searchInput::-webkit-sea=
+rch-results-decoration { -webkit-appearance: textfield; }
+  div#simpleSearch #searchButton, div#simpleSearch #mw-searchButton { posit=
+ion: absolute; top: 0px; right: 0px; width: 1.65em; height: 100%; cursor: p=
+ointer; text-indent: -99999px; line-height: 1; direction: ltr; white-space:=
+ nowrap; overflow: hidden; }
+  div#simpleSearch #searchButton { background-image: linear-gradient(transp=
+arent, transparent), url("data:image/svg+xml,%3C%3Fxml version=3D%221.0%22 =
+encoding=3D%22UTF-8%22%3F%3E%3Csvg xmlns=3D%22http://www.w3.org/2000/svg%22=
+ width=3D%2212%22 height=3D%2213%22%3E%3Cg stroke-width=3D%222%22 stroke=3D=
+%22%236c6c6c%22 fill=3D%22none%22%3E%3Cpath d=3D%22M11.29 11.71l-4-4%22/%3E=
+%3Ccircle cx=3D%225%22 cy=3D%225%22 r=3D%224%22/%3E%3C/g%3E%3C/svg%3E"); ba=
+ckground-position: center center; background-repeat: no-repeat; }
+  div#simpleSearch #mw-searchButton { z-index: 1; }
+  div.vectorTabs h3 { display: none; }
+  div.vectorTabs { float: left; height: 2.5em; background-image: url("data:=
+image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAuCAIAAABmjeQ9AAAAQ0lEQVR4AW=
+VOhQEAIAzC/X+xAXbXeoDFGA3A9yk1n4juBROcUegfarWjP3ojZvEzxs6j+nygmo+zzsk79nY+t=
+OxdEhlf3UHVgUFrVwAAAABJRU5ErkJggg=3D=3D"); background-position: left bottom=
+; background-repeat: no-repeat; padding-left: 1px; }
+  div.vectorTabs ul { float: left; height: 100%; list-style-type: none; lis=
+t-style-image: none; margin: 0px; padding: 0px; background-image: url("data=
+:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAuCAIAAABmjeQ9AAAAQ0lEQVR4A=
+WVOhQEAIAzC/X+xAXbXeoDFGA3A9yk1n4juBROcUegfarWjP3ojZvEzxs6j+nygmo+zzsk79nY+=
+tOxdEhlf3UHVgUFrVwAAAABJRU5ErkJggg=3D=3D"); background-position: right bott=
+om; background-repeat: no-repeat; }
+  div.vectorTabs ul li { float: left; line-height: 1.125em; display: inline=
+-block; height: 100%; margin: 0px; padding: 0px; background-color: rgb(243,=
+ 243, 243); background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSU=
+hEUgAAAAEAAABkCAIAAADITs03AAAAO0lEQVR4AeSKhREAMQzDdN5/5uixuEKDpqgBjl2f78wd2=
+DVj1+26/h///PfteVMN7zoGebcg1/Y/ZQQAlAUtQCujIJMAAAAASUVORK5CYII=3D"); backgr=
+ound-position: left bottom; background-repeat: repeat-x; white-space: nowra=
+p; }
+  div.vectorTabs ul > li { display: block; }
+  div.vectorTabs li { }
+  div.vectorTabs li.new a, div.vectorTabs li.new a:visited { color: rgb(165=
+, 88, 88); }
+  div.vectorTabs li.selected { background-image: url("data:image/png;base64=
+,iVBORw0KGgoAAAANSUhEUgAAAAEAAABkAQAAAABvV2fNAAAADElEQVR4AWNoGB4QAInlMgFKeR=
+KBAAAAAElFTkSuQmCC"); }
+  div.vectorTabs li.selected a, div.vectorTabs li.selected a:visited { colo=
+r: rgb(34, 34, 34); text-decoration: none; }
+  div.vectorTabs li.icon a { background-position: right bottom; background-=
+repeat: no-repeat; }
+  div.vectorTabs li a { display: inline-block; height: 1.9em; padding-left:=
+ 0.5em; padding-right: 0.5em; color: rgb(6, 69, 173); cursor: pointer; font=
+-size: 0.8em; }
+  div.vectorTabs li > a { display: block; }
+  div.vectorTabs span { display: inline-block; background-image: url("data:=
+image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAuCAIAAABmjeQ9AAAAQ0lEQVR4AW=
+VOhQEAIAzC/X+xAXbXeoDFGA3A9yk1n4juBROcUegfarWjP3ojZvEzxs6j+nygmo+zzsk79nY+t=
+OxdEhlf3UHVgUFrVwAAAABJRU5ErkJggg=3D=3D"); background-position: right botto=
+m; background-repeat: no-repeat; height: 100%; }
+  div.vectorTabs span a { display: inline-block; padding-top: 1.25em; }
+  div.vectorTabs span > a { float: left; display: block; }
+  div.vectorMenu { direction: ltr; float: left; cursor: pointer; position: =
+relative; line-height: 1.125em; }
+  body.rtl div.vectorMenu { direction: rtl; }
+  div#mw-head div.vectorMenu h3 { float: left; background-image: url("data:=
+image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAuCAIAAABmjeQ9AAAAQ0lEQVR4AW=
+VOhQEAIAzC/X+xAXbXeoDFGA3A9yk1n4juBROcUegfarWjP3ojZvEzxs6j+nygmo+zzsk79nY+t=
+OxdEhlf3UHVgUFrVwAAAABJRU5ErkJggg=3D=3D"); background-repeat: no-repeat; ba=
+ckground-position: right bottom; font-size: 1em; height: 2.5em; padding-rig=
+ht: 1px; margin-right: -1px; }
+  div.vectorMenu h3 span { display: block; font-size: 0.8em; padding-left: =
+0.7em; padding-top: 1.25em; padding-right: 20px; font-weight: normal; color=
+: rgb(68, 68, 68); background-image: linear-gradient(transparent, transpare=
+nt), url("data:image/svg+xml,%3C%3Fxml version=3D%221.0%22 encoding=3D%22UT=
+F-8%22%3F%3E%3Csvg xmlns=3D%22http://www.w3.org/2000/svg%22 width=3D%2222%2=
+2 height=3D%2216%22%3E%3Cpath d=3D%22M15.502 6.001l-5 5.001-5-5.001z%22 fil=
+l=3D%22%23797979%22/%3E%3C/svg%3E"); background-position: 100% 100%; backgr=
+ound-repeat: no-repeat; }
+  div.vectorMenuFocus h3 span { background-image: linear-gradient(transpare=
+nt, transparent), url("data:image/svg+xml,%3C%3Fxml version=3D%221.0%22 enc=
+oding=3D%22UTF-8%22%3F%3E%3Csvg xmlns=3D%22http://www.w3.org/2000/svg%22 wi=
+dth=3D%2222%22 height=3D%2216%22%3E%3Cpath d=3D%22M15.502 6.001l-5 5.001-5-=
+5.001z%22 fill=3D%22%23929292%22/%3E%3C/svg%3E"); }
+  div.vectorMenu div.menu { min-width: 100%; position: absolute; top: 2.5em=
+; left: -1px; background-color: rgb(255, 255, 255); border-width: 0px 1px 1=
+px; border-style: solid; border-color: rgb(162, 169, 177); border-image: in=
+itial; clear: both; box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 1px 0px; text-al=
+ign: left; display: none; z-index: 2; }
+  div.vectorMenu:hover div.menu, div.vectorMenu.menuForceShow div.menu { di=
+splay: block; }
+  div.vectorMenu ul { list-style-type: none; list-style-image: none; paddin=
+g: 0px; margin: 0px; text-align: left; }
+  div.vectorMenu li { padding: 0px; margin: 0px; text-align: left; line-hei=
+ght: 1em; }
+  div.vectorMenu li a { display: inline-block; padding: 0.5em; white-space:=
+ nowrap; color: rgb(6, 69, 173); cursor: pointer; font-size: 0.8em; }
+  div.vectorMenu li > a { display: block; }
+  div.vectorMenu li.selected a, div.vectorMenu li.selected a:visited { colo=
+r: rgb(34, 34, 34); text-decoration: none; }
+  * html div.vectorMenu div.menu { display: block; position: static; border=
+: 0px; }
+  * html div#mw-head div.vectorMenu h3 { display: none; }
+  * html div.vectorMenu li { float: left; line-height: 1.125em; border-righ=
+t: 1px solid rgb(167, 215, 249); }
+  * html div.vectorMenu li a { padding-top: 1.25em; }
+  @-webkit-keyframes rotate {=20
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+  @keyframes rotate {=20
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+  #ca-unwatch.icon a, #ca-watch.icon a { margin: 0px; padding: 3.1em 0px 0p=
+x; display: block; width: 26px; height: 0px; overflow: hidden; background-p=
+osition: 5px 60%; }
+  #ca-unwatch.icon a { background-image: linear-gradient(transparent, trans=
+parent), url("data:image/svg+xml,%3C%3Fxml version=3D%221.0%22 encoding=3D%=
+22UTF-8%22%3F%3E%3Csvg xmlns=3D%22http://www.w3.org/2000/svg%22 xmlns:xlink=
+=3D%22http://www.w3.org/1999/xlink%22 width=3D%2216%22 height=3D%2216%22%3E=
+%3Cdefs%3E%3ClinearGradient id=3D%22a%22%3E%3Cstop offset=3D%220%22 stop-co=
+lor=3D%22%23c2edff%22/%3E%3Cstop offset=3D%22.5%22 stop-color=3D%22%2368bdf=
+f%22/%3E%3Cstop offset=3D%221%22 stop-color=3D%22%23fff%22/%3E%3C/linearGra=
+dient%3E%3ClinearGradient x1=3D%2213.47%22 y1=3D%2214.363%22 x2=3D%224.596%=
+22 y2=3D%223.397%22 id=3D%22b%22 xlink:href=3D%22%23a%22 gradientUnits=3D%2=
+2userSpaceOnUse%22/%3E%3C/defs%3E%3Cpath d=3D%22M8.103 1.146l2.175 4.408 4.=
+864.707-3.52 3.431.831 4.845-4.351-2.287-4.351 2.287.831-4.845-3.52-3.431 4=
+.864-.707z%22 fill=3D%22url%28%23b%29%22 stroke=3D%22%237cb5d1%22 stroke-wi=
+dth=3D%220.9999199999999999%22/%3E%3C/svg%3E"); }
+  #ca-watch.icon a { background-image: linear-gradient(transparent, transpa=
+rent), url("data:image/svg+xml,%3C%3Fxml version=3D%221.0%22 encoding=3D%22=
+UTF-8%22%3F%3E%3Csvg xmlns=3D%22http://www.w3.org/2000/svg%22 width=3D%2216=
+%22 height=3D%2216%22%3E%3Cpath d=3D%22M8.103 1.146l2.175 4.408 4.864.707-3=
+.52 3.431.831 4.845-4.351-2.287-4.351 2.287.831-4.845-3.52-3.431 4.864-.707=
+z%22 fill=3D%22%23fff%22 stroke=3D%22%237cb5d1%22 stroke-width=3D%220.99991=
+99999999999%22/%3E%3C/svg%3E"); }
+  #ca-unwatch.icon a:hover, #ca-unwatch.icon a:focus { background-image: li=
+near-gradient(transparent, transparent), url("data:image/svg+xml,%3C%3Fxml =
+version=3D%221.0%22 encoding=3D%22UTF-8%22%3F%3E%3Csvg xmlns=3D%22http://ww=
+w.w3.org/2000/svg%22 xmlns:xlink=3D%22http://www.w3.org/1999/xlink%22 width=
+=3D%2216%22 height=3D%2216%22%3E%3Cdefs%3E%3ClinearGradient id=3D%22a%22%3E=
+%3Cstop offset=3D%220%22 stop-color=3D%22%23c2edff%22/%3E%3Cstop offset=3D%=
+22.5%22 stop-color=3D%22%2368bdff%22/%3E%3Cstop offset=3D%221%22 stop-color=
+=3D%22%23fff%22/%3E%3C/linearGradient%3E%3ClinearGradient x1=3D%2213.47%22 =
+y1=3D%2214.363%22 x2=3D%224.596%22 y2=3D%223.397%22 id=3D%22b%22 xlink:href=
+=3D%22%23a%22 gradientUnits=3D%22userSpaceOnUse%22/%3E%3C/defs%3E%3Cpath d=
+=3D%22M8.103 1.146l2.175 4.408 4.864.707-3.52 3.431.831 4.845-4.351-2.287-4=
+.351 2.287.831-4.845-3.52-3.431 4.864-.707z%22 fill=3D%22url%28%23b%29%22 s=
+troke=3D%22%23c8b250%22 stroke-width=3D%220.9999199999999999%22/%3E%3C/svg%=
+3E"); }
+  #ca-watch.icon a:hover, #ca-watch.icon a:focus { background-image: linear=
+-gradient(transparent, transparent), url("data:image/svg+xml,%3C%3Fxml vers=
+ion=3D%221.0%22 encoding=3D%22UTF-8%22%3F%3E%3Csvg xmlns=3D%22http://www.w3=
+.org/2000/svg%22 width=3D%2216%22 height=3D%2216%22%3E%3Cpath d=3D%22M8.103=
+ 1.146l2.175 4.408 4.864.707-3.52 3.431.831 4.845-4.351-2.287-4.351 2.287.8=
+31-4.845-3.52-3.431 4.864-.707z%22 fill=3D%22%23fff%22 stroke=3D%22%23c8b25=
+0%22 stroke-width=3D%220.9999199999999999%22/%3E%3C/svg%3E"); }
+  #ca-unwatch.icon a.loading, #ca-watch.icon a.loading { background-image: =
+linear-gradient(transparent, transparent), url("data:image/svg+xml,%3C%3Fxm=
+l version=3D%221.0%22 encoding=3D%22UTF-8%22%3F%3E%3Csvg xmlns=3D%22http://=
+www.w3.org/2000/svg%22 width=3D%2216%22 height=3D%2216%22%3E%3Cpath d=3D%22=
+M8.103 1.146l2.175 4.408 4.864.707-3.52 3.431.831 4.845-4.351-2.287-4.351 2=
+.287.831-4.845-3.52-3.431 4.864-.707z%22 fill=3D%22%23fff%22 stroke=3D%22%2=
+3d1d1d1%22 stroke-width=3D%220.9999199999999999%22/%3E%3C/svg%3E"); animati=
+on: rotate 700ms linear infinite; outline: 0px; cursor: default; pointer-ev=
+ents: none; background-position: 50% 60%; transform-origin: 50% 57% 0px; }
+  #ca-unwatch.icon a span, #ca-watch.icon a span { display: none; }
+  #mw-navigation h2 { position: absolute; top: -9999px; }
+  #mw-page-base { height: 5em; background-position: left bottom; background=
+-repeat: repeat-x; background-image: linear-gradient(rgb(255, 255, 255) 50%=
+, rgb(246, 246, 246) 100%); background-color: rgb(255, 255, 255); }
+  #mw-head-base { margin-top: -5em; margin-left: 10em; height: 5em; }
+  div#mw-head { position: absolute; top: 0px; right: 0px; width: 100%; }
+  div#mw-head h3 { margin: 0px; padding: 0px; }
+  #left-navigation { float: left; margin-left: 10em; margin-top: 2.5em; mar=
+gin-bottom: -2.5em; display: inline; }
+  #right-navigation { float: right; margin-top: 2.5em; }
+  #p-logo { width: 10em; height: 160px; }
+  #p-logo a { display: block; width: 10em; height: 160px; background-repeat=
+: no-repeat; background-position: center center; text-decoration: none; }
+  div#mw-panel { font-size: inherit; position: absolute; top: 0px; width: 1=
+0em; left: 0px; }
+  div#mw-panel div.portal { margin: 0px 0.6em 0px 0.7em; padding: 0.25em 0p=
+x; direction: ltr; background-position: left top; background-repeat: no-rep=
+eat; }
+  div#mw-panel div.portal h3 { font-size: 0.75em; color: rgb(68, 68, 68); f=
+ont-weight: normal; margin: 0.5em 0px 0px 0.666667em; padding: 0.25em 0px; =
+cursor: default; border: 0px; }
+  div#mw-panel div.portal div.body { margin-left: 0.5em; padding-top: 0px; =
+background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIwAAA=
+ABCAAAAAAphRnkAAAAJ0lEQVQIW7XFsQEAIAyAMPD/b7uLWz8wS5youFW1UREfiIpH1Q2VBz7fG=
+PS1dOGeAAAAAElFTkSuQmCC"); background-repeat: no-repeat; }
+  div#mw-panel div.portal div.body ul { list-style-type: none; list-style-i=
+mage: none; margin: 0px; padding: 0.3em 0px 0px; }
+  div#mw-panel div.portal div.body ul li { line-height: 1.125em; margin: 0p=
+x; padding: 0.25em 0px; font-size: 0.75em; word-wrap: break-word; }
+  div#mw-panel div.portal div.body ul li a { color: rgb(6, 69, 173); }
+  div#mw-panel div.portal div.body ul li a:visited { color: rgb(11, 0, 128)=
+; }
+  div#mw-panel #p-logo + div.portal { background-image: none; margin-top: 1=
+em; }
+  div#mw-panel #p-logo + div.portal h3 { display: none; }
+  div#mw-panel #p-logo + div.portal div.body { background-image: none; marg=
+in-left: 0.5em; }
+  div#footer { margin-left: 10em; margin-top: 0px; padding: 0.75em; directi=
+on: ltr; }
+  div#footer ul { list-style-type: none; list-style-image: none; margin: 0p=
+x; padding: 0px; }
+  div#footer ul li { margin: 0px; padding: 0.5em 0px; color: rgb(51, 51, 51=
+); font-size: 0.7em; }
+  div#footer #footer-icons { float: right; }
+  div#footer #footer-icons li { float: left; margin-left: 0.5em; line-heigh=
+t: 2em; text-align: right; }
+  div#footer #footer-info li { line-height: 1.4em; }
+  div#footer #footer-places li { float: left; margin-right: 1em; line-heigh=
+t: 2em; }
+  body.ltr div#footer #footer-places { float: left; }
+  .mw-body-content .external { background-position: right center; backgroun=
+d-repeat: no-repeat; background-image: linear-gradient(transparent, transpa=
+rent), url("data:image/svg+xml,%3C%3Fxml version=3D%221.0%22 encoding=3D%22=
+UTF-8%22 standalone=3D%22no%22%3F%3E%3Csvg xmlns=3D%22http://www.w3.org/200=
+0/svg%22 width=3D%2212%22 height=3D%2212%22%3E%3Cpath fill=3D%22%23fff%22 s=
+troke=3D%22%2306c%22 d=3D%22M1.5 4.518h5.982V10.5H1.5z%22/%3E%3Cpath d=3D%2=
+2M5.765 1H11v5.39L9.427 7.937l-1.31-1.31L5.393 9.35l-2.69-2.688 2.81-2.808L=
+4.2 2.544z%22 fill=3D%22%2306f%22/%3E%3Cpath d=3D%22M9.995 2.004l.022 4.885=
+L8.2 5.07 5.32 7.95 4.09 6.723l2.882-2.88-1.85-1.852z%22 fill=3D%22%23fff%2=
+2/%3E%3C/svg%3E"); padding-right: 13px; }
+}
+
+@media screen and (min-width: 982px) {
+  .mw-body { margin-left: 11em; padding: 1.25em 1.5em 1.5em; }
+  div#footer { margin-left: 11em; padding: 1.25em; }
+  #mw-panel { padding-left: 0.5em; }
+  #p-search { margin-right: 1em; }
+  #left-navigation { margin-left: 11em; }
+  #p-personal { right: 1em; }
+  #mw-head-base { margin-left: 11em; }
+}
+
+@media screen and (max-width: 720px) {
+  div#mw-head { margin-top: 0.5em; position: static !important; }
+  div#mw-navigation div#mw-panel { display: table; position: static; table-=
+layout: fixed; width: 100%; overflow: hidden; font-size: 150%; }
+  div#mw-navigation div#mw-panel .portal { display: block; width: 100%; }
+  div#mw-navigation div#mw-panel ul li { list-style: none; }
+  div#p-logo { display: none; }
+  body div#footer { margin-left: 0px; padding-top: 0px; }
+  body div#footer li#footer-info-lastmod, body div#footer li#footer-info-vi=
+ewcount { display: none; }
+  div#p-personal { display: table; position: relative; width: 100%; top: in=
+herit; left: inherit; right: inherit; }
+  div#p-personal ul { padding-left: 0px; }
+  div#right-navigation { position: absolute; top: inherit; right: 0px; marg=
+in-top: 0px; float: none; }
+  div#left-navigation { position: absolute; top: inherit; margin: 0px; disp=
+lay: block; float: none; }
+  div#p-namespaces, div#p-views, div#p-variants { position: relative; top: =
+2.5em; }
+  div#p-namespaces { padding-left: 0px; }
+  div#p-cactions { top: 2.5em; float: right; }
+  div#p-search { float: none; position: absolute; right: 0px; width: 100vw;=
+ margin: 0px; }
+  div#simpleSearch { margin: 0px 3em; width: 80vw; padding: 0px; }
+  div.vectorMenu div.menu { left: inherit; right: -1px; }
+  div#content { border-left: 0px; margin-left: 0px; }
+}
+
+#archnavbar { height: 40px !important; padding: 10px 15px !important; backg=
+round: rgb(51, 51, 51) !important; border-bottom: 5px solid rgb(0, 136, 204=
+) !important; }
+
+#archnavbarlogo { float: left !important; margin: 0px !important; padding: =
+0px !important; height: 40px !important; width: 190px !important; }
+
+html > body #archnavbarlogo { background: url("/extensions/ArchLinux/module=
+s/archnavbar/archlogo.svg?29b1c") 0% 0% / 190px 40px no-repeat !important; =
+}
+
+#archnavbarlogo p { margin: 0px !important; padding: 0px !important; text-i=
+ndent: -9999px !important; }
+
+#archnavbarlogo h1 { margin: 0px !important; padding: 0px !important; text-=
+indent: -9999px !important; }
+
+#archnavbarlogo a { display: block !important; height: 40px !important; wid=
+th: 190px !important; }
+
+#archnavbar ul { display: inline !important; float: right !important; list-=
+style: none !important; margin: 0px !important; padding: 0px !important; }
+
+#archnavbar ul li { float: left !important; font-size: 14px !important; fon=
+t-family: sans-serif !important; line-height: 45px !important; padding-righ=
+t: 15px !important; padding-left: 15px !important; }
+
+#archnavbar ul#archnavbarlist li a { color: rgb(153, 153, 153); font-weight=
+: bold !important; text-decoration: none !important; }
+
+#archnavbar ul li a:hover { color: white !important; text-decoration: under=
+line !important; }
+
+#archnavbar ul li.anb-selected a { color: white !important; }
+
+@media (max-width: 600px) {
+  #anb-wiki { display: none; }
+}
+
+@media (max-width: 680px) {
+  html > body #archnavbarlogo { width: 40px !important; margin-right: 5px !=
+important; background: url("/extensions/ArchLinux/modules/archnavbar/archic=
+on.svg?0c6bc") 0% 0% / 40px 40px no-repeat !important; }
+  #archnavbar ul { justify-content: space-between; flex-wrap: nowrap; overf=
+low: hidden; display: flex !important; float: none !important; }
+  #archnavbar ul li { padding: 0px !important; float: none !important; }
+}
+
+@media (max-width: 830px) {
+  #anb-home, #anb-start { display: none; }
+  html > body #archnavbarlogo { padding-right: 15px !important; }
+  #archnavbar { padding-left: 5px !important; padding-right: 5px !important=
+; }
+  #archnavbar ul li { padding-left: 5px !important; padding-right: 5px !imp=
+ortant; }
+}
+
+body { background: rgb(246, 249, 252); }
+
+#content { background: rgb(255, 255, 255); border: 1px solid rgb(204, 204, =
+204); }
+
+#content table, #content h1, #content h2, #content h3, #content h4, #conten=
+t h5, #content pre, #content code, #content tt { color: rgb(34, 34, 34); }
+
+#content ul { list-style-image: none; }
+
+#content table { border-collapse: collapse; padding: 2px; }
+
+#content td { padding: 2px; }
+
+#content pre { border: 1px solid rgb(187, 204, 221); overflow: auto; word-b=
+reak: break-all; white-space: pre-wrap !important; }
+
+#content pre, #content code, #content tt { background-color: rgb(235, 241, =
+245); font-family: monospace; }
+
+#content code, #content tt { display: inline-block; padding: 0px 0.3em; bor=
+der-width: 0px; border-radius: 0px; }
+
+#footer-icons { display: none; }
+
+#footer { color: rgb(51, 51, 51); }
+
+#toc, .toc, .mw-warning, .toccolours { background-color: rgb(249, 250, 255)=
+; border: 1px solid rgb(215, 223, 227); }
+
+#bodyContent > div.mw-content-ltr a, #bodyContent > div.mw-content-rtl a, #=
+wikiPreview > div.mw-content-ltr a, #wikiPreview > div.mw-content-rtl a { f=
+ont-weight: bold; }
+
+#bodyContent #toc a, #bodyContent .special li > a, #bodyContent .special li=
+ span a, #bodyContent #pagehistory a { font-weight: normal; }
+
+#content a:not(.new), #mw-navigation li:not(.new) a:not(.new), #mw-panel li=
+:not(.new) a:not(.new), #column-one li:not(.new) a:not(.new), #footer a:not=
+(.new) { text-decoration: none; color: rgb(0, 119, 187) !important; }
+
+#content a:not(.new):hover, #mw-navigation li:not(.new) a:not(.new):hover, =
+#mw-panel li:not(.new) a:not(.new):hover, #column-one li:not(.new) a:not(.n=
+ew):hover, #footer a:not(.new):hover { text-decoration: underline; backgrou=
+nd-color: transparent; color: rgb(153, 153, 153) !important; }
+
+#content a:active, #mw-navigation li:not(.new) a:active, #mw-panel li:not(.=
+new) a:active, #column-one li:not(.new) a:active, #footer a:active, #conten=
+t a:focus, #mw-navigation li:not(.new) a:focus, #mw-panel li:not(.new) a:fo=
+cus, #column-one li:not(.new) a:focus, #footer a:focus, #content a:active:h=
+over, #mw-navigation li:not(.new) a:active:hover, #mw-panel li:not(.new) a:=
+active:hover, #column-one li:not(.new) a:active:hover, #footer a:active:hov=
+er, #content a:focus:hover, #mw-navigation li:not(.new) a:focus:hover, #mw-=
+panel li:not(.new) a:focus:hover, #column-one li:not(.new) a:focus:hover, #=
+footer a:focus:hover { color: rgb(238, 153, 0) !important; }
+
+#content a:not(.new):visited, #mw-panel li:not(.new) a:not(.new):visited, #=
+p-navigation li:not(.new) a:not(.new):visited, #p-tb li:not(.new) a:not(.ne=
+w):visited { color: rgb(102, 102, 102) !important; }
+
+a.new, a.new:visited, #mw-navigation li.new a, #mw-navigation li.new a:visi=
+ted { color: rgb(187, 0, 0) !important; }
+
+.mw-body-content a.external, .mw-body-content a.extiw { background: url("ht=
+tps://wiki.archlinux.org/resources/src/mediawiki.skinning/images/external-l=
+tr.png") right center no-repeat; padding-right: 13px; }
+
+div#mw-head { top: 65px; }
+
+div#mw-panel { top: 65px; }
+
+#p-logo { display: none; }
+
+#mw-page-base { background: none; }
+
+div.vectorTabs, div.vectorMenu { margin-top: -2px; }
+
+div.vectorTabs { padding-left: 0px; }
+
+div.vectorTabs ul, div.vectorTabs ul li { background: none; }
+
+div.vectorTabs ul li { border: 1px; }
+
+div.vectorTabs li.selected { border-width: 1px; border-style: solid; border=
+-color: rgb(204, 204, 204) rgb(204, 204, 204) rgb(255, 255, 255); border-im=
+age: initial; background-color: rgb(255, 255, 255); }
+
+div.vectorTabs li.selected span { background: none; }
+
+div.vectorTabs li:not(:first-child).selected { margin-left: -2px; }
+
+@media screen and (max-width: 720px) {
+  div#p-personal { top: unset; }
+  div#mw-panel { padding-top: 0px; }
+}
+------MultipartBoundary--8Q8KkWDH0jU2natWIrEITv9XCblqb2Zw3lJLUuxIEV----
+Content-Type: image/svg+xml
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://wiki.archlinux.org/extensions/ArchLinux/modules/archnavbar/archlogo.svg?29b1c
+
+<svg xmlns=3D"http://www.w3.org/2000/svg" version=3D"1" width=3D"600" heigh=
+t=3D"126"><path d=3D"M159.568 34.427c-8.89-.014-16.267 1.809-19.12 2.803l-2=
+.937 15.857c-.007.058 14.617-3.9 21.059-3.667 10.665.383 11.646 4.076 11.46=
+ 9.06.182.292-2.752-4.503-11.979-4.664-11.64-.2-28.069 4.122-28.046 21.692-=
+.314 19.765 14.764 25.579 25.032 25.686 9.232-.168 13.563-3.496 15.934-5.28=
+ 3.115-3.257 6.679-6.532 10.078-10.462-3.216 5.844-6.005 9.884-8.907 12.977=
+v2.611l14.033-2.361.096-38.144c-.143-5.399 3.096-26.057-26.703-26.108zm-2.0=
+16 33.21c5.817.08 12.488 2.948 12.497 9.849.03 6.277-7.863 9.651-12.996 9.5=
+98-5.135-.053-11.949-4.036-11.979-10.155.099-5.47 6.426-9.432 12.478-9.291z=
+m37.972-29.685l-.095 63.166 16.348-3.15.027-35.814c.004-5.333 7.62-11.564 1=
+7.178-11.464 2.028-3.67 5.84-13.05 6.77-15.183-21.351-.051-21.623 6.137-25.=
+336 9.18-.04-5.806-.013-9.292-.013-9.292l-14.879 2.557zm92.002 8.292c-.158-=
+.074-8.526-9.788-25.35-9.864-15.758-.262-33.433 5.847-33.716 32.27.138 23.2=
+32 16.979 32.311 33.805 32.488 18.007.187 25.172-11.26 25.602-11.543-2.149-=
+1.863-10.196-9.837-10.196-9.837s-5.027 7.157-14.779 7.248c-9.755.093-18.234=
+-7.54-18.354-18.189-.125-10.65 7.795-16.419 18.427-16.885 9.205-.002 14.516=
+ 5.943 14.516 5.943zm20.606-30.399l-15.434 3.628.115 82.277 15.204-2.745.17=
+2-38.72c.033-4.06 5.874-10.295 15.626-10.097 9.325.097 11.41 6.215 11.384 6=
+.988l.269 44.824 14.993-2.65.057-47.53c.099-4.574-10.018-14.233-26.28-14.30=
+2-7.729.012-12.009 1.762-14.187 3.052-3.726 2.879-7.985 5.637-12.17 9.157 3=
+.869-4.97 7.117-8.407 10.29-10.961l-.04-22.921z" fill=3D"#fff" fill-rule=3D=
+"evenodd"/><path d=3D"M360.136 17.218l6.962-1.742.33 82.95-7.074 1.204zm18.=
+928 24.757l6.101-2.716.052 59.478-5.892 1.217zm-1.45-21.448l4.92-4.015 4.08=
+6 4.547-4.921 4.121zm19.024 20.365l6.962-1.421.033 12.434c.001.534 3.823-13=
+.89 22.258-13.57 17.9.1 20.827 13.957 20.73 17.064l.221 43.725-6.102 1.324-=
+.035-43.189c.07-1.261-2.79-11.927-15.439-11.966-12.646-.037-21.409 9.186-21=
+.393 15.078l.1 38.047-7.07 1.847zm110.954 58.546l-6.962 1.42-.033-12.433c-.=
+001-.534-3.825 13.89-22.258 13.57-17.9-.1-20.827-13.957-20.73-17.064l-.221-=
+43.725 7.397-1.494.114 43.19c.003 1.18 1.416 12.096 14.065 12.135 12.646.03=
+7 21.506-7.616 21.569-19.139l-.09-34.076 6.885-1.757zm13.645-59.037l-4.882 =
+3.82 18.717 24.494-19.963 28.3 5.179 3.843 18.766-26.28 19.368 26.902 4.791=
+-3.82-20.757-28.765 16.56-23.262-5.092-4.305-15.085 21.525zM61.88 1.778c-5.=
+385 13.203-8.633 21.839-14.629 34.649 3.676 3.896 8.188 8.434 15.516 13.559=
+-7.878-3.242-13.252-6.497-17.267-9.874-7.673 16.011-19.695 38.818-44.09 82.=
+65 19.174-11.068 34.037-17.893 47.889-20.497a35.103 35.103 0 0 1-.91-8.213l=
+.023-.614c.304-12.284 6.694-21.73 14.264-21.09 7.57.642 13.454 11.126 13.15=
+ 23.41-.058 2.312-.319 4.536-.774 6.598 13.701 2.68 28.405 9.487 47.32 20.4=
+07-3.73-6.866-7.059-13.056-10.238-18.95-5.007-3.882-10.23-8.933-20.884-14.4=
+02 7.323 1.903 12.566 4.099 16.653 6.552C75.58 35.786 72.963 27.79 61.88 1.=
+778z" fill=3D"#1793d1" fill-rule=3D"evenodd"/><path d=3D"M576.771 93.265V80=
+.603h-4.73v-1.695h11.38v1.695h-4.75v12.662h-1.9m8.629 0V78.908h2.859l3.398 =
+10.166c.314.947.542 1.655.686 2.125.163-.522.418-1.29.764-2.301l3.437-9.99h=
+2.556v14.357h-1.831V81.25l-4.172 12.016h-1.714l-4.152-12.222v12.222h-1.832"=
+ font-weight=3D"400" font-size=3D"8.441" font-family=3D"DejaVu Sans Mono" f=
+ill=3D"gray"/></svg>
+------MultipartBoundary--8Q8KkWDH0jU2natWIrEITv9XCblqb2Zw3lJLUuxIEV----
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Location: https://wiki.archlinux.org/resources/src/mediawiki.skinning/images/external-ltr.png
+
+iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAs0lEQVR4AWP4//8/yRiroHH6njrj
+tN1/sGGYJpwajdJ2bXNI2M8BE8PQhMXUv0B8yThtMxeGJgyBmf9ZDRO3iRqn775rmL5NCyQG0giy
+Eacm0WWvVstNvnNXt+hYNogP0giyEeRUnJpkVj3mBGqcC8SvNGrOVIJsBDkV5EecmmBYZOnrbqmZ
+D1+CnAqTA2nEq4lh/38W0aWv9gGxF4YcpiYEFlz1jh+kGa8m3BhTE1GYYk0A08+9f1lXOBcAAAAA
+SUVORK5CYII=
+
+------MultipartBoundary--8Q8KkWDH0jU2natWIrEITv9XCblqb2Zw3lJLUuxIEV----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://wiki.archlinux.org/load.php?debug=false&lang=en&modules=site.styles&only=styles&skin=vector
+
+@charset "utf-8";
+
+pre, .mw-code { white-space: pre; }
+
+#bodyContent a.external[href^=3D"http://wiki.archlinux.org"], #bodyContent =
+a.external[href^=3D"https://wiki.archlinux.org"] { background: none; paddin=
+g-right: 0px; }
+
+span.archwiki-template-pkg, span.archwiki-template-man { font-family: monos=
+pace; }
+
+div.archwiki-template-box { padding: 5px; border: thin solid black; margin:=
+ 0.5em 0px; overflow: hidden; }
+
+div.archwiki-template-box.archwiki-template-box-note { background-color: rg=
+b(221, 221, 255); border-color: rgb(187, 187, 221); }
+
+div.archwiki-template-box.archwiki-template-box-warning { background-color:=
+ rgb(255, 221, 221); border-color: rgb(221, 187, 187); }
+
+div.archwiki-template-box.archwiki-template-box-tip { background-color: rgb=
+(221, 255, 221); border-color: rgb(187, 221, 187); }
+
+div.archwiki-template-message { position: relative; overflow: hidden; min-h=
+eight: 4.6em; margin-bottom: 1em; background-color: rgb(249, 250, 255); bor=
+der: 1px solid rgb(215, 223, 227); padding: 0px 100px; text-align: center; =
+}
+
+div.archwiki-template-message > p > a { display: block; position: absolute;=
+ top: 5px; }
+
+div.archwiki-template-message > p > a:first-of-type { left: 26px; }
+
+div.archwiki-template-message > p > a:last-of-type { right: 26px; }
+
+div.archwiki-template-message > div { font-size: 90%; }
+
+div.archwiki-template-message ul, div.archwiki-template-message ol { text-a=
+lign: left; }
+
+div.archwiki-template-meta-related-articles-start { float: right; clear: ri=
+ght; width: 25%; margin: 0px 0px 0.5em 0.5em; }
+
+div.archwiki-template-meta-related-articles-start > p { background: rgb(51,=
+ 51, 51); color: white; padding: 0.2em; border-bottom: 5px solid rgb(0, 136=
+, 204); margin: 0px; text-align: center; font-weight: bold; }
+
+div.archwiki-template-meta-related-articles-start > ul { list-style-type: n=
+one; list-style-image: none; margin: 0px; padding: 0.3em; }
+
+div.archwiki-template-meta-related-articles-start > ul > li { padding: 0.4e=
+m 0px; line-height: 1; }
+
+@media screen and (min-width: 721px) {
+  div.archwiki-main-page-columns { column-count: 2; }
+  div.archwiki-main-page-columns > * { break-inside: avoid; display: inline=
+-block; width: 100%; }
+}
+------MultipartBoundary--8Q8KkWDH0jU2natWIrEITv9XCblqb2Zw3lJLUuxIEV----
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Location: https://wiki.archlinux.org/images/d/d6/Tango-inaccurate.png
+
+iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAALuUlE
+QVRogb2Ze3BdxX3HP7vnnPuUdPV+WUIgIT+EBZjxg/BubCjUhEBqKJnWkDaN26E8WqYz9WSmU/ij
+k2kmJYTiNKQzJelAE5JhiqltOcG4xtTI0Bowxg9kS5ZlWy/r6nnv1X2cs9s/rq51X7qWZNPfzM7e
+u7vn9/t+d3/729/ZI7hC8uID1Ig4txgG60p81jp/wN/ssjxF0pDSTsRjiXhsKjQ1/elEyO5U0DlR
+zKHnfk38cu2Ky3n41bvwTHl4vKqy6MmrWq9Z3tK8hLKqKlMYFk40jtAKIUBr0FJiWBInEdZD54fs
+nlNn1NneobcmQvEXn+7g4P8rgVe+hs/RPNt0Tf3WtTff5AlUVxuEptDhSXQkjE4k5jZouZF+P8pX
+jHALBk5325983NV1tn/yiac7eO9LJ/DS77Kxrr7s5xvuua3MX1ouGR3GmRgHrRaqCiElsrQCp8jL
+UF+3feCDY3vHx6KP/8UuBuetY74DX70LT7SIbV+5/abNbTfeYBEcwhkLLhh0fhQCWVGNcik6DxyK
+fH504KGnO/jtfB415jPolQ0ERJnV+dAj997d2NhoqnM9qHDo8kBniY6EkXFF4/JWqywgvtnuHZ3c
+8YX+8FLPXZLAjzdS5il1H3r4m/ct81tu6ZzrBbVwd5mPaMeGUJiyhga5pM5zd7sryPYTquC+KEjg
+hYfxFgmzc9Oj9y71KCmcof7LAijcxYhAA9JfBQiwo4DOpgGRCP6KKllV5b5jhWtkZMcX+n/m0mkW
+MuiL8tP7N9253CNdwhk4t2jQxsrfx2hZj6hszYQaCaJOv4d95E30aHdah4bgOLW19ca6NZEX/ynR
+/dFTu/jfvPrnMvyjjTx629plP7t+9Rq3feZUUukCxWh/GHPtFoS7eLbRjqGdeGabVjhdHST2/wAS
+07PgDAMqvOzdd3j8yNmRq/7mbaaybeRdgR8+SGmFz//T9nVr3U7f6YWDFxLrzq0YbQ8k8U32Yx/+
+Ber0PnQshJAmGomsvQ5jxQMYzXdiLNuIrFxOfMcz6PBI8jnHQUzEuOO21sCF/5h4ARLfyZmkfPa/
+3sL37r//5tu9jhYqlEP6kmKu3YJ5w6MA2Id/SWL3VggNIbxlyeIpQXiKIRFB9exDnflvZNOtiJJ6
+ZP2NOF27QTlJZY5CmoYw3EZ7u3fsjV0nyYjdMtv4S/dRVVVVsqW8tlE6oyMLBi9r2zFXfysJ/uN/
+w/7gJURJHcJXDiLLnJAIXzk6HCS+/UlIRJDVbZhr/jRzWNhmxbJaq7zc+4Mce9kNArbcsm65W09M
+Lsrvza88CQjU0OfYH/4EDAtheQs+Iywv2FES7/9jUkf7Iwh/1cV+rYBIgmuvqbn3xxspK0jA5zWf
+rG5qMtT4wk9ZEWhA1t0AgP3hK0nLdnxeaYZwF+P07EOPnQHTjdF6d+aAcJwVy6tNR/DYnAR+dD+t
+VzeWBYiDXsRhJZtuBUBHx1HnD820anQ8NOM+hTMX4fLj9PxXhq6UaO3CANFQE8jwr8wVUKxvbamz
+dCSyYPAAMtCQNDZyMmPWdTgIriJwFydr0wMyTwA0LPSFE0kygcYsdgIxHaWmpmT5q3fhyUvALfid
+iupyU02HF0UAb9I9dXQys92Oosd6ES4/wuVPknD5wfJlEtEaHZ1I4vWVkS0ialNXU6InPLTnJSAl
+K62iEnQstjgC8SRx4S3N6dKhIVTwFMyQECkClhcM1wzRGOLiJOQJ3wlFWcBrCMnyVFPGOlouq15o
+sajcHkCP9yUJVC4FaczG8rR+NT2GqFyG8FcgLBOkgRYyuUrRSUT1ihnCua8EStl4/W6pNRf9K4OA
+YZle1MJDZ0qcMwcwb3kK4S5GNt6MOnMAtEq6RXQcHZsCFYfuPSBEcjWsIpBW8mDzlGI0fzUJti9P
+Jq1BSoklqUw1ZbiQIYSJshdNQI/1os4ncy5z7Rb0VD9q4BN0sAsdHgZ7enZVtIZYCB0aRE+eRQ0f
+QzauQQSWJHOjU3tyDSiNVgqX2yjJS8BWTlznpLcLEUVi3z+AcpBVy7Du3Mp8J0Q2rMF1z/eSOI68
+gTr3UR71CYSUxKadiylCBoFE3A4LsYgVsKPoiT5U/6foyXOogU8BMG9+AtemnyWjTgEx2h7E/e09
+YHnRE+dI7HwWPXoKNXQU4rObWegoiXgCpWfzoYw9oGynx4mGKlNXIQVFa3R0FELD6NgkCIG1/nms
+r/5txjDzpscxlt6HfXAbztE3UcFucGIIfzVGy3qMNd/BaL4rqXJ6lNhrD6KnZjZwIoQaPoZwB5Lh
+1kgQnorajuBkXgKO5rPpUHitNxYCqzK50bIlEUZHgujICDgz1yeGC9c3/gVz1WOZQ/d/H+uWZxBF
+1Vgbnsfa8Pyc86EGjxB7/Rvo4KncuYolzwajuo6R8YgyoCvVl+FCMYc9A4MTMVwadeEoeqofHRpG
+hwaSS9r/MWroc/TUwEXwwhPA/a2OHPA6NERiz98x/dL12J++NvP6mAf48HHi258g+vJNecFnjC0u
+4+y5CfVUB8dTbRkroBX7j/eM0rp+Kc650+h44RNZlF6F+/GdyJqVmeDH+4j9fGNyb4x0Ef/VZuJv
+/TnG1XcgimtByOTBNnQUPXa6oI1ZYxJZHGB4qLtTpL1IZxD4q98w8JOvTR1JIFcLXxE6MvfViWy6
+Fffm7QhfRUa76n2f2GsPoSNZ2Ww8jNPVMT+w+eyVlTM6GrJHJ2IvZ7RnD4wn2NZ9cihu1NTPqcxo
+fwTPt/fkgHcO/4Lov96dC/4KiKhawmfHhuziKLvS23MIuC/w+kef9U+K0gqEy5PdjdH+CO4/eD2Z
+UaaJ3fkysV9vBnuReVQBESUB4oalenqGv//H+8jYTDkE/uwQielp+++/OH4+bl7VnKPMtfGFrAxS
+Ed/5LPH/fCon97ky6AWy8Vo6P+yLAy9md+cQALCG2fbBobP9CbcPWV6V0aenx2f/JCLE/n0T9oEf
+XlnQaWLWNTA2lbC7eoa/+8ROxrL7895K7BhAbWjh4MDgxB+1rV5u6rERcJIntOo7gChvRo/3En/j
+D1Hde7808KKoBLWkmR27jx7vH3f+ZF8vOWlywXe8bb/H1lUra59bvarBbR87jLbnvve/0iI8XuSy
+69n9blek79zYsqc7yHs1WPBudOdJDrxdGrquyGu21iy9xlTjQXC+BD/PEun1IZe2s7+zN3ryTPDe
+Zzo4MufYQooE6JEwm9//qO+dEycvxMwVNyJ8/iuPOB1QSSly2fXs7+yNHjsx/PBf7mJ/ofGFVkAA
+1r5erKPDvF0rJlti0UTr1atWmEIrdHjhN3aFkUuMJU3ouiY63v1i+uDR4Kbv7mUfs5OcN72ci4AB
+WIALcI1HsXaf4p1Gdzg4eD54e0tbk+mprUNHIpC4/LgvA+UYrdcxEpXOW7uO9r55KPz1Vw5xbAZ8
+6j5GQO4mzkcgHXxGvf8MXZGI3REeGlxpO7qivq3FsMoqEEJALLqgmzxhWRiVtRhN1xL1leq9B04n
+tr935uXn3nX++vAQk8wGmPRAk0MiOwqJGbDmTD1XMR+7gdvW1otnW6+tqF/VVmOVVgYEoUl0aAIV
+nYbpCNq2kxcE0gDTRHh8CK8PURwAbxGD/UHnk2PD+rPusZ1vHeOfPx5gELCBRIFiz5S8BOQ8wGcQ
+uaeFtrUN3NdQatzRWB8obm4spaLcZ/qKPELK2RihbMXkZEQNj0acnrPj4uz5iZ4Tw3rXO93sPTVG
+cB7As0nkJUA+kJdoS/02V1RQvbKWtho/TZU+Gk0DnwCpNPGozcTgFD3np+g92MeJ8TjhNNDp4LOJ
+5CN2MZbnIyALgUyrs4uRVqdvPkhGEE3Sf52Z2p75nU7CJpdUPnIXJd8XGjUzSJNpOGXcmQN0OvD0
+yJGSlB6dpie9pMDnI5Xj+ym51IfuFMC5ZjoFOht8yvmzCcw1IXORSS95Q9x8v9SLPOBTwLNdJt/s
+ZxPIJpGPTGo1LglsMZKKVtkukw4+H4F0Iiqr2My62Lzl/wBFDSGUeNlntgAAAABJRU5ErkJggg==
+
+------MultipartBoundary--8Q8KkWDH0jU2natWIrEITv9XCblqb2Zw3lJLUuxIEV----
+Content-Type: text/html
+Content-ID: <frame-21-9385d7f2-61b4-47a9-aa93-f1adbf138734@mhtml.blink>
+Content-Transfer-Encoding: quoted-printable
+Content-Location: chrome-extension://ihlenndgcmojhcghmfjfneahoeklbjjh/cmdline_frame.html
+
+<!DOCTYPE html><html><head><meta http-equiv=3D"Content-Type" content=3D"tex=
+t/html; charset=3Dwindows-1252">
+       =20
+       =20
+       =20
+       =20
+       =20
+       =20
+       =20
+       =20
+       =20
+       =20
+       =20
+       =20
+       =20
+       =20
+       =20
+       =20
+       =20
+       =20
+       =20
+       =20
+       =20
+        <link rel=3D"stylesheet" href=3D"chrome-extension://ihlenndgcmojhcg=
+hmfjfneahoeklbjjh/content_scripts/main.css">
+    <style>#cVim-command-bar, #cVim-command-bar-mode, #cVim-command-bar-inp=
+ut, #cVim-command-bar-search-results,
+.cVim-completion-item, .cVim-completion-item .cVim-full, .cVim-completion-i=
+tem .cVim-left,
+.cVim-completion-item .cVim-right {
+  font-family: Helvetica, Helvetica Neue, Neue, sans-serif, monospace, Aria=
+l;
+  font-size: 10pt !important;
+  -webkit-font-smoothing: antialiased !important;
+}
+
+#cVim-command-bar {
+  position: fixed;
+  z-index: 2147483646;
+  background-color: #1b1d1e;
+  color: #bbb;
+  display: none;
+  box-sizing: content-box;
+  box-shadow: 0 3px 3px rgba(0,0,0,0.4);
+  left: 0;
+  width: 100%;
+  height: 20px;
+}
+
+#cVim-command-bar-mode {
+  display: inline-block;
+  vertical-align: middle;
+  box-sizing: border-box;
+  padding-left: 2px;
+  height: 100%;
+  width: 10px;
+  padding-top: 2px;
+  color: #888;
+}
+
+#cVim-command-bar-input {
+  background-color: #1b1d1e;
+  color: #bbb;
+  height: 100%;
+  right: 0;
+  top: 0;
+  width: calc(100% - 10px);
+  position: absolute;
+}
+
+#cVim-command-bar-search-results {
+  position: fixed;
+  width: 100%;
+  overflow: hidden;
+  z-index: 2147483647;
+  left: 0;
+  box-shadow: 0 3px 3px rgba(0,0,0,0.4);
+  background-color: #1c1c1c;
+}
+
+.cVim-completion-item, .cVim-completion-item .cVim-full, .cVim-completion-i=
+tem .cVim-left, .cVim-completion-item .cVim-right {
+  text-overflow: ellipsis;
+  padding: 1px;
+  display: inline-block;
+  box-sizing: border-box;
+  vertical-align: middle;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.cVim-completion-item:nth-child(even) {
+  background-color: #1f1f1f;
+}
+
+.cVim-completion-item {
+  width: 100%; left: 0;
+  color: #bcbcbc;
+}
+
+.cVim-completion-item[active] {
+  width: 100%; left: 0;
+  color: #1b1d1e;
+  background-color: #f1f1f1;
+}
+
+.cVim-completion-item[active] span {
+  color: #1b1d1e;
+}
+
+.cVim-completion-item .cVim-left {
+  color: #fff;
+  width: 37%;
+}
+
+.cVim-completion-item .cVim-right {
+  font-style: italic;
+  color: #888;
+  width: 57%;
+}
+
+
+#cVim-link-container, .cVim-link-hint,
+#cVim-hud, #cVim-status-bar {
+  font-family: Helvetica, Helvetica Neue, Neue, sans-serif, monospace, Aria=
+l;
+  font-size: 10pt !important;
+  -webkit-font-smoothing: antialiased !important;
+}
+
+#cVim-link-container {
+  position: absolute;
+  pointer-events: none;
+  width: 100%; left: 0;
+  height: 100%; top: 0;
+  z-index: 2147483647;
+}
+
+.cVim-link-hint {
+  position: absolute;
+  color: #302505 !important;
+  background-color: #ffd76e !important;
+  border-radius: 2px !important;
+  padding: 2px !important;
+  font-size: 8pt !important;
+  font-weight: 500 !important;
+  text-transform: uppercase !important;
+  border: 1px solid #ad810c;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  text-align: center !important;
+  box-shadow: 2px 2px 1px rgba(0,0,0,0.25) !important;
+}
+
+.cVim-link-hint_match {
+  color: #777;
+  text-transform: uppercase !important;
+}
+
+
+#cVim-hud {
+  background-color: rgba(28,28,28,0.9);
+  position: fixed !important;
+  transition: right 0.2s ease-out;
+  z-index: 24724289;
+}
+
+#cVim-hud span {
+  padding: 2px;
+  padding-left: 4px;
+  padding-right: 4px;
+  color: #8f8f8f;
+  font-size: 10pt;
+}
+
+#cVim-frames-outline {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 9999999999;
+  box-sizing: border-box;
+  border: 3px solid yellow;
+}
+</style></head>
+    <body>
+   =20
+
+</body><div id=3D"cVim-status-bar" style=3D"top: 0px;"></div><div id=3D"cVi=
+m-command-bar" spellcheck=3D"false" style=3D"top: 0px;"><span id=3D"cVim-co=
+mmand-bar-mode"></span><input type=3D"text" id=3D"cVim-command-bar-input"><=
+/div><div id=3D"cVim-command-bar-search-results" style=3D"top: 20px;"></div=
+></html>
+------MultipartBoundary--8Q8KkWDH0jU2natWIrEITv9XCblqb2Zw3lJLUuxIEV----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: chrome-extension://ihlenndgcmojhcghmfjfneahoeklbjjh/content_scripts/main.css
+
+@charset "windows-1252";
+
+#cVim-command-frame { display: none; border: 0px; position: fixed; margin: =
+0px; padding: 0px; left: 0px; width: 100%; top: 0px; height: 100%; z-index:=
+ 2147483647 !important; }
+
+#cVim-link-container { transition: opacity 0.1s ease; opacity: 0; }
+
+.cVim-hint-scale { animation: scale 0.25s; }
+
+@keyframes scale {=20
+  0% { transform: scale(0) perspective(1px); }
+  60% { transform: scale(1.15) perspective(1px); }
+  100% { transform: scale(1) perspective(0px); }
+}
+
+.cVim-link-hint_match { opacity: 0.6; }
+
+.cVim-link-hint_match_hidden { display: none; }
+
+.cVim-link-hint { line-height: 1; }
+
+#cVim-command-bar { }
+
+#cVim-command-bar-mode { }
+
+#cVim-command-bar-input { box-sizing: border-box; outline-style: none; bord=
+er: 0px; }
+
+#cVim-command-bar-search-results { }
+
+.cVim-completion-item { }
+
+.cVim-completion-item .cVim-full { }
+
+.cVim-completion-item .cVim-left { }
+
+.cVim-completion-item .cVim-right { }
+
+.cVim-highlight { background-color: yellow; min-height: 0px !important; bor=
+der-radius: 0px !important; border: 0px !important; text-shadow: none !impo=
+rtant; outline: none 0px !important; padding: 0px !important; margin: 0px !=
+important; }
+
+#cVim-hud { bottom: 0px; min-height: 0px !important; border-radius: 0px !im=
+portant; box-sizing: border-box !important; box-shadow: none !important; ma=
+rgin: 0px !important; -webkit-appearance: none !important; letter-spacing: =
+normal !important; word-spacing: normal !important; text-transform: none !i=
+mportant; text-indent: 0px !important; text-shadow: none !important; text-a=
+lign: start !important; outline: none 0px !important; border: 0px !importan=
+t; line-height: 1 !important; font-style: normal !important; display: inlin=
+e-block !important; vertical-align: middle !important; position: fixed !imp=
+ortant; z-index: 24724289 !important; }
+
+#cVim-hud span { display: inline-block !important; box-sizing: border-box !=
+important; vertical-align: middle !important; }
+
+#cVim-status-bar { display: none; vertical-align: middle; padding-left: 2px=
+; padding-top: 2px; box-shadow: rgba(0, 0, 0, 0.4) 0px 3px 3px; min-height:=
+ 0px !important; border-radius: 0px !important; border: 0px !important; -we=
+bkit-appearance: none !important; letter-spacing: normal !important; word-s=
+pacing: normal !important; text-transform: none !important; text-indent: 0p=
+x !important; text-shadow: none !important; text-align: start !important; o=
+utline: none 0px !important; margin: 0px !important; font-style: normal !im=
+portant; position: fixed !important; z-index: 2147483647 !important; backgr=
+ound-color: rgb(27, 29, 30) !important; color: rgb(187, 187, 187) !importan=
+t; box-sizing: border-box !important; left: 0px !important; width: 100% !im=
+portant; height: 20px !important; }
+
+.cVim-error { min-height: 0px !important; border-radius: 0px !important; bo=
+x-sizing: content-box !important; box-shadow: none !important; margin: 0px =
+!important; -webkit-appearance: none !important; letter-spacing: normal !im=
+portant; word-spacing: normal !important; text-transform: none !important; =
+text-indent: 0px !important; text-shadow: none !important; text-align: star=
+t !important; outline: none 0px !important; border: 0px !important; line-he=
+ight: 1 !important; font-style: normal !important; }
+
+#cVim-cursor { display: none; min-height: 0px !important; border-radius: 0p=
+x !important; box-sizing: content-box !important; box-shadow: none !importa=
+nt; margin: 0px !important; -webkit-appearance: none !important; letter-spa=
+cing: normal !important; word-spacing: normal !important; text-transform: n=
+one !important; text-indent: 0px !important; text-shadow: none !important; =
+text-align: start !important; outline: none 0px !important; border: 0px !im=
+portant; line-height: 1 !important; font-style: normal !important; position=
+: fixed !important; background: none !important; left: 0px !important; widt=
+h: 100% !important; top: 0px !important; height: 100% !important; z-index: =
+2147483647 !important; cursor: none !important; transform: translateZ(0px) =
+!important; }
+
+.cVim-find-mark { animation: unset; transition: unset; color: rgb(17, 17, 1=
+7); font-family: unset; font-feature-settings: unset; font-kerning: unset; =
+font-size: unset; font-stretch: unset; font-style: unset; font-variant: uns=
+et; font-variation-settings: unset; font-weight: unset; text-orientation: u=
+nset; text-rendering: unset; -webkit-font-smoothing: unset; -webkit-locale:=
+ unset; -webkit-text-orientation: unset; -webkit-writing-mode: unset; writi=
+ng-mode: unset; zoom: unset; place-content: unset; place-items: unset; plac=
+e-self: unset; alignment-baseline: unset; backface-visibility: unset; backg=
+round-attachment: unset; background-blend-mode: unset; background-clip: uns=
+et; background-color: rgb(255, 255, 0); background-image: unset; background=
+-origin: unset; background-position: unset; background-repeat: unset; backg=
+round-size: unset; baseline-shift: unset; block-size: unset; border: unset;=
+ border-radius: unset; border-collapse: unset; bottom: unset; box-shadow: u=
+nset; box-sizing: unset; break-after: unset; break-before: unset; break-ins=
+ide: unset; buffered-rendering: unset; caption-side: unset; caret-color: un=
+set; clear: unset; clip: unset; clip-path: unset; clip-rule: unset; color-i=
+nterpolation: unset; color-interpolation-filters: unset; color-rendering: u=
+nset; columns: unset; column-fill: unset; gap: unset; column-rule: unset; c=
+olumn-span: unset; contain: unset; content: unset; counter-increment: unset=
+; counter-reset: unset; cursor: unset; cx: unset; cy: unset; d: unset; disp=
+lay: unset; dominant-baseline: unset; empty-cells: unset; fill: unset; fill=
+-opacity: unset; fill-rule: unset; filter: unset; flex: unset; flex-flow: u=
+nset; float: unset; flood-color: unset; flood-opacity: unset; grid: unset; =
+grid-area: unset; height: unset; hyphens: unset; image-rendering: unset; in=
+line-size: unset; isolation: unset; left: unset; letter-spacing: unset; lig=
+hting-color: unset; line-break: unset; line-height: unset; list-style: unse=
+t; margin: unset; marker: unset; mask: unset; mask-type: unset; max-block-s=
+ize: unset; max-height: unset; max-inline-size: unset; max-width: unset; mi=
+n-block-size: unset; min-height: unset; min-inline-size: unset; min-width: =
+unset; mix-blend-mode: unset; object-fit: unset; object-position: unset; of=
+fset: unset; opacity: unset; order: unset; orphans: unset; outline: unset; =
+outline-offset: unset; overflow-anchor: unset; overflow-wrap: unset; overfl=
+ow: unset; overscroll-behavior: unset; padding: unset; page: unset; paint-o=
+rder: unset; perspective: unset; perspective-origin: unset; pointer-events:=
+ unset; position: unset; quotes: unset; r: unset; resize: unset; right: uns=
+et; rx: unset; ry: unset; scroll-behavior: unset; shape-image-threshold: un=
+set; shape-margin: unset; shape-outside: unset; shape-rendering: unset; siz=
+e: unset; speak: unset; stop-color: unset; stop-opacity: unset; stroke: uns=
+et; stroke-dasharray: unset; stroke-dashoffset: unset; stroke-linecap: unse=
+t; stroke-linejoin: unset; stroke-miterlimit: unset; stroke-opacity: unset;=
+ stroke-width: unset; tab-size: unset; table-layout: unset; text-align: uns=
+et; text-align-last: unset; text-anchor: unset; text-combine-upright: unset=
+; text-decoration: unset; text-decoration-skip-ink: unset; text-indent: uns=
+et; text-overflow: unset; text-shadow: unset; text-size-adjust: unset; text=
+-transform: unset; text-underline-position: unset; top: unset; touch-action=
+: unset; transform: unset; transform-box: unset; transform-origin: unset; t=
+ransform-style: unset; user-select: unset; vector-effect: unset; vertical-a=
+lign: unset; visibility: unset; -webkit-app-region: unset; -webkit-appearan=
+ce: unset; -webkit-border-after: unset; -webkit-border-before: unset; -webk=
+it-border-end: unset; border-spacing: unset; -webkit-border-image: unset; -=
+webkit-border-start: unset; -webkit-box-align: unset; -webkit-box-decoratio=
+n-break: unset; -webkit-box-direction: unset; -webkit-box-flex: unset; -web=
+kit-box-flex-group: unset; -webkit-box-lines: unset; -webkit-box-ordinal-gr=
+oup: unset; -webkit-box-orient: unset; -webkit-box-pack: unset; -webkit-box=
+-reflect: unset; -webkit-font-size-delta: unset; -webkit-highlight: unset; =
+-webkit-hyphenate-character: unset; -webkit-line-break: unset; -webkit-line=
+-clamp: unset; -webkit-logical-height: unset; -webkit-logical-width: unset;=
+ -webkit-margin-after: unset; -webkit-margin-collapse: unset; -webkit-margi=
+n-before: unset; -webkit-margin-bottom-collapse: unset; -webkit-margin-end:=
+ unset; -webkit-margin-start: unset; -webkit-margin-top-collapse: unset; -w=
+ebkit-mask-box-image: unset; -webkit-mask: unset; -webkit-mask-composite: u=
+nset; -webkit-max-logical-height: unset; -webkit-max-logical-width: unset; =
+-webkit-min-logical-height: unset; -webkit-min-logical-width: unset; -webki=
+t-padding-after: unset; -webkit-padding-before: unset; -webkit-padding-end:=
+ unset; -webkit-padding-start: unset; -webkit-perspective-origin-x: unset; =
+-webkit-perspective-origin-y: unset; -webkit-print-color-adjust: unset; -we=
+bkit-rtl-ordering: unset; -webkit-ruby-position: unset; -webkit-tap-highlig=
+ht-color: unset; -webkit-text-combine: unset; -webkit-text-decorations-in-e=
+ffect: unset; -webkit-text-emphasis: unset; -webkit-text-emphasis-position:=
+ unset; -webkit-text-fill-color: unset; -webkit-text-security: unset; -webk=
+it-text-stroke: unset; -webkit-transform-origin-x: unset; -webkit-transform=
+-origin-y: unset; -webkit-transform-origin-z: unset; -webkit-user-drag: uns=
+et; -webkit-user-modify: unset; white-space: unset; widows: unset; width: u=
+nset; will-change: unset; word-break: unset; word-spacing: unset; word-wrap=
+: unset; x: unset; y: unset; z-index: unset; }
+
+.cVim-find-mark[active] { background-color: rgb(255, 150, 50); }
+
+#cVim-frames-outline { position: fixed; width: 100%; height: 100%; left: 0p=
+x; top: 0px; right: 0px; z-index: 2147483647; box-sizing: border-box; borde=
+r: 3px solid yellow; }
+
+.cVim-completion-item[active] { width: 100%; left: 0px; color: rgb(27, 29, =
+30); background-color: rgb(241, 241, 241); }
+
+.cVim-completion-item[active] span { color: rgb(27, 29, 30); }
+------MultipartBoundary--8Q8KkWDH0jU2natWIrEITv9XCblqb2Zw3lJLUuxIEV------

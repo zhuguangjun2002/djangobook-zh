@@ -1,0 +1,40 @@
+The Low-level Cache API
+低级高速缓存API
+
+Sometimes, caching an entire rendered page doesn’t gain you very much and is, in fact, inconvenient overkill. Perhaps, for instance, your site includes a view whose results depend on several expensive queries, the results of which change at different intervals. In this case, it would not be ideal to use the full-page caching that the per-site or per-view cache strategies offer, because you wouldn’t want to cache the entire result (since some of the data changes often), but you’d still want to cache the results that rarely change.
+有时候，`缓存`整个`渲染页面`并不会给你带来`太多好处`，事实上，这是`不方便`的`矫枉过正`。
+例如，也许您的网站包含一个`视图`，其结果取决于几个`昂贵`的`查询`，其结果会以不同的`时间间隔`进行`更改`。
+在这种情况下，使用每个站点或每个视图`缓存策略`提供的`整页缓存`并不理想，
+因为您不希望`缓存``整个结果`（因为一些`数据``经常变化`），但你仍然想`缓存``很少改变`的`结果`。
+
+For cases like this, Django exposes a simple, low-level cache API. You can use this API to store objects in the cache with any level of granularity you like. You can cache any Python object that can be pickled safely: strings, dictionaries, lists of model objects, and so forth. (Most common Python objects can be pickled; refer to the Python documentation for more information about pickling.)
+
+对于这种情况，Django公开了一个`简单`的`低级缓存API`。
+您可以使用此API将`对象`以任意级别的`粒度`存储在`缓存`中。
+您可以`缓存`任何可以安全`腌制`的`Python对象`：`字符串`，`字典`，`模型对象列表`等。
+（大多数常见的`Python对象`都可以被`腌制`;有关`pickling`的更多信息，请参阅`Python文档`。）
+=======================================
+Accessing The Cache
+访问缓存
+
+You can access the caches configured in the CACHES setting through a dictionary-like object: django.core.cache.caches. Repeated requests for the same alias in the same thread will return the same object.
+您可以通过类似字典的对象`访问`在`CACHES``设置`中`配置`的`缓存`：`django.core.cache.caches`。
+在`同一线程`中`重复``请求`相同的`别名`将返回相同的`对象`。
+------------------------
+>>> from django.core.cache import caches
+>>> cache1 = caches['myalias']
+>>> cache2 = caches['myalias']
+>>> cache1 is cache2
+True 
+------------------------
+If the named key does not exist, InvalidCacheBackendError will be raised. To provide thread-safety, a different instance of the cache backend will be returned for each thread.
+如果指定的`键`不存在，则会引发`InvalidCacheBackendError`。
+为了提供`线程安全性`，将为每个`线程`返回不同的`高速缓存后端``实例`。
+
+As a shortcut, the default cache is available as django.core.cache.cache:
+作为一个快捷方式，`默认缓存`可用作`django.core.cache.cache`：
+--------------------
+>>> from django.core.cache import cache 
+--------------------
+This object is equivalent to caches['default'].
+==============================

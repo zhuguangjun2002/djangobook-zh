@@ -1,0 +1,112 @@
+==============================================
+Internationalization
+国际化
+
+Django was originally developed right in the middle of the United States – quite literally, as Lawrence, Kansas, is less than 40 miles from the geographic center of the continental United States. Like most open source projects, though, Django’s community grew to include people from all over the globe. As Django’s community became increasingly diverse, internationalization and localization became increasingly important.
+Django最初是在`美国中部`开发的 - 就像字面意义上的那样，`堪萨斯州``劳伦斯`距离美国`大陆`的`地理中心`不到`40英里`。
+然而，与大多数开源项目一样，Django的社区也逐渐成长为包括来自全球各地的人们。
+随着Django的社区日益多元化，`国际化`和`本地化`变得越来越重要。
+
+Django itself is fully internationalized; all strings are marked for translation, and settings control the display of locale-dependent values like dates and times. Django also ships with more than 50 different localization files. If you’re not a native English speaker, there’s a good chance that Django is already translated into your primary language.
+Django本身已经完全国际化;
+所有`字符串`都被标记为`翻译`，并且`设置`控制显示与`日期`和`时间`等`语言环境`相关的`值`。 
+Django还附带有`50多个`不同的`本地化文件`。
+如果您不是以`英语`为`母语`的人，Django很可能已经被翻译成您的主要`语言`。
+
+The same internationalization framework used for these localizations is available for you to use in your own code and templates.
+用于这些`本地化`的相同`国际化框架`,可供您在自己的`代码`和`模板`中使用。
+
+Because many developers have at best a fuzzy understanding of what internationalization and localization actually mean, we will begin with a few definitions.
+由于许多`开发人员`至多对`国际化`和`本地化`实际上意味着什么有模糊的`理解`，因此我们将从几个`定义`开始。
+==================================
+Definitions
+定义
+
+=======================
+Internationalization
+国际化
+
+Refers to the process of designing programs for the potential use of any locale. This process is usually done by software developers. Internationalization includes marking text (such as UI elements and error messages) for future translation, abstracting the display of dates and times so that different local standards may be observed, providing support for differing time zones, and generally making sure that the code contains no assumptions about the location of its users. You’ll often see internationalization abbreviated I18N. (The 18 refers to the number of letters omitted between the initial I and the terminal N.)
+
+指的是为潜在使用任何`语言环境`而`设计程序`的过程。
+这个过程通常由`软件开发人员`完成。
+`国际化`包括为`未来翻译``标记文本`（如`UI元素`和`错误消息`），`抽取`显示`日期`和`时间`，以便可以`观察`不同的`本地标准`，为不同的`时区`提供`支持`，并且通常确保`代码`不包含`任何假设`关于其`用户`的`位置`。
+您经常会看到`国际化`缩写为`I18N`。 （`18`代表在`初始I`和`终端N`之间`省略`的`字母数目`。）
+=======================
+Localization
+本土化
+
+Refers to the process of actually translating an internationalized program for use in a particular locale. This work is usually done by translators. You’ll sometimes see localization abbreviated as L10N.
+指实际`翻译`一个`国际化程序`以用于一个`特定的语言环境`的`过程`。
+这项工作通常由`翻译人员`完成。
+您有时会看到缩写为`L10N`的`本地化`。
+
+Here are some other terms that will help us to handle a common language:
+以下是一些有助于我们处理一个共同语言的`术语`：
+-------------------
+locale name
+
+A locale name, either a language specification of the form ll or a combined language and country specification of the form ll_CC. Examples: it, de_AT, es, pt_BR. The language part is always in lower case and the country part in upper case. The separator is an underscore.
+一个`区域设置`的`名称`，可以是`形式ll`的一个`语言规范`，也可以是`形式ll_CC`的`一个组合`语言`和`国家/地区``规范`。
+例如：it，de_AT，es，pt_BR。`语言`部分总是`小写`，`国家`部分`大写`。`分隔符`是`下划线`。
+-------------------
+language code
+
+Represents the name of a language. Browsers send the names of the languages they accept in the Accept-Language HTTP header using this format. Examples: it, de-at, es, pt-br. Language codes are generally represented in lower-case, but the HTTP Accept-Language header is case-insensitive. The separator is a dash.
+代表一种`语言`的`名称`。
+`浏览器`使用此格式在`Accept-Language HTTP标头`中`发送`它们`接受`的`语言`的`名称`。
+例如：it，de-at，es，pt-br。
+`语言代码`通常以`小写字母`表示，但`HTTP Accept-Language标头``不区分``大小写`。
+`分隔符`是一个`短划线`。
+-------------------
+message file
+
+A message file is a plain-text file, representing a single language, that contains all available translation strings and how they should be represented in the given language. Message files have a .po file extension.
+一个`消息文件`是一个`纯文本文件`，表示`单一语言`，其中包含所有可用的`翻译字符串`以及它们应如何用`给定``语言`表示。
+`消息文件`具有一个`.po``文件扩展名`。
+-------------------
+translation string
+
+A literal that can be translated.
+一个`文字`，是指可以被翻译的`文字`。
+-------------------
+format file
+
+A format file is a Python module that defines the data formats for a given locale.
+一个`格式文件`是一个`Python模块`，用于`定义``一个给定语言环境`的`数据格式`。
+=======================
+
+==================================
+Translation
+翻译
+
+In order to make a Django project translatable, you have to add a minimal number of hooks to your Python code and templates. These hooks are called translation strings. They tell Django: This text should be translated into the end user’s language, if a translation for this text is available in that language. It’s your responsibility to mark translatable strings; the system can only translate strings it knows about.
+为了使一个`Django项目`可以`翻译`，你必须在你的`Python代码`和`模板`中添加`最少数量`的`钩子`。
+这些`钩子`被称为`翻译字符串`。
+他们告诉`Django`：如果该`文本`的`翻译`可以用`该语言``翻译`，则应将该`文本`翻译成`最终用户`的`语言`。
+`标记``可翻译`的`字符串`是`您`的`责任`;
+该系统只能`翻译`它所知道的`字符串`。
+
+Django then provides utilities to extract the translation strings into a message file. This file is a convenient way for translators to provide the equivalent of the translation strings in the target language. Once the translators have filled in the message file, it must be compiled. This process relies on the GNU gettext toolset.
+然后Django提供`实用程序`将`翻译字符串``提取`到一个`消息文件`中。
+此`文件`是`翻译人员`提供`目标语言``翻译字符串`的一个很方便的方法。
+一旦`译员`填写了`消息文件`，它必须被`编译`。
+这个过程依赖于`GNU gettext``工具集`。
+
+Once this is done, Django takes care of translating Web apps on the fly in each available language, according to users’ language preferences.
+完成此操作后，Django会根据用户的`语言偏好`，按照每种`可用语言``即时`翻译`Web应用程序`。
+
+Essentially, Django does two things:
+基本上，Django做了两件事：
+--------------------------
+++ It lets developers and template authors specify which parts of their applications should be translatable.
+++ It uses that information to translate Web applications for particular users according to their language preferences.
+++ 它使`开发人员`和`模板作者`可以指定`应用程序`的`哪些部分`应该`可翻译`。
+++ 它使用该`信息`根据其`语言偏好`为`特定用户``翻译``Web应用程序`。
+--------------------------
+Django’s internationalization hooks are on by default, and that means there’s a bit of i18n-related overhead in certain places of the framework. If you don’t use internationalization, you should take the two seconds to set USE_I18N = False in your settings file. Then Django will make some optimizations so as not to load the internationalization machinery, which will save you some overhead. There is also an independent but related USE_L10N setting that controls if Django should implement format localization.
+Django的`国际化``挂钩`,`默认`是`开启`，这意味着在`框架`的某些地方会有一些`国际化`的`开销`。
+如果你`不使用``国际化`，你应该`花两秒钟`在你的`设置文件`中设置`USE_I18N = False`。
+然后，`Django`将进行一些`优化`，`以免``加载``国际化机器`，这将为您`节省`一些`开销`。
+还有一个`独立`但相关的`USE_L10N``设置`，用于`控制`Django是否应该实现`格式本地化`。
+==========================================

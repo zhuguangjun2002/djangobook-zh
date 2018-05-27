@@ -1,0 +1,448 @@
+==============================
+Internationalization in Python Code
+Python代码中的国际化
+-------------------
+https://djangobook.com/internationalization-python-code/
+-------------------
+==============================
+Standard Translation
+标准翻译
+
+Specify a translation string by using the function ugettext(). It’s convention to import this as a shorter alias, _, to save typing.
+使用`函数ugettext（）`指定一个`翻译字符串`。
+按惯例，将其`导入`为一个较短的`别名`,`_`,以保存`输入`。
+
+Python’s standard library gettext module installs _() into the global namespace, as an alias for gettext(). In Django, we have chosen not to follow this practice, for a couple of reasons:
+`Python`的`标准库``gettext模块`将`_（）`安装到`全局名称空间`中，作为`gettext（）`的一个`别名`。
+在`Django`中，我们选择`不采取`这种`做法`，原因如下：
+-------------------
+1. For international character set (Unicode) support, ugettext() is more useful than gettext(). Sometimes, you should be using ugettext_lazy() as the default translation method for a particular file. Without _() in the global namespace, the developer has to think about which is the most appropriate translation function.
+1. 对于`国际字符集`（Unicode）`的支持`，`ugettext（）`比`gettext（）`更`有用`。
+有时，您应该使用`ugettext_lazy（）`作为一个`特定的文件`的`默认`的`翻译方法`。
+如果在`全局名称空间`中没有`_（）`，`开发人员`必须考虑`哪个`是`最合适`的`翻译功能`。
+
+2. The underscore character (_) is used to represent the previous result in Python’s interactive shell and doctest tests. Installing a global _() function causes interference. Explicitly importing ugettext() as _() avoids this problem.
+2. `下划线字符`（_）被用于表示`Python的交互式shell`和`doctest测试`中的`以前`的`结果`。
+`安装`一个`全局的_（）函数`会导致`干扰`。
+`显式地`导入`ugettext（）`作为`_（）`，可以`避免`这个`问题`。
+-------------------
+In this example, the text “Welcome to my site.” is marked as a translation string:
+在本例中，文本“Welcome to my site.”被`标记`为一个`翻译字符串`：
+--------------------
+from django.utils.translation import ugettext as _
+from django.http import HttpResponse
+
+def my_view(request):
+    output = _("Welcome to my site.")
+    return HttpResponse(output)
+--------------------
+Obviously, you could code this without using the alias. This example is identical to the previous one:
+显然，你可以在不使用别名的情况下编码。这个例子与之前的例子相同：
+--------------------
+from django.utils.translation import ugettext
+from django.http import HttpResponse
+
+def my_view(request):
+    output = ugettext("Welcome to my site.")
+    return HttpResponse(output)
+--------------------
+Translation also works on computed values. This example is identical to the previous two:
+`翻译`也适用于`计算的值`。这个`例子`与`前两个`相同：
+---------------------
+def my_view(request):
+    words = ['Welcome', 'to', 'my', 'site.']
+    output = _(' '.join(words))
+    return HttpResponse(output)
+--------------------
+… and on variables. Again, here’s an identical example:
+在`变量`（`variables`）.这里有一个一样的例子：
+--------------------
+def my_view(request):
+    sentence = 'Welcome to my site.'
+    output = _(sentence)
+    return HttpResponse(output)
+-------------------
+(The caveat with using variables or computed values, as in the previous two examples, is that Django’s translation-string-detecting utility, django-admin makemessages, won’t be able to find these strings. More on makemessages later.)
+（`前面两个例子`中使用`变量`或`计算值`的`警告`是，
+`Django`的`翻译字符串检测`实用程序,`django-admin makemessage`将无法找到这些`字符串`，稍后将详细介绍`makemessage`。）
+
+The strings you pass to _() or ugettext() can take placeholders, specified with Python’s standard named-string interpolation syntax. Example:
+传递给`_（）`或`ugettext（）`的`字符串`可以`占位符`，用`Python`的`标准命名字符串插值语法``指定`。例：
+-------------------
+def my_view(request, m, d):
+    output = _('Today is %(month)s %(day)s.') % {'month': m, 'day': d}
+    return HttpResponse(output)
+-------------------
+This technique lets language-specific translations reorder the placeholder text. For example, an English translation may be “Today is November 26.”, while a Spanish translation may be “Hoy es 26 de Noviembre.” – with the month and the day placeholders swapped.
+
+这种技术可以让`语言特定`的`翻译`对`占位符文本``重新排序`。
+例如，`英文翻译`可能是“Today is November 26.”，而`西班牙文翻译`可能是“Hoy es 26 de Noviembre。” - `月份`和`日期``占位符交换`。
+
+For this reason, you should use named-string interpolation (e.g., %(day)s) instead of positional interpolation (e.g., %s or %d) whenever you have more than a single parameter. If you used positional interpolation, translations wouldn’t be able to reorder placeholder text.
+因此，只要有`多个参数`，就应该使用`命名字符串插值`（例如,`％（day）s）`代替`位置插值`（例如，`％s`或`％d`）。
+如果您使用`位置插值`，`翻译`将无法`重新``排列``占位符文本`。
+==============================
+Comments for Translators
+给`译员`的`注释`
+
+If you would like to give translators hints about a translatable string, you can add a comment prefixed with the Translators keyword on the line preceding the string, e.g.:
+如果您希望为一个`翻译字符串`为`翻译`提供`提示`，则可以在`字符串`前面的`行`上，添加以`Translators关键字`为`前缀`的`注释`，例如：
+------------------------
+def my_view(request):
+    # Translators: This message appears on the home page only
+    output = ugettext("Welcome to my site.")
+------------------------
+The comment will then appear in the resulting .po file associated with the translatable construct located below it and should also be displayed by most translation tools.
+该`注释`将出现在与位于其下的`可翻译结构`相关联的`结果.po文件`中，并且也应该由`大多数``翻译工具``显示`。
+
+Just for completeness, this is the corresponding fragment of the resulting .po file:
+为了完整起见，这是结果.po文件的相应片段：
+------------------------
+#. Translators: This message appears on the home page only
+# path/to/python/file.py:123
+msgid "Welcome to my site."
+msgstr ""
+------------------------
+This also works in templates. See translator-comments-in-templates for more details.
+这也适用于`模板`。
+有关更多详细信息，请参阅`翻译器注释模板`。
+`注释`将出现在与位于`其下`的`可翻译结构`关联的`结果.po文件`中，并且也应该由大多数`翻译工具`显示。
+==============================
+Marking Strings as No-Op
+将`字符串``标记`为`无操作`
+
+Use the function django.utils.translation.ugettext_noop() to mark a string as a translation string without translating it. The string is later translated from a variable.
+使用`函数``django.utils.translation.ugettext_noop（）`将`字符串`标记为一个`翻译字符串`，而`不进行``翻译`。
+该`字符串`稍后将从一个`变量``转换`而来。
+
+Use this if you have constant strings that should be stored in the source language because they are exchanged over systems or users – such as strings in a database – but should be translated at the last possible point in time, such as when the string is presented to the user.
+如果您的`常量字符串`应该以`源语言``存储`，因为它们是通过`系统`或`用户`进行`交换`的（例如,`数据库`中的`字符串`），但应该在`最后时间点`进行`翻译`，例如如,`数据库`中的`字符串` - 但是应该在`最后的时间点`被`翻译`，比如，当`字符串`被`呈现`给`用户`。
+==============================
+Pluralization
+复数
+
+
+Use the function django.utils.translation.ungettext() to specify pluralized messages.
+使用`函数``django.utils.translation.ungettext（）`指定`复数消息`。
+
+ungettext takes three arguments: the singular translation string, the plural translation string and the number of objects.
+`ungettext`有三个`参数`：`单数翻译字符串`，`复数翻译字符串`和`对象数量`。
+
+This function is useful when you need your Django application to be localizable to languages where the number and complexity of plural forms is greater than the two forms used in English (‘object’ for the singular and ‘objects’ for all the cases where count is different from one, irrespective of its value.)
+
+当您需要将`Django应用程序``本地化`为`复数形式`的`数量`和`复杂度`大于`英语`所用的`两种形式`
+（`单数`为“object”且`count`为`count`的`所有情况`的“对象”）时，此`函数`非常`有用`,不同于一个，不管它的`值`。）
+For example:
+--------------------------
+from django.utils.translation import ungettext
+from django.http import HttpResponse
+
+def hello_world(request, count):
+    page = ungettext(
+        'there is %(count)d object',
+        'there are %(count)d objects', 
+        count
+        ) % {
+            'count': count, 
+        }
+    return HttpResponse(page)
+--------------------------
+In this example the number of objects is passed to the translation languages as the count
+variable.
+例如：在这个例子中，`对象`的`数量`作为`计数`变量，被`传递`给`翻译语言`。
+
+Note that pluralization is complicated and works differently in each language. Comparing count
+to 1 isn’t always the correct rule. This code looks sophisticated, but will produce incorrect results for some languages:
+请注意，`复数`是`复杂的`，并且在每种`语言`中，`工作方式`不同。
+比较`计数`与`1`并不总是`正确的规则`。
+此`代码`看起来很`复杂`，但会对某些`语言`产生`不正确`的`结果`：
+------------------------
+from django.utils.translation import ungettext
+from myapp.models import Report
+
+count = Report.objects.count()
+if count == 1:
+    name = Report._meta.verbose_name
+else:
+    name = Report._meta.verbose_name_plural
+
+text = ungettext(
+    'There is %(count)d %(name)s available.',
+    'There are %(count)d %(name)s available.',
+    count
+    ) % {
+      'count': count,
+      'name': name
+    }
+------------------------
+Don’t try to implement your own singular-or-plural logic, it won’t be correct. In a case like this, consider something like the following:
+不要试图实现你自己的单数或复数逻辑，它不会是正确的。在这种情况下，请考虑如下内容：
+------------------
+text = ungettext(
+    'There is %(count)d %(name)s object available.',
+    'There are %(count)d %(name)s objects available.',
+    count
+    ) % {
+      'count': count,
+      'name': Report._meta.verbose_name,
+    }
+--------------------
+When using ungettext(), make sure you use a single name for every extrapolated variable included in the literal. In the examples above, note how we used the name Python variable in both translation strings. This example, besides being incorrect in some languages as noted above, would fail:
+
+使用`ungettext（）`时，确保对`文字`中包含的每个`外推变`量使用`单个``名称`。
+在上面的`示例`中，请注意我们如何在两个`翻译字符串`中使用`name` `Python变量`。
+这个例子除了在上面提到的`某些语言`中`不正确`之外，还会`失败`：
+-----------------------
+text = ungettext(
+    'There is %(count)d %(name)s available.',
+    'There are %(count)d %(plural_name)s available.',
+    count
+    ) % {
+      'count': Report.objects.count(),
+      'name': Report._meta.verbose_name,
+      'plural_name': Report._meta.verbose_name_plural
+    }
+-------------------------
+You would get an error when running django-admin compilemessages:
+运行django-admin compilemessages时会出现错误：
+-------------------------
+a format specification for argument 'name', as in 'msgstr[0]', doesn't exist in 'msgi\
+d'
+-------------------------
+==============================
+Contextual Markers
+Sometimes words have several meanings, such as “May” in English, which refers to a month name and to a verb. To enable translators to translate these words correctly in different contexts, you can use the django.utils.translation.pgettext() function, or the django.utils.translation.npgettext() function if the string needs pluralization. Both take a context string as the first variable.
+
+有时`单词`有几个`含义`，如`英语`中的“May”，指的是`月份``名称`和`动词`。
+为了使`翻译人员`能够在`不同的``上下文`中`正确`翻译这些`单词`，如果`字符串`需要`复数形式`，可以使用`django.utils.translation.pgettext（）函数`或`django.utils.translation.npgettext（）函数`。
+`两者`都将`上下文字符串`作为`第一个变量`。
+
+In the resulting .po file, the string will then appear as often as there are different contextual markers for the same string (the context will appear on the msgctxt line), allowing the translator to give a different translation for each of them.
+在生成的`.po文件`中，`字符串`将出现的`频率`与`同一字符串`的`不同``上下文``标记`（该`上下文`将出现在`msgctxt行`中）相同，
+允许`翻译器`为它们中的`每一个`提供不同的`翻译`。
+
+For example:
+
+-------------------------
+from django.utils.translation import pgettext
+
+month = pgettext("month name", "May")
+-------------------------
+or:
+
+-------------------------
+from django.db import models
+from django.utils.translation import pgettext_lazy
+
+class MyThing(models.Model):
+    name = models.CharField(help_text=pgettext_lazy( 
+        'help text for MyThing model', 'This is the help text'))
+-------------------------
+will appear in the .po file as:
+
+-------------------------
+msgctxt "month name"
+msgid "May"
+msgstr ""
+-------------------------
+Contextual markers are also supported by the trans and blocktrans template tags.
+`上下文`标记`也被`trans`和`blocktrans``模板标签`支持。
+==============================
+Lazy Translation
+懒惰的翻译
+
+Use the lazy versions of translation functions in django.utils.translation (easily recognizable by the lazy suffix in their names) to translate strings lazily – when the value is accessed rather than when they’re called.
+在`django.utils.translation`中使用`懒惰版本`的`翻译函数`（可以通过`名称`中的`懒惰后缀`轻松`识别`）来`懒惰`地`翻译字符串` 
+-当`值`被`访问`时，而不是在被`调用`时。
+
+These functions store a lazy reference to the string – not the actual translation. The translation itself will be done when the string is used in a string context, such as in template rendering.
+这些`函数`存储对`字符串`的一个`惰性引用` - 而不是`实际`的`翻译`。
+`翻译`本身将在`字符串``上下文`中使用`字符串`时`完成`，例如，在`模板``呈现`中。
+
+This is essential when calls to these functions are located in code paths that are executed at module load time.
+当这些`函数`的`调用`位于`模块加载`时`执行`的`代码路径`中时，这是非常重要的。
+
+This is something that can easily happen when defining models, forms and model forms, because Django implements these such that their fields are actually class-level attributes. For that reason, make sure to use lazy translations in the following cases.
+这是`定义模型`，`表单`和`模型表单`时很容易发生的事情，因为Django实现了这些，使得它们的`字段`实际上是`类级属性`。
+出于这个原因，请确保在以下情况下使用`懒惰翻译`。
+==============================
+Model fields and relationships
+`模型字段`和`关系`
+
+For example, to translate the help text of the name field in the following model, do the following:
+例如，要翻译以下`模型`中`名称``字段`的`帮助文本`，请执行以下操作：
+------------------------
+from django.db import models
+from django.utils.translation import ugettext_lazy as _
+
+class MyThing(models.Model):
+    name = models.CharField(help_text=_('This is the help text'))
+------------------------
+You can mark names of ForeignKey, ManyToManyField or OneToOneField relationship as translatable by using their verbose_name options:
+您可以使用其`verbose_name`选项,将`ForeignKey`，`ManyToManyField`或`OneToOneField`关系的`名称`,`标记`为`可翻译`的：
+------------------------
+class MyThing(models.Model):
+    kind = models.ForeignKey(ThingKind, related_name='kinds',   verbose_name=_('kind'\
+))
+------------------------
+Just like you would do in verbose_name you should provide a lowercase verbose name text for the relation as Django will automatically title case it when required.
+就像你在`verbose_name`中做的那样，你应该为`关系`提供一个`小写`的`verboase_name``文本`，因为`Django`会在`需要时``自动``标题``大小写`。
+============================================
+Model verbose names values
+`模型``详细名称值`
+
+It is recommended to always provide explicit verbose_name and verbose_name_plural options rather than relying on the fall-back English-centric and somewhat naive determination of verbose names Django performs by looking at the model’s class name:
+建议始终提供明确的`verbose_name`和`verbose_name_plural`选项，而不是`依赖`于以`英语`为`中心`的`回退`，并且通过查看`模型`的`类名称`来确定Django所执行的`详细名称`，这种方式有些`天真`：
+------------------------
+from django.db import models
+from django.utils.translation import ugettext_lazy as _
+
+class MyThing(models.Model):
+    name = models.CharField(_('name'), help_text=_('This is the help   text'))
+
+    class Meta:
+        verbose_name = _('my thing')
+        verbose_name_plural = _('my things')
+------------------------
+============================================
+Model methods short_description attribute values
+`模型``方法`的`short_description`属性值
+
+For model methods, you can provide translations to Django and the admin site with the short_description attribute:
+对于`模型方法`，您可以使用`short_description属性`为`Django`和`管理网站`提供`翻译`：
+-------------------------
+from django.db import models
+from django.utils.translation import ugettext_lazy as _
+
+class MyThing(models.Model):
+    kind = models.ForeignKey(ThingKind, related_name='kinds', verbose_name=_('kind'))
+
+    def is_mouse(self):
+        return self.kind.type == MOUSE_TYPE
+        is_mouse.short_description = _('Is it a mouse?')
+-------------------------
+============================================
+Working with Lazy Translation Objects
+使用`懒惰翻译``对象`
+
+The result of a ugettext_lazy() call can be used wherever you would use a Unicode string (an object with type unicode) in Python. If you try to use it where a bytestring (a str object) is expected, things will not work as expected, since a ugettext_lazy() object doesn’t know how to convert itself to a bytestring. You can’t use a Unicode string inside a bytestring, either, so this is consistent with normal Python behavior. For example:
+一个`ugettext_lazy（）`调用的结果可用于`Python`中任何需要使用`Unicode字符串`（`类型`为`unicode`的`对象`）的`地方`。
+如果您尝试在需要`字节串`（`str对象`）的`地方`使用`它`，则事情将无法按预期工作，因为`ugettext_lazy（）`对象不知道如何将其`自身`转换为一个`字节串`。
+你不能在一个`字符串`中使用一个`Unicode字符串`，所以这与正常的`Python``行为一致`。例如：
+--------------------------
+# This is fine: putting a unicode proxy into a unicode string.
+"Hello %s" % ugettext_lazy("people")
+
+# This will not work, since you cannot insert a unicode object
+# into a bytestring (nor can you insert our unicode proxy there)
+b"Hello %s" % ugettext_lazy("people")
+--------------------------
+If you ever see output that looks like "hello <django.utils.functional...>", you have tried to insert the result of ugettext_lazy() into a bytestring. That’s a bug in your code.
+如果您看到输出如“hello <django.utils.functional ...>”，您已尝试将`ugettext_lazy（）`的`结果`插入到一个`字符串`中。
+这是你的`代码`中的一个`错误`。
+
+If you don’t like the long ugettext_lazy name, you can just alias it as _ (underscore), like so:
+如果您不喜欢长的`ugettext_lazy`名称，则可以将其作为`_（下划线）`来使用，如下所示：
+------------------------
+from django.db import models
+from django.utils.translation import ugettext_lazy as _
+
+class MyThing(models.Model):
+    name = models.CharField(help_text=_('This is the help text'))
+------------------------
+Using ugettext_lazy() and ungettext_lazy() to mark strings in models and utility functions is a common operation. When you’re working with these objects elsewhere in your code, you should ensure that you don’t accidentally convert them to strings, because they should be converted as late as possible (so that the correct locale is in effect). This necessitates the use of the helper function described next.
+使用`ugettext_lazy（）`和`ungettext_lazy（）``标记`模型`和`实用程序函数`中的`字符串`是一个常用操作。
+当你在`代码`的其他地方处理这些`对象`时，应该确保你不会意外地将它们转换为`字符串`，因为它们应该`尽可能晚`地进行`转换`（以便`正确`的`区域设置`生效）。
+这需要使用下面描述的`帮助函数`。
+============================================
+Lazy translations and plural
+懒惰的翻译和复数
+
+When using lazy translation for a plural string ([u]n[p]gettext_lazy), you generally don’t know the number argument at the time of the string definition. Therefore, you are authorized to pass a key name instead of an integer as the number argument. Then number will be looked up in the dictionary under that key during string interpolation. Here’s example:
+当对`复数形式`的`字符串`（[u] n [p] gettext_lazy）使用`惰性转换`时，通常不会在`字符串`定义时知道`number参数`。
+因此，您有权传递`密钥名称`而不是`整数`作为`数字参数`。
+然后在`字符串``插值过程中`，在该`字典`下查找`数字`。
+这里是一个例子：
+------------------
+from django import forms
+from django.utils.translation import ugettext_lazy
+
+class MyForm(forms.Form):
+    error_message = ungettext_lazy("You only provided %(num)d    
+      argument", "You only provided %(num)d arguments", 'num')
+
+    def clean(self):
+        # ...
+        if error:
+            raise forms.ValidationError(self.error_message %  
+              {'num': number})
+-------------------
+If the string contains exactly one unnamed placeholder, you can interpolate directly with the number argument:
+如果该`字符串`恰好包含一个`未命名`的`占位符`，则可以直接`插入``数字参数`：
+--------------------
+class MyForm(forms.Form):
+    error_message = ungettext_lazy("You provided %d argument",
+        "You provided %d arguments")
+
+    def clean(self):
+        # ...
+        if error:
+            raise forms.ValidationError(self.error_message % number)
+-------------------
+=================================
+Joining strings: string_concat()
+连接字符串：string_concat（）
+
+Standard Python string joins (''.join([...])) will not work on lists containing lazy translation objects.
+Instead, you can use django.utils.translation.string_concat(), which creates a lazy object that concatenates its contents and converts them to strings only when the result is included in a string. For example:
+标准Python`字符串连接`（''.join（[...]））在包含`惰性转换对象`的`列表`上`不起作用`。
+相反，您可以使用`django.utils.translation.string_concat（）`，它会创建一个`延迟对象`，将其内容`连接`起来，
+并只在`结果`包含在`字符串`中时将其转换为`字符串`。例如：
+----------------------
+from django.utils.translation import string_concat
+from django.utils.translation import ugettext_lazy
+# ...
+name = ugettext_lazy('John Lennon')
+instrument = ugettext_lazy('guitar')
+result = string_concat(name, ': ', instrument)
+----------------------
+In this case, the lazy translations in result will only be converted to strings when result itself is used in a string (usually at template rendering time).
+在这种情况下，当结果本身用于`字符串`时（通常在`模板呈现`时），结果中的`惰性翻译`将仅转换为`字符串`。
+=================================
+Other uses of lazy in delayed translations
+`懒惰`在`延迟翻译`中的`其他用途`
+
+For any other case where you would like to delay the translation, but have to pass the translatable string as argument to another function, you can wrap this function inside a lazy call yourself. For example:
+对于任何其他您希望`延迟翻译`的情况，但必须将可转换`字符串`作为`参数``传递`给`另一个函数`，您可以自己将此`函数`包装在`惰性调用`中。例如：
+------------------
+from django.utils import six  # Python 3 compatibility
+from django.utils.functional import lazy
+from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _
+
+mark_safe_lazy = lazy(mark_safe, six.text_type)
+------------------
+And then later:
+------------------
+lazy_string = mark_safe_lazy(_("<p>My <strong>string!</strong></p>"))
+------------------
+=================================
+Localized Names of Languages
+语言的本地化名称
+
+The get_language_info() function provides detailed information about languages:
+`get_language_info（）函数`提供有关`语言`的`详细信息`：
+--------------------
+>>> from django.utils.translation import get_language_info
+>>> li = get_language_info('de')
+>>> print(li['name'], li['name_local'], li['bidi'])
+German Deutsch False 
+--------------------
+The name and name_local attributes of the dictionary contain the name of the language in English and in the language itself, respectively. The bidi attribute is True only for bi-directional languages.
+字典的`name`和`name_local`属性,分别包含`英语语言`和`语言本身`的`名称`。`bidi属性`仅适用于`双向语言`。
+
+The source of the language information is the django.conf.locale module. Similar access to this information is available for template code. See below.
+`语言信息`的`来源`是`django.conf.locale`模块。
+类似的访问这些信息可用于`模板代码`。
+见下文。
+=====================================

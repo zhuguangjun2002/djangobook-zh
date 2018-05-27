@@ -1,0 +1,214 @@
+=============================
+Django Middleware
+
+Middleware is a framework of hooks into Django’s request/response processing. It’s a light, low-level plugin system for globally altering Django’s input or output.
+中间件是Django`请求/响应`处理的一个`钩子``框架`。这是一个`轻量级`的`低级``插件系统`，用于`全局`改变Django的`输入`或`输出`。
+
+Each middleware component is responsible for doing some specific function. For example, Django includes a middleware component, AuthenticationMiddleware, that associates users with requests using sessions.
+每个`中间件组件`都负责完成一些特定的功能。
+例如，Django包含一个`中间件组件``AuthenticationMiddleware`，它使用`会话`将`用户`与`请求`关联起来。
+
+This document explains how middleware works, how you activate middleware, and how to write your own middleware. Django ships with some built-in middleware you can use right out of the box. See “available middleware” later in this chapter.
+
+本文档介绍了`中间件`如何工作，如何`激活`中间件以及如何`编写`自己的中间件。 
+Django附带一些`内置`的`中间件`，您可以立即使用它们。
+请参阅本章稍后的“可用中间件”。
+=============================
+Activating Middleware
+激活中间件
+
+To activate a middleware component, add it to the MIDDLEWARE_CLASSES list in your Django settings.
+要`激活`一个`中间件``组件`，请将其添加到你的`Django设置`中的`MIDDLEWARE_CLASSES``列表`中。
+
+In MIDDLEWARE_CLASSES, each middleware component is represented by a string: the full Python path to the middleware’s class name. For example, here’s the default value created by django-admin startproject:
+在`MIDDLEWARE_CLASSES`中，每个`中间件组件`都由一个`字符串`表示：
+`中间件类名`的`完整Python路径`。
+例如，以下是由`django-admin startproject`创建的`默认值`：
+-------------------------------
+MIDDLEWARE_CLASSES = [
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+-------------------------------
+A Django installation doesn’t require any middleware – MIDDLEWARE_CLASSES can be empty, if you’d like – but it’s strongly suggested that you at least use CommonMiddleware.
+一个`Django安装`，不需要任何`中间件` 
+-如果您愿意，`MIDDLEWARE_CLASSES`可以为`空` 
+-但`强烈建议`您至少使用`CommonMiddleware`。
+
+The order in MIDDLEWARE_CLASSES matters because a middleware can depend on other middleware. For instance, AuthenticationMiddleware stores the authenticated user in the session; therefore, it must run after SessionMiddleware. See “middleware ordering” later in this chapter for some common hints about ordering of Django middleware classes.
+
+`MIDDLEWARE_CLASSES`中的`顺序`很重要，因为一个`中间件`可以`依赖`于`其他``中间件`。
+例如，`AuthenticationMiddleware`将`认证``用户``存储`在`会话`中;
+因此，它必须在`SessionMiddleware`之后运行。
+有关`Django中间件类`的`排序`的一些常见提示，请参阅本章后面的“中间件排序”。
+=============================
+Hooks and Application Order
+
+
+During the request phase, before calling the view, Django applies middleware in the order it’s defined in MIDDLEWARE_CLASSES, top-down. Two hooks are available:
+
+在`请求`阶段，在`调用``视图`之前，Django按照`MIDDLEWARE_CLASSES`中`自上而下`的`顺序``应用``中间件`。
+`两个``钩子`可用：
+---------------------
+process_request()
+process_view()
+---------------------
+During the response phase, after calling the view, middleware are applied in reverse order, from the bottom up. Three hooks are available:
+在`响应`阶段，在`调用``视图`之后，`中间件`从`下往上`以`相反`的`顺序``应用`。
+`三个``挂钩`可供选择：
+--------------------
+process_exception()
+process_template_response()
+process_response()
+--------------------
+If you prefer, you can also think of it like an onion: each middleware class is a layer that wraps the view. The behavior of each hook is described below.
+如果你愿意，你也可以把它想象成一个`洋葱`：每个`中间件类`都是一个`包装``视图`的`图层`。
+每个`钩子`的`行为`如下所述
+=============================
+Writing Your Own Middleware
+编写自己的中间件
+
+Writing your own middleware is easy. Each middleware component is a single Python class that defines one or more of the following methods:
+编写自己的`中间件`很容易。
+每个`中间件组件`都是一个`Python类`，它定义了以下`一种`或`多种``方法`：
+==================
+process_request
+Method: process_request(request)
+-------------------
+++ request is an HttpRequest object.
+++ process_request() is called on each request, before Django decides which view to execute.
+-------------------
+It should return either None or an HttpResponse object. If it returns None, Django will continue processing this request, executing any other process_request() middleware, then, process_view() middleware, and finally, the appropriate view.
+它应该返回`None`或一个`HttpResponse对象`。
+如果返回`None`，`Django`将`继续`处理该`请求`，执行任何其他`process_request（）`中间件`，然后执行`process_view（）`中间件`，最后执行相应的`视图`。
+
+If it returns an HttpResponse object, Django won’t bother calling any other request, view or exception middleware, or the appropriate view; it’ll apply response middleware to that HttpResponse, and return the result.
+如果它返回一个`HttpResponse对象`，Django不会麻烦`调用`任何其他`请求`，`视图`或`异常中间件`或适当的`视图`;
+它会将`响应中间件``应用`于`该HttpResponse`，并返回`结果`。
+==================
+process_view
+Method: process_view(request, view_func, view_args, view_kwargs)
+-----------------------
+++ request is an HttpRequest object.
+++ view_func is the Python function that Django is about to use. (It’s the actual function object, not the name of the function as a string.)
+++ view_args is a list of positional arguments that will be passed to the view.
+++ view_kwargs is a dictionary of keyword arguments that will be passed to the view.
+++ Neither view_args nor view_kwargs include the first view argument (request). 
+process_view() is called just before Django calls the view. 
+It should return either None or an HttpResponse object. 
+If it returns None, Django will continue processing this request, executing any other process_view() middleware and, then, the appropriate view.
+-----------------------
+If it returns an HttpResponse object, Django won’t bother calling any other view or exception middleware, or the appropriate view; it’ll apply response middleware to that HttpResponse, and return the result.
+如果它返回一个`HttpResponse对象`，Django不会麻烦`调用``任何其他视图`或`异常中间件`或`适当的视图`;
+它会将`响应中间件`应用于该`HttpResponse`，并返回`结果`。
+
+==================
+Accessing request.POST inside middleware from process_request or process_view will prevent any view running after the middleware from being able to modify the upload handlers for the request, and should normally be avoided.
+在`中间件内部`从`process_request`或`process_view`访问`request.POST`会`阻止`任何`视图`在`中间件`能够`修改``请求的`上传处理程序`之后`运行`，并且通常应该`避免`。
+
+The CsrfViewMiddleware class can be considered an exception, as it provides the csrf_exempt() and csrf_protect() decorators which allow views to explicitly control at what point the CSRF validation should occur.
+`CsrfViewMiddleware类`可以被认为是一个`例外`，因为它提供了`csrf_exempt（）`和`csrf_protect（）`修饰器，它们允许`视图`明确地控制`CSRF验证`应该发生在哪一点。
+==================
+
+====================================
+process_template_response
+Method: process_template_response(request, response)
+
+-----------------------
+request is an HttpRequest object.
+response is the TemplateResponse object (or equivalent) returned by a Django view or by a middleware.
+-----------------------
+process_template_response() is called just after the view has finished executing, if the response instance has a render() method, indicating that it is a TemplateResponse or equivalent.
+如果`响应实例``具有一个`render（）`方法，则表示它是一个`TemplateResponse`或`等效的`，`process_template_response（）`将在`视图`执行完毕后立即调用。
+
+It must return a response object that implements a render method. It could alter the given response by changing response.template_name and response.context_data, or it could create and return a brand-new TemplateResponse or equivalent.
+它必须返回一个`实现`一个`render`方法的`响应对象`。
+它可以通过改变`response.template_name`和`response.context_data`来改变给定的`响应`，或者它可以创建并返回一个全新的`TemplateResponse`或`等价物`。
+
+You don’t need to explicitly render responses – responses will be automatically rendered once all template response middleware has been called.
+您不需要明确`render``响应` - `响应`将在所有模板`响应中间件`被`调用`后自动`呈现`。
+
+Middleware are run in reverse order during the response phase, which includes process_template_response().
+`中间件`在`响应阶段`以相反的`顺序`运行，其中包括`process_template_response（）`。
+==================
+process_response
+Method: process_response(request, response)
+
+request is an HttpRequest object.
+response is the HttpResponse or StreamingHttpResponse object returned by a Django view or by a middleware. process_response() is called on all responses before they’re returned to the browser. It must return an HttpResponse or StreamingHttpResponse object. It could alter the given response, or it could create and return a brand-new HttpResponse or StreamingHttpResponse.
+Unlike the process_request() and process_view() methods, the process_response() method is always called, even if the process_request() and process_view() methods of the same middleware class were skipped (because an earlier middleware method returned an HttpResponse). In particular, this means that your process_response() method cannot rely on setup done in process_request().
+
+Finally, remember that during the response phase, middleware are applied in reverse order, from the bottom up. This means classes defined at the end of MIDDLEWARE_CLASSES will be run first.
+
+==================
+Dealing with streaming responses
+Unlike HttpResponse, StreamingHttpResponse does not have a content attribute. As a result, middleware can no longer assume that all responses will have a content attribute. If they need access to the content, they must test for streaming responses and adjust their behavior accordingly:
+
+if response.streaming:
+    response.streaming_content = wrap_streaming_content(response.streaming_content)
+else:
+    response.content = alter_content(response.content)
+streaming_content should be assumed to be too large to hold in memory. Response middleware may wrap it in a new generator, but must not consume it. Wrapping is typically implemented as follows:
+
+def wrap_streaming_content(content):
+    for chunk in content:
+        yield alter_content(chunk)
+==================
+process_exception
+Method: process_exception(request, exception)
+-----------------------
+request is an HttpRequest object.
+exception is an Exception object raised by the view function.
+-----------------------
+Django calls process_exception() when a view raises an exception. process_exception() should return either None or an HttpResponse object. If it returns an HttpResponse object, the template response and response middleware will be applied, and the resulting response returned to the browser. Otherwise, default exception handling kicks in.
+Django在一个`视图`引发`异常`时，调用`process_exception（）`。
+`process_exception（）`应该返回`None`或一个`HttpResponse对象`。
+如果它返回一个`HttpResponse对象`，则将`应用``模板响应`和`响应中间件`，并将生成的`响应`返回给`浏览器`。
+否则，`默认`的`异常处理`就`开始`了。
+
+Again, middleware are run in reverse order during the response phase, which includes process_exception. If an exception middleware returns a response, the middleware classes above that middleware will not be called at all.
+`中间件`再一次在`响应阶段`以`相反`的`顺序`运行，其中包括`process_exception`。
+如果`异常中间件`返回`响应`，则该`中间件`上方的`中间件类`将不会被`调用`。
+==================
+__init__
+
+Most middleware classes won’t need an initializer since middleware classes are essentially placeholders for the process_* methods. If you do need some global state, you may use __init__ to set up. However, keep in mind a couple of caveats:
+大多数`中间件类`不需要`初始化器`，因为`中间件类`基本上是`process_ *方法`的`占位符`。
+如果你确实需要一些`全局状态`，你可以使用`__init__`来`设置`。
+不过，请记住一些`注意事项`：
+------------------
+1.Django initializes your middleware without any arguments, so you can’t define __init__ as requiring any arguments.
+1. Django无需任何`参数`即可`初始化`您的`中间件`，因此您无法将`__init__``定义`为`需要`任何`参数`。
+
+2.Unlike the process_* methods which get called once per request, __init__ gets called only once, when the Web server responds to the first request.
+2.不同于每个`请求`调用一次的`process_ *方法`，当`Web服务器``响应`第一个`请求`时，`__init__`只会被`调用``一次`。
+------------------
+==================
+Marking middleware as unused
+将中间件标记为未使用
+
+It’s sometimes useful to determine at run-time whether a piece of middleware should be used. In these cases, your middleware’s __init__ method may raise django.core.exceptions.MiddlewareNotUsed. Django will then remove that piece of middleware from the middleware process and a debug message will be logged to the django.request logger when DEBUG is set to True.
+在`运行时`确定是否应使用`中间件`,有时很`有用`。
+在这些情况下，您的`中间件`的`__init__方法`,可能会引发`django.core.exceptions.MiddlewareNotUsed`。
+然后，`Django`将从`中间件进程`中`移除`该`中间件`，并在`DEBUG`设置为`True`时将`调试消息`记录到`django.request``记录器`(`logger`)。
+==================
+Additional Guidelines
+附加指南
+
+Middleware classes don’t have to subclass anything.
+中间件类不需要`子类`任何东西。
+
+The middleware class can live anywhere on your Python path. All Django cares about is that the MIDDLEWARE_CLASSES setting includes the path to it.
+Feel free to look at Django’s available middleware for examples.
+`中间件类`可以在您的`Python路径`上的任何地方`居住`。
+所有的Django关心的是`MIDDLEWARE_CLASSES`设置包含它的`路径`。
+请随意查看Django可用的`中间件`以获取`示例`。
+
+If you write a middleware component that you think would be useful to other people, contribute to the community! Let us know and we’ll consider adding it to Django.
+如果您编写一个您认为对其他人有用的`中间件组件`，请为社区做`贡献`！
+让我们知道，我们会考虑将其`添加`到`Django`。
+=============================
